@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link href="https://fonts.googleapis.com/css?family=Alata&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/styles.css">
+	<title>Word cards</title>
+<body>
+
+	<!-- HEADER -->
+
+	<header class="header">
+		<div class="container">
+			<div class="header__content">
+
+				<div class="header__title">
+					<h1>Word cards</h1>
+				</div>
+
+
+				<!-- INPUT POINT -->
+
+
+				<!-- SART PAGE BUTTONS -->
+				
+				<div class="header__buttons">
+
+					<div class="header__btn-holder">
+						<button class="btn btn--log-in" onclick="htmlGen.log_in()">
+							Log in 
+						</button>
+					</div>
+		
+					<div class="header__btn-holder">
+						<button class="btn btn--sign-up" onclick="htmlGen.sign_up()">
+							Sign up
+						</button>
+					</div>
+
+				</div>
+
+				<!-- REGULAR BUTTONS -->
+				
+				<div class="header__buttons hidden">
+
+					<div class="header__btn-holder">
+						<button class="btn btn--log-in">
+							<img src="./img/add.svg" alt="" height="20" width="20">
+							Create new module
+						</button>
+					</div>
+
+
+				</div>
+
+			</div>
+			
+		</div>
+	</header>
+
+	<!-- INPUT POINT -->
+
+	<!-- START PAGE -->
+
+	<div class="start">
+		<div class="container">
+			<div class="start__content">
+
+				<div class="start__intro">
+					<div class="start__welcome">
+							<h1>Welcome to Word cards</h1>
+					</div>
+					<button class="btn btn--sign-up btn--sign-up--big" onclick="htmlGen.log_in()">Get started</button>
+				</div>
+				<!-- <div class="start__img">
+					<img src="" alt="">
+				</div> -->
+
+			</div>
+		</div>
+	</div>
+
+	<!-- LOG IN ( modal ) -->
+
+	<!-- SIGN UP ( modal ) -->
+
+	<!-- HOME PAGE -->
+
+	<!-- MODULE PAGE -->
+
+	<!-- MODULE EDIT PAGE ( this one is pretty much the same as the creation of a new module page )-->
+
+	<!-- FLASHCARD SESSION or WRITING SESSION (it might be both if I will have left time an enthusiasm) -->
+
+	<!-- CREATION OF A NEW MODULE -->
+
+	<!-- <div class="container">
+		<button type="button" class="btn" onclick="fetchData(url1)">fetch1</button>
+	</div> -->
+
+	<!-- <div class="container">
+		<button type="button" class="btn" onclick="fetchData(url2)">min length</button>
+	</div> -->
+
+	<!-- <div class="container">
+		<button type="button" class="btn" onclick="card.fetchData();">fetch data</button>
+	</div> -->
+	<script src="js/ref/log-in.js"></script>
+	<script src="js/ref/sign-up.js"></script>
+	<script src="js/ref/home.js"></script>
+	<script src="js/ref/module.js"></script>
+	<script src="js/ref/edit.js"></script>
+	<script src="js/index.js"></script>
+</body>
+</html>
