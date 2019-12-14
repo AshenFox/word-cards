@@ -1,0 +1,15 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "gh-pages -d word-cards"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://HoarFox.github.io/word-cards",
+  "dependencies": {
+    "gh-pages": "^2.1.1"
+  }
+}
