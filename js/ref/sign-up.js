@@ -221,14 +221,16 @@ class Sign_up {
     //     return false;
     // }
 
-    httpParam(method, data) {
-        return {
+    httpParam(method, data, cred) {
+        let obj = {
             method: method,
             headers: {
-                'Content-Type': 'text/plain',
+                'Content-Type': 'text/plain'
             },
             body: JSON.stringify(data),
         }
+        if (cred) obj.credentials = "same-origin";
+        return obj;
     }
 
     async checkValue(str, route) {
@@ -267,7 +269,7 @@ class Sign_up {
                 password: password.value,
             }
 
-            let httpParam = this.httpParam('POST', reqData);
+            let httpParam = this.httpParam('POST', reqData, true);
 
             let response = await fetch(url + '/sign_up/sign_up', httpParam);
 

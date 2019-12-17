@@ -157,14 +157,16 @@ class Log_in {
         
     }
 
-    httpParam(method, data) {
-        return {
+    httpParam(method, data, cred) {
+        let obj = {
             method: method,
             headers: {
                 'Content-Type': 'text/plain'
             },
             body: JSON.stringify(data),
         }
+        if (cred) obj.credentials = "same-origin";
+        return obj;
     }
 
     async checkValue(str, route, opt) {
@@ -193,7 +195,7 @@ class Log_in {
             password,
         }
 
-        let httpParam = this.httpParam('POST', reqData);
+        let httpParam = this.httpParam('POST', reqData, true);
         let response = await fetch(url + '/log_in/log_in', httpParam);
         console.log(httpParam);
 
@@ -209,8 +211,3 @@ class Log_in {
         return resData.result;
     }
 };
-
-
-document.cookie = 'sessionId=38afes7a8';
-
-console.log(document.cookie);
