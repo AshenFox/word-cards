@@ -229,7 +229,7 @@ class Sign_up {
             },
             body: JSON.stringify(data),
         }
-        if (cred) obj.credentials = "same-origin";
+        if (cred) obj.credentials = "include";
         return obj;
     }
 
