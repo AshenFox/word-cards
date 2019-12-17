@@ -209,8 +209,3 @@ class Log_in {
         return resData.result;
     }
 };
-
-
-document.cookie = 'sessionId=38afes7a8';
-
-console.log(document.cookie);
