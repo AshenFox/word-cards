@@ -195,7 +195,7 @@ class Log_in {
             password,
         }
 
-        let httpParam = this.httpParam('POST', reqData);
+        let httpParam = this.httpParam('POST', reqData, true);
         let response = await fetch(url + '/log_in/log_in', httpParam);
         console.log(httpParam);
 
