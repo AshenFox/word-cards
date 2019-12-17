@@ -157,14 +157,16 @@ class Log_in {
         
     }
 
-    httpParam(method, data) {
-        return {
+    httpParam(method, data, cred) {
+        let obj = {
             method: method,
             headers: {
                 'Content-Type': 'text/plain'
             },
             body: JSON.stringify(data),
         }
+        if (cred) obj.credentials = "same-origin";
+        return obj;
     }
 
     async checkValue(str, route, opt) {
