@@ -195,6 +195,7 @@ class Log_in {
 
         let httpParam = this.httpParam('POST', reqData);
         let response = await fetch(url + '/log_in/log_in', httpParam);
+        console.log(httpParam);
 
         // let resData = JSON.parse(await response.text());
         
@@ -204,7 +205,12 @@ class Log_in {
         //     this.checkForModal();
         //     active = new Home();
         // }
-        console.log(`${username} has logged in!`)
+        console.log(`${resData}`);
         return resData.result;
     }
 };
+
+
+document.cookie = 'sessionId=38afes7a8';
+
+console.log(document.cookie);
