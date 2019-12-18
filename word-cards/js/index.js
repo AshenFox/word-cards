@@ -77,6 +77,33 @@ const htmlGen = {
     // }
 };
 
+class HttpParam {
+
+    constructor(method, data, cred) {
+
+        this.method = method;
+        this.headers = {
+            'Content-Type': 'text/plain'
+        };
+        if (data) this.body = JSON.stringify(data);
+        if (cred) this.credentials = "include";
+    }
+}
+
+async function loggedInCheck() {
+    let httpParam = new HttpParam('GET', false, false);
+    console.log(httpParam);
+
+    let response = await fetch(url + '/home/auth', httpParam);
+    let resData = await response.text();
+    console.log(response.status);
+    console.log(resData);
+}
+
+loggedInCheck();
+
+// htmlGen.module();
+
 
 
 
