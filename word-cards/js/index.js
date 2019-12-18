@@ -88,17 +88,16 @@ class HttpParam {
         if (data) this.body = JSON.stringify(data);
         if (cred) this.credentials = "include";
     }
-}
+};
 
 async function loggedInCheck() {
     let httpParam = new HttpParam('GET', false, true);
     console.log(httpParam);
 
     let response = await fetch(url + '/home/auth', httpParam);
-    let resData = await response.text();
     console.log(response.status);
-    console.log(resData);
-}
+    if(response.status = 200) htmlGen.home();
+};
 
 loggedInCheck();
 
