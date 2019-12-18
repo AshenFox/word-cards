@@ -238,7 +238,7 @@ class Sign_up {
             data: str
         }
 
-        let httpParam = this.httpParam('POST', reqData);
+        let httpParam = new HttpParam('POST', reqData);
 
         let response = await fetch(url + route, httpParam);
 
@@ -269,7 +269,7 @@ class Sign_up {
                 password: password.value,
             }
 
-            let httpParam = this.httpParam('POST', reqData, true);
+            let httpParam = new HttpParam('POST', reqData, true);
 
             let response = await fetch(url + '/sign_up/sign_up', httpParam);
 
