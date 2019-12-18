@@ -91,7 +91,7 @@ class HttpParam {
 }
 
 async function loggedInCheck() {
-    let httpParam = new HttpParam('GET', false, false);
+    let httpParam = new HttpParam('GET', false, true);
     console.log(httpParam);
 
     let response = await fetch(url + '/home/auth', httpParam);
