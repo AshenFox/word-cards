@@ -26,21 +26,21 @@ class Log_in {
                 <div class="modal__content">
 
                     <div class="modal__username-error"></div>
-                    <input type="text" class="modal__input username" id="username" placeholder="Type your username">
+                    <input type="text" class="input pad5 fz17 height4r br-bottom2 bcc-whiteblue brc-grey f-brc-yellow username" id="username" placeholder="Type your username">
                     <label for="" class="label modal__label">USERNAME</label>
 
                     <div class="modal__password-error"></div>
-                    <input type="password" class="modal__input password" id="password" placeholder="Type your password">
+                    <input type="password" class="input pad5 fz17 height4r br-bottom2 bcc-whiteblue brc-grey f-brc-yellow password" id="password" placeholder="Type your password">
                     <label for="" class="label modal__label">PASSWORD</label>
 
                     <div class="modal__log-in">
-                        <button class="btn btn--log-in--big" onclick="active.checkValues.call(active)">
+                        <button class="btn width100 bcc-lightblue pad15-30 brr5 fz175 white h-grey h-bcc-yellow" onclick="modal.checkValues.call(modal)">
                             Log in
                         </button>
                     </div>
 
                     <div class="modal__options">
-                        <p>Don't have an account?   <button class="btn btn--log-in btn--log-in--black" onclick="htmlGen.sign_up()">Sign up!</button></p>
+                        <p>Don't have an account?   <button class="btn white fz15 inline-block black h-yellow" onclick="htmlGen.sign_up()">Sign up!</button></p>
                         
                     </div>
                 </div>
@@ -63,9 +63,12 @@ class Log_in {
     render() {
         
         this.checkForModal();
-        
         let el = htmlGen.createEl(this);
         document.body.appendChild(el);
+        setTimeout(() => {
+            el.querySelector('.modal__dialog').classList.add('activated');
+        }, 0);
+        
         this.el = el;
 
         el.querySelector('.modal__close').addEventListener('mousedown', () => {
@@ -197,17 +200,13 @@ class Log_in {
 
         let httpParam = new HttpParam('POST', reqData, true);
         let response = await fetch(url + '/log_in/log_in', httpParam);
-        console.log(httpParam);
 
-        // let resData = JSON.parse(await response.text());
-        
-        let resData = await response.text();
-
-        // if (resData) {
-        //     this.checkForModal();
-        //     active = new Home();
-        // }
-        console.log(`${resData}`);
-        return resData.result;
+        if (response.status == 200) {
+            this.checkForModal();
+            htmlGen.startDashboard();
+            htmlGen.regularDashboard();
+            htmlGen.home();
+        };
+        return;
     }
 };
