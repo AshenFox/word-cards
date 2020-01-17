@@ -1,14 +1,21 @@
 'use strict'
 
-let active;
+let active = { empty: true };
+let modal = false;
+
+const url = 'https://word-cards-15-12-2019.herokuapp.com'// 'http://localhost:5000'
 
 
-const url = 'http://localhost:5000'//'https://word-cards-15-12-2019.herokuapp.com'
+
 const htmlGen = {
+
+    menuListner: false,
 
     deleteEl(el) {
         let target = document.querySelector(`.${el}`);
-        target.parentNode.removeChild(target);
+        if(target) {
+            target.parentNode.removeChild(target);
+        }  
     },
 
     createEl(type) {
@@ -19,62 +26,84 @@ const htmlGen = {
         return el;
     },
 
+    hideCreateModule() {
+        let regularBTN = document.getElementById('new-module-regular');
+        let menuBTN = document.getElementById('new-module-menu');
+        regularBTN.classList.toggle("hidden");
+        menuBTN.classList.toggle("hidden");
+    },
+
+    toggleHeaderMenu() {
+        let headerMenuBtn = document.querySelector('.header__menu');
+        headerMenuBtn.classList.remove("hidden");
+        
+        let listnerFunction = (e) => {
+            let headerMenuBtn = document.querySelector('.header__menu');
+            headerMenuBtn.classList.add("hidden");  
+            this.menuListner = false;
+            document.body.removeEventListener('click', listnerFunction);
+            
+        };
+        
+        if(!this.menuListner) {
+
+            this.menuListner = true;
+
+            setTimeout(() => { document.body.addEventListener('click', listnerFunction) }, 0);
+
+        };
+    },
+
+    startDashboard() {
+        let el = document.querySelector(".header__buttons-start");
+        el.classList.toggle("hidden");
+    },
+
+    regularDashboard() {
+        let el = document.querySelector(".header__buttons-regular");
+        el.classList.toggle("hidden");
+    },
+
+    toggleSpinner() {
+        let spinner =  document.querySelector('.spinner__container');
+        spinner.classList.toggle('hidden');
+    },
+
+    start() {
+        if(!active.empty) {
+            this.toggleSpinner();
+        }
+        active = new Start();
+    },
+
     log_in() {
-        active = new Log_in();
+        modal = new Log_in();
     },
 
     sign_up() {   
-        active = new Sign_up();
+        modal = new Sign_up();
+    },
+
+    delete() {
+        modal = new Delete();
     },
 
     home() {
+        if(!active.empty) {
+            this.toggleSpinner();
+        }
         active = new Home();
     },
 
-    module() {
-        active = new Module();
+    module(id) {
+        this.toggleSpinner();
+        active = new Module(id);
     },
 
-    edit() {
-        active = new Edit();
+    edit(id) {
+        this.toggleSpinner();
+        active = new Edit(id);
     },
-
-    
-
-
-
-
-
-
-
-
-
-    // cardItem(num) {
-    //     let el = document.createElement('div');
-    //     el.className = 'edit__cards-card';
-    //     el.innerHTML = `
-    //         <div class="edit__cards-header">
-    //             <div class="edit__cards-number">${num}</div>
-    //             <div class="edit__cards-delete">Delete BTN</div>
-    //         </div>
-
-    //         <div class="edit__cards-items">
-    //             <div class="edit__cards-term">
-    //                 <div contenteditable="true" class="textarea"></div>
-    //                 <div class="edit__cards-label">TERM</div>
-    //             </div>
-
-    //             <div class="edit__cards-definition">
-    //                 <div contenteditable="true" class="textarea" placeholder="Something"></div>
-    //                 <div class="edit__cards-label" for="edit__cards-definition-input1">DEFINITION</div>
-    //             </div>
-    //         </div>
-    //     `;
-
-    //     this.cardamount++;
-    
-    //     return el;
-    // }
 };
 
 class HttpParam {
@@ -91,17 +120,42 @@ class HttpParam {
 };
 
 async function loggedInCheck() {
-    let httpParam = new HttpParam('GET', false, true);
-    console.log(httpParam);
+    try {
 
-    let response = await fetch(url + '/home/auth', httpParam);
-    console.log(response.status);
-    if(response.status = 200) htmlGen.home();
+        let httpParam = new HttpParam('GET', false, true);
+        htmlGen.toggleSpinner();
+        let response = await fetch(url + '/home/auth', httpParam);
+
+        console.log(response);
+        if(response.status == 200) {
+            htmlGen.regularDashboard();
+            htmlGen.home();
+        } else {
+            htmlGen.startDashboard();
+            htmlGen.start();
+        }
+
+    } catch(err) {
+        // add connection with the server is absent message
+        console.log(err);
+        htmlGen.startDashboard();
+        htmlGen.start();
+    }
 };
 
-loggedInCheck();
+async function log_out() { // add a cookie deletion
+    let httpParam = new HttpParam('GET', false, true);
+    let response = await fetch(url + '/home/log-out', httpParam);
+    console.log(response.status);
+    htmlGen.regularDashboard();
+    htmlGen.startDashboard();
+    htmlGen.start();
+};
 
-// htmlGen.module();
+
+
+
+loggedInCheck();
 
 
 

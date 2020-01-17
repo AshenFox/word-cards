@@ -32,22 +32,22 @@ class Sign_up {
                     
                     <div class="modal__username-error"></div>
                     <label for="username" class="label">USERNAME:</label>
-                    <input type="text" class="modal__input modal__input--ver2 username" id="username" placeholder="Enter a user name">
+                    <input type="text" class="pad20-15 fz17 height4r br2 bc-none brc-grey f-brc-yellow mar-bottom20 username" id="username" placeholder="Enter a user name">
 
                     <div class="modal__email-error"></div>
                     <label for="email" class="label">EMAIL:</label>
-                    <input type="email" class="modal__input modal__input--ver2 email" id="email" placeholder="Enter an email">
+                    <input type="email" class="pad20-15 fz17 height4r br2 bc-none brc-grey f-brc-yellow mar-bottom20 email" id="email" placeholder="Enter an email">
                 
                     <div class="modal__password-error"></div>
                     <label for="password" class="label">PASSWORD:</label>
-                    <input type="password" class="modal__input modal__input--ver2 password" id="password" placeholder="Enter a password">
+                    <input type="password" class="pad20-15 fz17 height4r br2 bc-none brc-grey f-brc-yellow mar-bottom20 password" id="password" placeholder="Enter a password">
                     
                     <div class="modal__sign-up">
-                        <button class="btn btn--log-in--big inactive" onclick="active.signup(active.el)">Sign up</button>
+                        <button id="btn-sign-up" class="btn width100 bcc-lightblue pad15-30 brr5 fz175 white h-grey h-bcc-yellow inactive" onclick="modal.signup(modal.el)">Sign up</button>
                     </div>
 
                     <div class="modal__options">
-                        <p>Already have an account?   <button class="btn btn--log-in btn--log-in--black" onclick="htmlGen.log_in()">Log in!</button></p>
+                        <p>Already have an account?   <button class="btn white fz15 inline-block black h-yellow" onclick="htmlGen.log_in()">Log in!</button></p>
                     </div>
                 </div>
             </div> 
@@ -62,17 +62,22 @@ class Sign_up {
         
         let el = htmlGen.createEl(this);
         document.body.appendChild(el);
+        setTimeout(() => {
+            el.querySelector('.modal__dialog').classList.add('activated');
+        }, 0);
         this.el = el;
 
         // Close modal
 
         el.querySelector('.modal__close').addEventListener('mousedown', () => {
             htmlGen.deleteEl(this.class);
+            modal = false;
         });
 
         el.addEventListener('mousedown', (e) => {
             if(e.target === el) {
                 htmlGen.deleteEl(this.class);
+                modal = false;
             };
         });
 
@@ -274,10 +279,24 @@ class Sign_up {
             let response = await fetch(url + '/sign_up/sign_up', httpParam);
 
             // let resData = JSON.parse(await response.text());
-            let resData = await response.text();
+            console.log(response.status);
+            if (response.status == 200) {
 
-            console.log(resData);
-            return resData.result;
+                response = await fetch(url + '/log_in/log_in', httpParam);
+
+                if (response.status == 200) {
+                    this.checkForModal();
+                    htmlGen.startDashboard();
+                    htmlGen.regularDashboard();
+                    htmlGen.home();
+                }
+
+
+                
+            };
+
+            
+            return;
 
             
 
@@ -286,7 +305,7 @@ class Sign_up {
 
     signupToggle(el) {
 
-        let btn = el.querySelector('.btn--log-in--big');
+        let btn = document.getElementById('btn-sign-up');
 
         if (this.username &&
             this.email &&
@@ -309,28 +328,3 @@ class Sign_up {
 
 
 // When u have username email and password active you still can send requsest although it doesn't fit the format
-
-// async submitModule(data) {  
-        
-    //         this.saveModule(cardsContainer);
-    
-    //         let bodyParam = {
-    //             method: 'moduleSubmition'
-    //         }
-    
-    //         let httpParam = {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'text/plain'
-    //             },
-    //             body: JSON.stringify({
-    //                 param: bodyParam,
-    //                 module: data,
-    //             }),
-    //         }
-    
-    //         let response = await fetch(url, httpParam);
-    //         let text = await response.text();
-    
-    //         console.log(text);
-    //     }

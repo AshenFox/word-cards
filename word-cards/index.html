@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset="UTF-8">	
+	<meta name="viewport" content="width=device-width initial-scale=1">
 	<link href="https://fonts.googleapis.com/css?family=Alata&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/styles.css">
-	<title>Word cards</title>
+	<title>Flash Cards</title>
 <body>
 
 	<!-- HEADER -->
@@ -13,26 +14,26 @@
 		<div class="container">
 			<div class="header__content">
 
-				<div class="header__title">
-					<h1>Word cards</h1>
-				</div>
-
+				
+				<button class="btn header__title" onclick="htmlGen.home()">
+					<h1>Flash Cards</h1>
+				</button>
 
 				<!-- INPUT POINT -->
 
 
-				<!-- SART PAGE BUTTONS -->
+				<!-- START PAGE BUTTONS -->
 				
-				<div class="header__buttons">
+				<div class="header__buttons-start hidden">
 
 					<div class="header__btn-holder">
-						<button class="btn btn--log-in" onclick="htmlGen.log_in()">
+						<button class="btn white fz175 h-thinblue" onclick="htmlGen.log_in()">
 							Log in 
 						</button>
 					</div>
 		
 					<div class="header__btn-holder">
-						<button class="btn btn--sign-up" onclick="htmlGen.sign_up()">
+						<button class="btn bcc-lightblue pad15-30 brr5 white fz175 h-grey h-bcc-yellow" onclick="htmlGen.sign_up()">
 							Sign up
 						</button>
 					</div>
@@ -41,72 +42,96 @@
 
 				<!-- REGULAR BUTTONS -->
 				
-				<div class="header__buttons hidden">
+				<div class="header__buttons-regular hidden">
 
-					<div class="header__btn-holder">
-						<button class="btn btn--log-in">
-							<img src="./img/add.svg" alt="" height="20" width="20">
+					<div class="header__btn-holder regular" id="new-module-regular">
+						<button class="btn white fz175 h-thinblue" onclick="htmlGen.edit()">
+							<svg fill="#ffffff" width="20" height="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" style="enable-background:new 0 0 55 55;" xml:space="preserve">
+							<g>
+								<path d="M49,8.5v-8H0v47h7v7h48v-46H49z M2,45.5v-43h45v6H7v37H2z M53,52.5H9v-5v-37h40h4V52.5z"/>
+								<path d="M42,30.5H32v-10c0-0.553-0.447-1-1-1s-1,0.447-1,1v10H20c-0.553,0-1,0.447-1,1s0.447,1,1,1h10v10c0,0.553,0.447,1,1,1
+									s1-0.447,1-1v-10h10c0.553,0,1-0.447,1-1S42.553,30.5,42,30.5z"/>
+							</g>
+							</svg>
 							Create new module
+						</button>
+					</div>
+
+					<div class="header__btn-holder regular">
+						<button class="btn white fz175 h-thinblue" onclick="log_out()">
+							Log out 
+						</button>
+					</div>
+
+					<div class="header__btn-menu">
+						<button class="btn" onclick="htmlGen.toggleHeaderMenu()">
+							<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="25" height="25" viewBox="0 0 124 124" style="enable-background:new 0 0 124 124;" xml:space="preserve" fill="#ffffff">
+								<g>
+									<path d="M112,6H12C5.4,6,0,11.4,0,18s5.4,12,12,12h100c6.6,0,12-5.4,12-12S118.6,6,112,6z"/>
+									<path d="M112,50H12C5.4,50,0,55.4,0,62c0,6.6,5.4,12,12,12h100c6.6,0,12-5.4,12-12C124,55.4,118.6,50,112,50z"/>
+									<path d="M112,94H12c-6.6,0-12,5.4-12,12s5.4,12,12,12h100c6.6,0,12-5.4,12-12S118.6,94,112,94z"/>
+								</g>
+							</svg>
 						</button>
 					</div>
 
 
 				</div>
 
+				
+
 			</div>
 			
 		</div>
-	</header>
 
-	<!-- INPUT POINT -->
+		<div class="header__menu hidden">
+			<div class="header__menu-item" id="new-module-menu">
+				<button class="btn fz175" onclick="htmlGen.edit();htmlGen.toggleHeaderMenu();">
+					<svg fill="#000000" width="20" height="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 55 55" style="enable-background:new 0 0 55 55;" xml:space="preserve">
+					<g>
+						<path d="M49,8.5v-8H0v47h7v7h48v-46H49z M2,45.5v-43h45v6H7v37H2z M53,52.5H9v-5v-37h40h4V52.5z"/>
+						<path d="M42,30.5H32v-10c0-0.553-0.447-1-1-1s-1,0.447-1,1v10H20c-0.553,0-1,0.447-1,1s0.447,1,1,1h10v10c0,0.553,0.447,1,1,1
+							s1-0.447,1-1v-10h10c0.553,0,1-0.447,1-1S42.553,30.5,42,30.5z"/>
+					</g>
+					</svg>
+					Create new module
+				</button>
+				<div class="header__triangle"></div>
+			</div>
 
-	<!-- START PAGE -->
-
-	<div class="start">
-		<div class="container">
-			<div class="start__content">
-
-				<div class="start__intro">
-					<div class="start__welcome">
-							<h1>Welcome to Word cards</h1>
-					</div>
-					<button class="btn btn--sign-up btn--sign-up--big" onclick="htmlGen.log_in()">Get started</button>
-				</div>
-				<!-- <div class="start__img">
-					<img src="" alt="">
-				</div> -->
-
+			<div class="header__menu-item">
+				<button class="btn fz175" onclick="log_out();htmlGen.toggleHeaderMenu();">
+					Log out 
+				</button>
+				<div class="header__triangle"></div>
 			</div>
 		</div>
-	</div>
-
-	<!-- LOG IN ( modal ) -->
-
-	<!-- SIGN UP ( modal ) -->
-
-	<!-- HOME PAGE -->
-
-	<!-- MODULE PAGE -->
-
-	<!-- MODULE EDIT PAGE ( this one is pretty much the same as the creation of a new module page )-->
+	</header>
 
 	<!-- FLASHCARD SESSION or WRITING SESSION (it might be both if I will have left time an enthusiasm) -->
 
-	<!-- CREATION OF A NEW MODULE -->
-
 	<!-- <div class="container">
-		<button type="button" class="btn" onclick="fetchData(url1)">fetch1</button>
+		<button type="button" class="btn fz15 uppercase grey h-yellow pad-bot10 br-bottom brc-lightblue h-brc-yellow" onclick="">Some btn</button>
 	</div> -->
 
 	<!-- <div class="container">
-		<button type="button" class="btn" onclick="fetchData(url2)">min length</button>
+		<button type="button" class="btn" onclick="active.getUserData()">Authentication test button</button>
+	</div>
+
+	<div class="container">
+		<button type="button" class="btn" onclick="active.createModule()">Create new module with curent user as the author</button>
 	</div> -->
 
-	<!-- <div class="container">
-		<button type="button" class="btn" onclick="card.fetchData();">fetch data</button>
-	</div> -->
+	<!-- <div class="triple-spinner"></div> -->
+
+	<div class="spinner__container hidden">
+		<div class="spinner"></div>
+	</div>
+	
+	<script src="js/ref/start.js"></script>
 	<script src="js/ref/log-in.js"></script>
 	<script src="js/ref/sign-up.js"></script>
+	<script src="js/ref/delete.js"></script>
 	<script src="js/ref/home.js"></script>
 	<script src="js/ref/module.js"></script>
 	<script src="js/ref/edit.js"></script>
