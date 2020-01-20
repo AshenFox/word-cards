@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = 'https://word-cards-15-12-2019.herokuapp.com'// 'http://localhost:5000'
+const url = 'http://localhost:5000'// 'https://word-cards-15-12-2019.herokuapp.com'
 
 
 
@@ -65,7 +65,6 @@ const htmlGen = {
     },
 
     toggleSpinner() {
-        let spinner =  document.querySelector('.spinner__container');
         spinner.classList.toggle('hidden');
     },
 
@@ -90,7 +89,7 @@ const htmlGen = {
 
     home() {
         if(!active.empty) {
-            this.toggleSpinner();
+            if (spinner.classList.contains('hidden')) this.toggleSpinner(); 
         }
         active = new Home();
     },
@@ -126,7 +125,6 @@ async function loggedInCheck() {
         htmlGen.toggleSpinner();
         let response = await fetch(url + '/home/auth', httpParam);
 
-        console.log(response);
         if(response.status == 200) {
             htmlGen.regularDashboard();
             htmlGen.home();
@@ -146,88 +144,24 @@ async function loggedInCheck() {
 async function log_out() { // add a cookie deletion
     let httpParam = new HttpParam('GET', false, true);
     let response = await fetch(url + '/home/log-out', httpParam);
-    console.log(response.status);
     htmlGen.regularDashboard();
     htmlGen.startDashboard();
     htmlGen.start();
 };
 
 
-
+const spinner =  document.querySelector('.spinner__container');
 
 loggedInCheck();
 
 
 
+/*
+
+Bags:
+
+If there are only two cards in the edit mode delete button still looks active
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let url1 = 'http://localhost:5000/'
-// let url2 = 'http://localhost:5000/sign_up/test'
-
-// async function fetchData(url) {
-
-//     let httpParam = {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'text/plain'
-//         },
-//         body: JSON.stringify({
-//             username: 'HoarFox',
-//         }),
-//     }
-    
-//     let response = await fetch(url, httpParam);
-//     let text = JSON.parse(await response.text());
-//     // let text = await response.text();
-//     console.log(text);
-// }
-
-//     async submitModule(data) {  
-        
-//         this.saveModule(cardsContainer);
-
-//         let bodyParam = {
-//             method: 'moduleSubmition'
-//         }
-
-//         let httpParam = {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'text/plain'
-//             },
-//             body: JSON.stringify({
-//                 param: bodyParam,
-//                 module: data,
-//             }),
-//         }
-
-//         let response = await fetch(url, httpParam);
-//         let text = await response.text();
-
-//         console.log(text);
-//     }
-
-
-
-
-
-
-
-
+*/

@@ -22,9 +22,6 @@ class Start {
                     </div>
                     <button class="btn bcc-lightblue pad30-50 brr5 white fz175 h-grey h-bcc-yellow" onclick="htmlGen.log_in()">Get started</button>
                 </div>
-                <!-- <div class="start__img">
-                    <img src="" alt="">
-                </div> -->
 
             </div>
         </div>

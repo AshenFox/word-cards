@@ -123,11 +123,9 @@ class Edit {
 
         if (!this.newModule) {
             let response = await this.getModule(id);
-            console.log(response);
             Object.assign(this, response);
         } else {
             let response = await this.getModule(id, true);
-            console.log(response);
             Object.assign(this, response);
         }
         
@@ -155,6 +153,11 @@ class Edit {
         if(this.cards) {
             this.appendCards(this.cards);
             this.changeNumber();
+ 
+            if(this.cardsCont.children.length < 3) {
+                this.toggleDelete(false);
+            }
+
         } else {
             for (let i = 1; i<=5; i++) {
                 this.addCard();
@@ -269,7 +272,6 @@ class Edit {
             
             let httpParam = new HttpParam('POST', reqData, true);
             let response = await fetch(url + '/edit/edit', httpParam);
-            console.log(response.status);
 
             if(response.status == 200) {
                 htmlGen.module(_id);
@@ -314,11 +316,14 @@ class Edit {
     }
 
     async saveModule() {
+
+        clearTimeout(this.timer);
+
         let reqData = this.collectData(this.titleCont, this.cardsCont);
-        console.log(reqData);
+        
         let httpParam = new HttpParam('POST', reqData, true);
         let response = await fetch(url + '/edit/save_module', httpParam);
-        console.log(response.status);
+        
         if(response.status == 200) {
             htmlGen.home();
         } else if (response.status == 500) {
@@ -368,7 +373,7 @@ class Edit {
             
             let httpParam = new HttpParam('POST', reqData, true);
             let response = await fetch(url + '/edit/edit_draft', httpParam);
-            console.log(response.status);
+            
 
         }, 1000);
     }
