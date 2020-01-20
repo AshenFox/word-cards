@@ -49,10 +49,6 @@ class Home {
 
             <div class="home__content">
 
-                <!--<div class="home__navbar">
-                     some content 
-                </div>-->
-
                 <div class="home__content-header">
                     <div class="home__user-info">
 
@@ -121,10 +117,7 @@ class Home {
         
 
         module.addEventListener('click', async (e) => {
-            let id = e.currentTarget.dataset.id;
-
-            // let response = await this.getModule(id);
-            // let moduleData = response.module;
+            let id = e.currentTarget.dataset.id
 
             draft ? htmlGen.edit() : htmlGen.module(id);
 
@@ -141,13 +134,11 @@ class Home {
         this.username = response.username;
         this.modules = response.modules;
 
-        console.log(this.modules);
-
         this.homeHtml();
         
         let el = htmlGen.createEl(this);
 
-        // htmlGen.switchDashboard();
+        
         htmlGen.toggleSpinner();
         document.body.appendChild(el);
 

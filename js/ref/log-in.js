@@ -129,12 +129,12 @@ class Log_in {
         }
 
         if (!userErrValue && !passErrValue) {
+            htmlGen.toggleSpinner();
             await this.login(userValue, passValue);
         }
     }
 
     createError(target1, target2, errValue) {
-        // let el = document.createElement('ul');
 
         if (!errValue) {
             target1.innerHTML = '';

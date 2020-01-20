@@ -185,9 +185,6 @@ class Module {
 
     async render(id) {
 
-        // Object.assign(this, data);
-        console.log(document.querySelector(`.${active.class}`));
-        console.log(active.class);
         htmlGen.deleteEl(active.class);
 
         let response = await this.getModule(id);
@@ -219,7 +216,6 @@ class Module {
         }
         let httpParam = new HttpParam('POST', reqData, true);
         let response = await fetch(url + '/edit/delete', httpParam);
-        console.log(response.status);
         htmlGen.home();
     }
 
@@ -233,36 +229,3 @@ class Module {
     }
     
 };
-
-
-/*
-
-                    <div class="module__card">
-                        <div class="module__card-term">
-                            condescending
-                        </div>
-                        <div class="module__card-definition">
-                            Don't be ... ( treating someone as if you are more important or more intelligent than them )
-                        </div>
-                    </div>
-
-                    <div class="module__card">
-                        <div class="module__card-term">
-                            white count
-                        </div>
-                        <div class="module__card-definition">
-                            ... is elevatied but within range ( the total number of the white blood cells in blood usually stated as the number in one cubic millimeter )( a calculation, esp. a scientific one, of the number of units in a group )
-                        </div>
-                    </div>
-
-                    <div class="module__card">
-                        <div class="module__card-term">
-                            to double up
-                        </div>
-                        <div class="module__card-definition">
-                            Dude ... on me / Matt Damon doubled up, winning two Oscars that night ( to receive or use two of something )
-                        </div>
-                    </div>
-
-
-*/

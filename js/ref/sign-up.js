@@ -266,8 +266,6 @@ class Sign_up {
             let email = el.querySelector('.email');
             let password = el.querySelector('.password');
 
-            // console.log(username.value, email.value, password.value);
-
             let reqData = {
                 username: username.value,
                 email: email.value,
@@ -278,8 +276,6 @@ class Sign_up {
 
             let response = await fetch(url + '/sign_up/sign_up', httpParam);
 
-            // let resData = JSON.parse(await response.text());
-            console.log(response.status);
             if (response.status == 200) {
 
                 response = await fetch(url + '/log_in/log_in', httpParam);
