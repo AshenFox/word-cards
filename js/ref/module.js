@@ -174,11 +174,28 @@ class Module {
         }
     }
 
-    appendCards(arr) {
-        arr.forEach(card => {
-            let newCard = this.cardHtml(card);
-            let el = htmlGen.createEl(newCard);
+    nonefoundHtml({value}) {
+        return {
+            class: 'module__none-found',
+            id: '',
+            html: /*html*/`
+            <p>No cards matching <b>'${value}'</b> found</p>
+            `
+        }
+    }
 
+    appendCards(arr) {
+
+        let html;
+        arr.forEach(item => {
+
+            if(typeof item.term == 'string') {
+                html = this.cardHtml(item);
+            } else {
+                html = this.nonefoundHtml(item);
+            };
+    
+            let el = htmlGen.createEl(html);
             this.cardsContainer.appendChild(el);
         });
     }
@@ -196,19 +213,108 @@ class Module {
         htmlGen.toggleSpinner();
         document.body.appendChild(el);
         this.cardsContainer = document.querySelector('.module__card-cont');
+        this.matchFilter = document.querySelector('.module__filter');
+
+        this.filterTimeout = false;
+
         let edit = document.getElementById('edit-item');
         let remove = document.getElementById('remove-item');
 
         edit.addEventListener('click', () => {
             htmlGen.edit(this._id);
-        })
+        });
 
         remove.addEventListener('click', () => {
             htmlGen.delete();
-        })
+        });
+
+        
+
+        this.matchFilter.addEventListener('input', (e) => {
+            clearTimeout(this.filterTimeout);
+
+            this.filterTimeout = setTimeout(() => {
+
+                this.cardsContainer.innerHTML = '';
+
+                let result;
+
+                if(e.target.value != '') {
+
+                    if (!this.findMatch(e.target.value)) {
+
+                        this.filteredCards = [
+                            {
+                                value: e.target.value,
+                            }
+                        ]
+                    }
+
+                    result = this.filteredCards
+                    
+                } else {
+                    result = this.cards;
+                }
+
+                this.appendCards(result);
+
+                // if(this.findMatch(e.target.value)) {
+
+                //     this.appendCards(this.filteredCards);
+
+                // } else {
+                    
+                //     this.appendCards(this.cards);
+                // }
+
+            }, 800);
+
+        });
 
         this.appendCards(this.cards);
     }
+
+    findMatch(value) {
+        
+        value = value.toLowerCase();
+
+        let result = false;
+        
+        this.filteredCards = this.cards.filter(card => {
+            if (card.term.toLowerCase().indexOf(value) != -1) {
+                result = true;
+                return true;
+            }
+            return false;
+        }).map(card => {
+            let newCard = Object.assign({}, card);
+            let regExp = new RegExp(`${value}`, 'g');
+            let replacement = `<span class='bcc-yellow'>${value}</span>`;
+            newCard.term = newCard.term.replace(regExp, replacement);
+            return newCard;
+        });
+
+        return result;
+    }
+
+    // findMatch(value) {
+    //     if (value == '') return false;
+        
+    //     value = value.toLowerCase();
+        
+    //     this.filteredCards = this.cards.filter(card => {
+    //         if (card.term.toLowerCase().indexOf(value) != -1) return true;
+    //         return false;
+    //     }).map(card => {
+    //         let newCard = Object.assign({}, card);
+    //         let regExp = new RegExp(`${value}`, 'g');
+    //         let replacement = `<span class='bcc-yellow'>${value}</span>`;
+    //         newCard.term = newCard.term.replace(regExp, replacement);
+    //         return newCard;
+    //     });
+
+    //     return true;
+    // }
     
     async deleteModule(_id) {
         let reqData = {
@@ -227,5 +333,7 @@ class Module {
         let response = await fetch(url + '/edit/get_module', httpParam);
         return JSON.parse(await response.text());
     }
+
+    
     
 };
