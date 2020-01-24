@@ -250,14 +250,12 @@ class Home {
     }
 
     findMatch(value) {
-        
-        value = value.toLowerCase();
 
         let result = false;
         
         this.filteredModules = this.modules.filter(item => {
             if (item.draft) return false;
-            if (item.title.toLowerCase().indexOf(value) != -1) {
+            if (item.title.indexOf(value) != -1) {
                 result = true;
                 return true;
             }
