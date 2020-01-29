@@ -41,10 +41,8 @@ class Module {
                     </div>
 
                     <div class="module__study-item">
-                        <button class="btn">
-                            <svg height="31" width="31" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                            width="315.944px" height="315.943px" viewBox="0 0 315.944 315.943" style="enable-background:new 0 0 315.944 315.943;"
-                            xml:space="preserve">
+                        <button class="btn" onclick="htmlGen.game();">
+                            <svg height="31" width="31" viewBox="0 0 315.944 315.943">
                                 <g>
                                     <path d="M198.587,206.706c0.231,0.031,0.464,0.047,0.696,0.047c0.774,0,1.539-0.168,2.246-0.49l111.254-50.746
                                         c2.305-1.047,3.564-3.552,3.043-6.033c-0.527-2.473-2.7-4.253-5.231-4.282c-0.907-0.011-90.988-1.928-130.961-81.815
@@ -66,7 +64,7 @@ class Module {
                     </div> 
                     <div class="module__study-item">
                         <button class="btn">
-                        <svg height="30" width="30" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 25.588 25.588" style="enable-background:new 0 0 25.588 25.588;" xml:space="preserve">
+                        <svg height="30" width="30" viewBox="0 0 25.588 25.588">
                             <g>
                                 <path d="M18.724,9.903l3.855,1.416l-3.206,8.729c-0.3,0.821-1.927,3.39-3.06,3.914l-0.275,0.75
                                     c-0.07,0.19-0.25,0.309-0.441,0.309c-0.054,0-0.108-0.01-0.162-0.029c-0.243-0.09-0.369-0.359-0.279-0.604l0.26-0.709
@@ -102,8 +100,7 @@ class Module {
                     <div class="module__nav">
                         <div id="edit-item" class="module__nav-item">
                             
-                            <svg width="25" height="25" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 528.899 528.899" style="enable-background:new 0 0 528.899 528.899;"
-                            xml:space="preserve">
+                            <svg width="25" height="25" viewBox="0 0 528.899 528.899">
                                 <g>
                                     <path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
                                         c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
@@ -113,7 +110,7 @@ class Module {
                             </svg>
                         </div>
                         <div id="remove-item" class="module__nav-item">
-                            <svg width="25" height="25" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 612.002 612.002" style="enable-background:new 0 0 612.002 612.002;" xml:space="preserve">
+                            <svg width="25" height="25" viewBox="0 0 612.002 612.002">
                                 <g>
                                     <path d="M540.346,19.437H389.4C388.323,8.529,379.114,0,367.917,0H244.084c-11.201,0-20.405,8.529-21.489,19.437H71.655
                                         c-11.93,0-21.599,9.669-21.599,21.602v41.036c0,11.934,9.669,21.6,21.599,21.6h468.691c11.93,0,21.599-9.667,21.599-21.6V41.04

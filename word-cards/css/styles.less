@@ -54,8 +54,9 @@ input {
     padding: 2rem 0;
     background-color: @blue;
     position: relative;
+    transition: all 0.1 linear;
 
-    @media @mobile {
+    @media @tablet {
         padding: 1rem 0;
     }
 }
@@ -95,6 +96,24 @@ input {
         display: none;
     }
 }
+
+.header__button-game-back,
+.header__button-game-options {
+    display: none;
+
+    @media @tablet {
+        display: block;
+    }
+}
+
+
+
+
+
+
+
+
+
 
 .header__btn-menu {
     display: none;
@@ -1004,10 +1023,504 @@ input {
     z-index: -10;
 }
 
-// =========== Helpers
 
-.hidden {
-    display: none;
+// =========== Game
+
+.game {
+    position: absolute;
+    top: 12.5rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 100%;
+
+    background-color: @grey-light;
+
+    @media @tablet {
+        top: 8rem;
+    }
+
+    @media @mobile {
+        top: 6.5rem;
+    }
+}
+
+.game .container {
+    padding: 0;
+    height: 100%;
+    position: relative;
+    
+}
+
+.game__main {
+    display: flex;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    @media @tablet {
+        flex-direction: column;
+    }
+}
+
+.game__controls-container {
+    
+    display: block;
+    bottom: 0;
+    position: fixed;
+    top: 12.5rem;
+    width: 19.5rem;
+
+    box-shadow: 0.3125rem 0 1.25rem 0 rgba(0,0,0,.28);
+
+    // @media @mobile {
+    //     top: 7.6rem;
+    // }
+
+    background-color: @white;
+
+    @media @tablet {
+        position: static;
+        width: 100%;
+    }
+}
+
+.game__controls {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+
+
+.game__back {
+
+    @media @tablet {
+        display: none;
+    }
+    
+
+    border-bottom: 1px solid @grey-light;
+
+    & button {
+        & svg {
+            fill: @lightblue;
+            margin-right: 0.5rem;
+            transition: all 0.1s linear;
+            
+        }
+
+        &:hover {
+            & svg {
+                fill: @grey;
+            }
+        }
+    }
+    margin-bottom: 3rem;
+}
+
+.game__title {
+
+    @media @tablet {
+        display: none;
+    }
+    
+
+    text-align: center;
+    margin-bottom: 3rem;
+
+    & svg {
+        vertical-align: middle;
+        margin-right: 0.5rem;
+        fill: @blue;
+    }
+
+    & span {
+        vertical-align: middle;
+        font-size: 2.4rem;
+        color: @blue;
+        font-weight: bold;
+    }
+    
+    
+}
+
+.game__progress {
+    padding: 1rem;
+
+    @media @tablet {
+        display: flex;
+        align-items: center;
+        padding: 1.2rem;
+    }
+}
+
+
+.game__progress-bar {
+    margin: auto;
+    height: 1.5rem;
+    background-color: @paleblue;
+    position: relative;
+    margin-bottom: 0.5rem;
+
+    @media @tablet {
+        display: inline-block;
+        width: 90%;
+        margin: 0;
+    }
+
+    
+}
+
+.game__bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+    background-color: @blue;
+}
+
+.game__progress-info {
+    display: flex;
+    justify-content: space-between;
+
+    @media @tablet {
+        width: 10%;
+    }
+}
+
+.game__progress-title {
+
+    @media @tablet {
+        display: none;
+    }
+    
+
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    color: @grey;
+}
+
+.game__progress-count {
+    font-size: 1.4rem;
+    color: @grey;
+
+    @media @tablet {
+        margin-left: auto;
+    }
+}
+
+.game__control-buttons {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    right: 1.25rem;
+
+    @media @tablet {
+        display: none;
+    }
+    
+}
+
+.game__control-buttons div button {
+
+    & svg {
+        fill: @lightblue;
+        vertical-align: middle;
+        transition: all 0.1s linear;
+        margin-right: 2rem;
+    }
+    & span {
+        vertical-align: middle;
+    }
+
+    &:hover {
+        & svg {
+            fill: @yellow;
+        }
+    }
+}
+
+.game__method {
+    margin-bottom: 2rem;
+}
+
+.game__method-tilte {
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: @grey;
+}
+
+.game__method-menu-container {
+    position: relative;
+}
+
+.game__method-menu {
+    text-transform: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: @white;
+    border: 1px solid @blue;
+}
+
+.game__method-menu-item {
+    vertical-align: middle;
+    text-align: center;
+    
+
+    &:hover {
+        color: @white;
+        background-color: @blue;
+    }
+}
+
+
+
+
+
+
+
+
+.game__content-container {
+    flex: 1;
+    margin-left: 19.5rem;
+    padding: 2.5rem;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    @media @tablet {
+        margin: 0;
+    }
+    
+}
+
+.game__content {
+    padding: 2.5rem;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+.game__components {
+    margin: 0 auto;
+    width: auto;
+    height: 100%;
+    max-width: 67.5rem;
+    
+
+    
+
+    // background-color: red;
+}
+
+.game__cards-container {
+
+    width: 100%;
+    height: 85%;
+
+    // background-color: green;
+    perspective: 1000px;
+    position: relative;
+    
+
+}
+
+// .game__card {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     bottom: 0;
+//     left: 0;
+
+
+//     background-color: @white;
+//     width: 100%;
+//     height: 100%;
+//     border-radius: 1rem;
+
+
+//     box-shadow: 0 0 1.25rem -0.1rem rgba(0,0,0,.28);
+//     transform-style: preserve-3d;
+//     transition: transform .30s ease, opacity .12s linear; //!important
+//     opacity: 1;
+
+//     text-align: center;
+
+
+//     &.transparent {
+//         opacity: 0;
+//         z-index: -10;
+
+//     }
+
+//     &.prev {
+//         transform: translateX(-16%) rotateY(16deg) translateZ(0);
+//     }
+
+//     &.next {
+//         transform: translateX(16%) rotateY(-16deg) translateZ(0);
+//     }
+
+//     &.flipped {
+//         transform: rotateX(180deg);
+//     }
+
+//     // &:hover {
+//     //     transform: rotateX(180deg);
+//     //     // transform: translateX(16%) rotateY(-16deg) translateZ(0);
+//     //     // opacity: 0;
+//     // }
+// }
+
+.game__card {
+
+    transition: transform .30s ease, opacity .12s linear;
+    
+    
+    opacity: 1;
+    
+    text-align: center;
+
+    
+
+    // &:hover {
+    //     transform: rotateX(180deg);
+    //     // transform: translateX(16%) rotateY(-16deg) translateZ(0);
+    //     // opacity: 0;
+    // }
+}
+
+.game__card-front,
+.game__card-back {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-color: @white;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 0 1.25rem -0.1rem rgba(0,0,0,.28);
+    transform-style: preserve-3d;
+    transition: transform .30s ease, opacity .12s linear;
+    backface-visibility: hidden;
+    z-index: 10;
+    transform: rotateX(0deg);
+
+    &.transparent {
+        opacity: 0;
+        z-index: -10;
+
+    }
+
+    &.prev {
+        transform: translateX(-16%) rotateY(16deg) translateZ(0);
+    }
+
+    &.next {
+        transform: translateX(16%) rotateY(-16deg) translateZ(0);
+    }
+
+    
+}
+
+.game__card-front {
+    &.rearside {
+        transform: rotateX(180deg);
+        z-index: -10;
+    }
+}
+
+.game__card-back {
+    &.rearside {
+        transform: rotateX(-180deg);
+        z-index: -10;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.game__nav {
+    display: flex;
+
+    width: 100%;
+    height: 15%;
+
+}
+
+
+.game__nav-item {
+
+    width: 50%;
+    padding: 0 5rem;
+    margin: auto;
+    
+    
+    & button {
+
+        
+        width: 5rem;
+        height: 5rem;
+        box-shadow: 0 0 0.6rem 0 rgba(0,0,0,0.28);
+
+        & svg {
+            transition: all 0.1s linear;
+            fill: @lightblue;
+            position: absolute;
+        }
+
+        &:hover {
+        
+            & svg {
+                fill: @grey;
+            }
+            
+        }
+    }
+
+    &.prev {
+        & button {
+            & svg {
+                top: 50%;
+                left: 50%;
+                transform: translate(-15px, -12.5px);
+            }
+        }
+    }
+
+    &.next {
+        & button {
+            & svg {
+                top: 50%;
+                left: 50%;
+                transform: translate(-9.5px, -12.5px);
+            }
+        }
+    }
+
 }
 
 @import "./helpers.less";

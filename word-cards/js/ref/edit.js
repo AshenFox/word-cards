@@ -89,7 +89,7 @@ class Edit {
                     <div class="edit__cards-number"></div>
                     <div class="edit__cards-delete">
                         <button class="btn">
-                            <svg width="17" height="17" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 612.002 612.002" style="enable-background:new 0 0 612.002 612.002;" xml:space="preserve">
+                            <svg width="17" height="17" viewBox="0 0 612.002 612.002">
                                 <g>
                                     <path d="M540.346,19.437H389.4C388.323,8.529,379.114,0,367.917,0H244.084c-11.201,0-20.405,8.529-21.489,19.437H71.655
                                         c-11.93,0-21.599,9.669-21.599,21.602v41.036c0,11.934,9.669,21.6,21.599,21.6h468.691c11.93,0,21.599-9.667,21.599-21.6V41.04

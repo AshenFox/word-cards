@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = 'https://word-cards-15-12-2019.herokuapp.com'// 'http://localhost:5000'
+const url = 'http://localhost:5000'// 'https://word-cards-15-12-2019.herokuapp.com'
 
 const htmlGen = {
 
@@ -101,6 +101,11 @@ const htmlGen = {
         this.toggleSpinner();
         active = new Edit(id);
     },
+
+    game() { // id parameter
+        // this.toggleSpinner();
+        active = new Game(); // id parameter
+    },
 };
 
 class HttpParam {
@@ -151,3 +156,4 @@ async function log_out() { // add a cookie deletion
 const spinner =  document.querySelector('.spinner__container');
 
 loggedInCheck();
+// htmlGen.game();
