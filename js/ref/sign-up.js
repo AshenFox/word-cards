@@ -291,10 +291,7 @@ class Sign_up {
                 
             };
 
-            
             return;
-
-            
 
         };
     }
