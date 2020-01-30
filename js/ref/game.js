@@ -185,7 +185,7 @@ class Game {
 
                                 <div class="game__nav-item prev">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow mar-left-a p-r" onclick="active.switchCard(false)">
-                                        <svg height="25" width="25" viewBox="0 0 490.661 490.661">
+                                        <svg viewBox="0 0 490.661 490.661">
                                             <g>
                                                 <g>
                                                     <path d="M453.331,1.424c-3.307-1.899-7.381-1.899-10.688,0L37.309,236.091c-3.285,1.92-5.312,5.44-5.312,9.237
@@ -199,7 +199,7 @@ class Game {
 
                                 <div class="game__nav-item next">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow p-r" onclick="active.switchCard(true)">
-                                        <svg height="25" width="25" viewBox="0 0 490.661 490.661">
+                                        <svg viewBox="0 0 490.661 490.661">
                                             <g>
                                                 <g>
                                                     <path d="M453.352,236.091L48.019,1.424c-3.285-1.899-7.36-1.899-10.688,0c-3.285,1.899-5.333,5.419-5.333,9.237v469.333
