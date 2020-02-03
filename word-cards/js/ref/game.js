@@ -144,7 +144,6 @@ class Game {
                 
                 <div class="game__content-container">
 
-
                     <div class="game__content">
 
                         <div class="game__components">
@@ -154,28 +153,70 @@ class Game {
 
                                 <div class="game__card">
                                     <div class="game__card-front prev transparent">
-                                        <h1>First card (front)</h1>
+                                        <div class="game__img-container">
+                                            <div class="game__img" style="background-image: url(https://img.huffingtonpost.com/asset/5dcc613f1f00009304dee539.jpeg?cache=QaTFuOj2IM&ops=crop_834_777_4651_2994%2Cscalefit_720_noupscale);"></div>
+                                        </div>
+
+                                        <div class="game__defenition-container">
+                                            <div class="game__defenition">
+                                                <p>
+                                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ipsum esse, nobis facilis sapiente doloribus impedit beatae laudantium sed atque animi rerum recusandae molestiae maxime nostrum similique suscipit culpa explicabo.
+                                                    
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="game__card-back rearside prev transparent">
-                                        <h1>First card (back)</h1>
+                                        <div class="game__term">
+                                            <p>Cat</p>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div class="game__card">
                                     <div class="game__card-front">
-                                        <h1>Second card (front)</h1>
+                                        <div class="game__img-container">
+                                            <div class="game__img" style="background-image: url(https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687);"></div>
+                                        </div>
+
+                                        <div class="game__defenition-container">
+                                            <div class="game__defenition">
+                                                <p>
+                                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ipsum esse, nobis facilis sapiente doloribus impedit beatae laudantium sed atque animi rerum recusandae molestiae maxime nostrum similique suscipit culpa explicabo.
+                                                    
+                                                </p>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                     <div class="game__card-back rearside">
-                                        <h1>Second card (back)</h1>
+                                        <div class="game__term">
+                                            <p>Turquoise</p>
+                                        </div>
                                     </div>
                                 </div>
 
+                                
+
                                 <div class="game__card">
                                     <div class="game__card-front next transparent">
-                                        <h1>Third card (front)</h1>
+                                        <div class="game__img-container">
+                                            <div class="game__img" style="background-image: url(https://www.billboard.com/files/styles/article_main_image/public/media/Billie-Eilish-bb12-2019-feat-billboard-strgoia-1548.jpg);"></div>
+                                        </div>
+
+                                        <div class="game__defenition-container">
+                                            <div class="game__defenition">
+                                                <p>
+                                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ipsum esse, nobis facilis sapiente doloribus impedit beatae laudantium sed atque animi rerum recusandae molestiae maxime nostrum similique suscipit culpa explicabo.
+                                                    
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="game__card-back rearside next transparent">
-                                        <h1>Third card (back)</h1>
+                                        <div class="game__term">
+                                            <p>Billie Eilish</p>
+                                        </div>
                                     </div>
                                 </div>
                             
@@ -280,10 +321,7 @@ class Game {
 
     flipCard(event) {
 
-        let target = event.target;
-
-        if(target.classList.contains('game__card-front') ||
-           target.classList.contains('game__card-back')) {
+        if(event.target.closest('.game__card')) {
             
             
             active.activeFront.classList.toggle('rearside');
