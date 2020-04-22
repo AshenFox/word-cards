@@ -1,14 +1,13 @@
 class Game {
-    constructor() {
+  constructor() {
+    if (active.newModule) htmlGen.hideCreateModule();
 
-        if(active.newModule) htmlGen.hideCreateModule();
+    this.class = "game";
+    this.render();
+  }
 
-        this.class = 'game'; 
-        this.render();
-    }
-
-    gameHtml() {
-        this.html = /*html*/ `
+  gameHtml() {
+    this.html = /*html*/ `
         
         <div class="container">
             <div class="game__main">
@@ -80,7 +79,7 @@ class Game {
                                 <div class="game__method-tilte">
                                     Answer with:
                                 </div>
-                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="">
+                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.methodMenuToggle();">
                                     
                                     <svg height="13" width="13" viewBox="0 0 512 512" >
                                         <g>
@@ -90,7 +89,7 @@ class Game {
                                                 C513.946,152.868,513.959,140.205,506.157,132.386z"/>
                                         </g>
                                     </svg>
-                                    <span>Defenition</span>
+                                    <span>Term</span>
 
                                     
                                     
@@ -111,7 +110,7 @@ class Game {
                             </div>
 
                             <div class="game__shuffle">
-                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="">
+                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.toggleShuffle(active.cardShuffle);">
 
                                     <svg height="20" width="20" viewBox="0 0 512 512">
                                         
@@ -199,6 +198,7 @@ class Game {
                                 
 
                                 <div class="game__card">
+
                                     <div class="game__card-front next transparent">
                                         <div class="game__img-container">
                                             <div class="game__img" style="background-image: url(https://www.billboard.com/files/styles/article_main_image/public/media/Billie-Eilish-bb12-2019-feat-billboard-strgoia-1548.jpg);"></div>
@@ -213,12 +213,31 @@ class Game {
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="game__card-back rearside next transparent">
                                         <div class="game__term">
                                             <p>Billie Eilish</p>
                                         </div>
                                     </div>
+
                                 </div>
+
+                                <div class="game__card">
+
+                                    <div class="game__card-front unturnable next transparent">
+                                        <h1 class="game__card-message">Nice work!</h1>
+                                        <p class="game__card-message-info">You've just studied 3 terms!</p>
+                                        <button class="btn bcc-lightblue pad30 brr5 white fz175 h-grey h-bcc-yellow width50">Finish up</button>
+                                    </div>
+
+                                    <div class="game__card-back unturnable rearside next transparent">
+                                        
+                                    </div>
+
+                                </div>
+
+
+
                             
                             </div>
 
@@ -227,13 +246,11 @@ class Game {
                                 <div class="game__nav-item prev">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow mar-left-a p-r" onclick="active.switchCard(false)">
                                         <svg viewBox="0 0 490.661 490.661">
-                                            <g>
-                                                <g>
-                                                    <path d="M453.331,1.424c-3.307-1.899-7.381-1.899-10.688,0L37.309,236.091c-3.285,1.92-5.312,5.44-5.312,9.237
-                                                        s2.027,7.317,5.312,9.237l405.333,234.667c1.664,0.96,3.499,1.429,5.355,1.429c1.835,0,3.691-0.469,5.333-1.429
-                                                        c3.285-1.899,5.333-5.419,5.333-9.237V10.661C458.664,6.843,456.616,3.323,453.331,1.424z"/>
-                                                </g>
-                                            </g>
+                                            
+                                            <path d="M453.331,1.424c-3.307-1.899-7.381-1.899-10.688,0L37.309,236.091c-3.285,1.92-5.312,5.44-5.312,9.237
+                                                s2.027,7.317,5.312,9.237l405.333,234.667c1.664,0.96,3.499,1.429,5.355,1.429c1.835,0,3.691-0.469,5.333-1.429
+                                                c3.285-1.899,5.333-5.419,5.333-9.237V10.661C458.664,6.843,456.616,3.323,453.331,1.424z"/>
+                                                
                                         </svg>
                                     </button>
                                 </div>
@@ -241,13 +258,11 @@ class Game {
                                 <div class="game__nav-item next">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow p-r" onclick="active.switchCard(true)">
                                         <svg viewBox="0 0 490.661 490.661">
-                                            <g>
-                                                <g>
-                                                    <path d="M453.352,236.091L48.019,1.424c-3.285-1.899-7.36-1.899-10.688,0c-3.285,1.899-5.333,5.419-5.333,9.237v469.333
-                                                        c0,3.819,2.048,7.339,5.333,9.237c1.643,0.939,3.499,1.429,5.333,1.429c1.856,0,3.691-0.469,5.355-1.429l405.333-234.667
-                                                        c3.285-1.92,5.312-5.44,5.312-9.237S456.637,237.989,453.352,236.091z"/>
-                                                </g>
-                                            </g>
+                                            
+                                            <path d="M453.352,236.091L48.019,1.424c-3.285-1.899-7.36-1.899-10.688,0c-3.285,1.899-5.333,5.419-5.333,9.237v469.333
+                                                c0,3.819,2.048,7.339,5.333,9.237c1.643,0.939,3.499,1.429,5.333,1.429c1.856,0,3.691-0.469,5.355-1.429l405.333-234.667
+                                                c3.285-1.92,5.312-5.44,5.312-9.237S456.637,237.989,453.352,236.091z"/>
+                                                
                                         </svg>
                                     </button>
                                 </div>
@@ -260,85 +275,107 @@ class Game {
             </div>
         </div>
         `;
+  }
+
+  async render() {
+    htmlGen.deleteEl(active.class);
+    htmlGen.toggleGameButtons();
+
+    // let response = await this.getModule(id);  edit/get-module
+
+    this.gameHtml();
+
+    let el = htmlGen.createEl(this);
+
+    // htmlGen.toggleSpinner();
+    document.body.appendChild(el);
+
+    this.cards = [...document.querySelectorAll(".game__card")];
+    this.cardsContainer = document.querySelector(".game__cards-container");
+    this.methodMenu = document.querySelector(".game__method-menu-container");
+    this.buttonMenu = document.querySelector(".game__method-menu-container");
+    this.cardShuffle = document.querySelector(".game__shuffle");
+
+    console.log(this.cards[1]);
+
+    this.activeCard = this.cards[1];
+
+    this.cardsContainer.addEventListener("click", this.flipCard);
+
+    // console.log(this.nextCard());
+
+    // this.prevBtn = document.querySelectorAll('.game__nav-item.prev');
+    // this.nextBtn = document.querySelectorAll('.game__nav-item.next');
+  }
+
+  get activeFront() {
+    return this.activeCard.querySelector(".game__card-front");
+  }
+
+  get activeBack() {
+    return this.activeCard.querySelector(".game__card-back");
+  }
+
+  switchCard(forward) {
+    let ind = this.cards.indexOf(this.activeCard);
+    if (ind == (forward ? this.cards.length - 1 : 0)) return;
+
+    this.activeFront.classList.add("transparent");
+    this.activeFront.classList.add(forward ? "prev" : "next");
+    this.activeFront.classList.remove("rearside");
+    this.activeBack.classList.add("transparent");
+    this.activeBack.classList.add(forward ? "prev" : "next");
+    this.activeBack.classList.add("rearside");
+
+    this.activeCard = this.cards[ind + (forward ? 1 : -1)];
+
+    this.activeFront.classList.remove("transparent");
+    this.activeFront.classList.remove(forward ? "next" : "prev");
+    this.activeBack.classList.remove("transparent");
+    this.activeBack.classList.remove(forward ? "next" : "prev");
+  }
+
+  flipCard(event) {
+    if (event.target.closest(".game__card")) {
+      active.activeFront.classList.toggle("rearside");
+      active.activeBack.classList.toggle("rearside");
     }
-    
-    async render() {
-        htmlGen.deleteEl(active.class);
+  }
 
-        // let response = await this.getUserData();
+  methodMenuToggle() {
+    let target;
+    modal ? (target = modal.methodMenu) : (target = active.methodMenu);
+    target.classList.toggle("hidden");
 
-        this.gameHtml();
-        
-        let el = htmlGen.createEl(this);
-
-        
-        // htmlGen.toggleSpinner();
-        document.body.appendChild(el);
-
-        this.cards = [...document.querySelectorAll('.game__card')];
-        this.cardsContainer = document.querySelector('.game__cards-container');
-
-        console.log(this.cards[1]);
-
-        this.activeCard = this.cards[1];
-
-        this.cardsContainer.addEventListener('click', this.flipCard);
-
-        // console.log(this.nextCard());
-    
-        // this.prevBtn = document.querySelectorAll('.game__nav-item.prev');
-        // this.nextBtn = document.querySelectorAll('.game__nav-item.next');
-    };
-
-    get activeFront() {
-        return this.activeCard.querySelector('.game__card-front');
+    if (target.classList.contains("hidden")) {
+      setTimeout(() => {
+        document.removeEventListener("click", active.methodMenuToggle);
+      }, 0);
+    } else {
+      setTimeout(() => {
+        document.addEventListener("click", active.methodMenuToggle);
+      }, 0);
     }
+  }
 
-    get activeBack() {
-        return this.activeCard.querySelector('.game__card-back');
+  methodChange(type) {
+    switch (type) {
+      case "term":
+
+      case "defenition":
     }
+  }
 
-    switchCard(forward) {
+  toggleShuffle(target) {
+    target.classList.toggle("active");
+  }
+  // async getUserData() {
+  //     let httpParam = new HttpParam('GET', false, true);
+  //     let response = await fetch(url + '/home/get_user_data', httpParam);
+  //     return JSON.parse(await response.text());
+  // }
+}
 
-        
-        let ind = this.cards.indexOf(this.activeCard);
-        if(ind == (forward ? this.cards.length - 1 : 0)) return;
-
-        this.activeFront.classList.add('transparent');
-        this.activeFront.classList.add(forward ? 'prev' : 'next');
-        this.activeFront.classList.remove('rearside');
-        this.activeBack.classList.add('transparent');
-        this.activeBack.classList.add(forward ? 'prev' : 'next');
-        this.activeBack.classList.add('rearside');
-
-        this.activeCard = this.cards[ind + (forward ? 1 : -1)];
-
-        this.activeFront.classList.remove('transparent');
-        this.activeFront.classList.remove(forward ? 'next' : 'prev');
-        this.activeBack.classList.remove('transparent');
-        this.activeBack.classList.remove(forward ? 'next' : 'prev');
-    }
-
-    flipCard(event) {
-
-        if(event.target.closest('.game__card')) {
-            
-            
-            active.activeFront.classList.toggle('rearside');
-            active.activeBack.classList.toggle('rearside');
-        }
-
-
-    }
-
-
-    // async getUserData() {
-    //     let httpParam = new HttpParam('GET', false, true);
-    //     let response = await fetch(url + '/home/get_user_data', httpParam);
-    //     return JSON.parse(await response.text());
-    // }
-};
-
-{/* <div class="game__card">
+/* <div class="game__card">
     <h1>Second card</h1>
-</div> */}
+</div> */

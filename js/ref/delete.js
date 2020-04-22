@@ -1,11 +1,9 @@
 class Delete {
-
     constructor() {
-
-        this.class = 'modal';
-        this.id = 'active-modal';
+        this.class = "modal";
+        this.id = "active-modal";
         this.el;
-        
+
         this.html = /*html*/ `
 
 		<div class="modal__dialog">
@@ -60,35 +58,34 @@ class Delete {
     }
 
     render() {
-
         this.checkForModal();
-        
+
         let el = htmlGen.createEl(this);
         document.body.appendChild(el);
         setTimeout(() => {
-            el.querySelector('.modal__dialog').classList.add('activated');
+            el.querySelector(".modal__dialog").classList.add("activated");
         }, 0);
         this.el = el;
 
         // Close modal
 
-        el.querySelector('.modal__close').addEventListener('mousedown', () => {
+        el.querySelector(".modal__close").addEventListener("mousedown", () => {
             htmlGen.deleteEl(this.class);
             modal = false;
         });
 
-        el.addEventListener('mousedown', (e) => {
-            if(e.target === el) {
+        el.addEventListener("mousedown", e => {
+            if (e.target === el) {
                 htmlGen.deleteEl(this.class);
                 modal = false;
-            };
-        });  
+            }
+        });
     }
 
     checkForModal() {
-        let el = document.getElementById('active-modal');
+        let el = document.getElementById("active-modal");
         if (el) {
             el.parentNode.removeChild(el);
-        };
+        }
     }
-};
+}

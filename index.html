@@ -9,13 +9,12 @@
 <body>
 
 	<!-- HEADER -->
-
 	<header class="header">
 		<div class="container">
 			<div class="header__content">
 
 				
-				<button class="btn header__title hidden__media-tablet" onclick="active.class !== 'start' ? htmlGen.home() : '';">
+				<button class="btn header__title" onclick="active.class !== 'start' ? htmlGen.home() : '';">
 					<h1>Flash Cards</h1>
 				</button>
 
@@ -79,7 +78,7 @@
 
 				<!-- GAME BUTTONS -->
 
-				<div class="header__button-game-back">
+				<div class="header__button-game-back hidden">
 					<button class="btn d-f" onclick="htmlGen.home();">
 						<svg fill="#ffffff" width="25" height="25" viewBox="0 0 443.52 443.52" >
 							<g>
@@ -91,8 +90,8 @@
 					</button>
 				</div>
 
-				<div class="header__button-game-options">
-					<button class="btn d-f">
+				<div class="header__button-game-options hidden">
+					<button class="btn d-f" onclick="htmlGen.options();">
 						<svg fill="#ffffff" width="30" height="30" viewBox="0 0 512 512">
 							<g>
 								
@@ -169,6 +168,7 @@
 	<script src="js/ref/module.js"></script>
 	<script src="js/ref/edit.js"></script>
 	<script src="js/ref/game.js"></script>
+	<script src="js/ref/options.js"></script>
 	<script src="js/index.js"></script>
 </body>
 </html>

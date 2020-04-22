@@ -1,18 +1,19 @@
-'use strict'
+"use strict";
 
 class Start {
     constructor() {
-
-        if(active) {
-            if(active.newModule) htmlGen.hideCreateModule();
+        if (active) {
+            if (active.newModule) htmlGen.hideCreateModule();
+            if (active.class == "game") htmlGen.toggleGameButtons();
         }
-        
-        this.class = 'start';
-        this.id = '';
+
+        this.class = "start";
+        this.id = "";
         this.el;
 
-        this.html = /*html*/
-        `
+        this.html =
+            /*html*/
+            `
         <div class="container">
             <div class="start__content">
 
@@ -25,18 +26,15 @@ class Start {
 
             </div>
         </div>
-        `
+        `;
         this.render();
-
     }
 
     render() {
-
-        if(active) {
+        if (active) {
             htmlGen.deleteEl(`${active.class}`);
         }
-        
-        
+
         let el = htmlGen.createEl(this);
 
         htmlGen.toggleSpinner();
