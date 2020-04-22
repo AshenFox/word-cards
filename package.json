@@ -4,12 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "gh-pages -d word-cards"
+    "deploy": "gh-pages -d word-cards",
+    "dev": "concurrently \"npx node-sass word-cards/css/styles.scss word-cards/css/styles.css -w\" \"npx live-server word-cards/ \""
   },
   "author": "",
   "license": "ISC",
   "homepage": "https://HoarFox.github.io/word-cards",
   "dependencies": {
     "gh-pages": "^2.1.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.7.6",
+    "concat": "^1.0.3",
+    "node-sass": "^4.13.1",
+    "postcss-cli": "^7.1.0"
   }
 }

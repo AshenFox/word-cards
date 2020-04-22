@@ -1,21 +1,20 @@
-'use strict'
+"use strict";
 
 class Module {
-    constructor(id) {
+  constructor(id) {
+    if (active.newModule) htmlGen.hideCreateModule();
+    if (active.class == "game") htmlGen.toggleGameButtons();
 
-        if(active.newModule) htmlGen.hideCreateModule();
+    this.class = "module";
+    // this.html = /*html*/ `
 
-        this.class = 'module';
-        // this.html = /*html*/ `
-        
-        // `;
+    // `;
 
-        this.render(id);
-        
-    }
+    this.render(id);
+  }
 
-    homeHtml() {
-        this.html = /*html*/ `
+  homeHtml() {
+    this.html = /*html*/ `
             <div class="module__header">
 
             <div class="container">
@@ -111,13 +110,11 @@ class Module {
                         </div>
                         <div id="remove-item" class="module__nav-item">
                             <svg width="25" height="25" viewBox="0 0 612.002 612.002">
-                                <g>
-                                    <path d="M540.346,19.437H389.4C388.323,8.529,379.114,0,367.917,0H244.084c-11.201,0-20.405,8.529-21.489,19.437H71.655
-                                        c-11.93,0-21.599,9.669-21.599,21.602v41.036c0,11.934,9.669,21.6,21.599,21.6h468.691c11.93,0,21.599-9.667,21.599-21.6V41.04
-                                        C561.945,29.106,552.276,19.437,540.346,19.437z"/>
-                                    <path d="M95.34,590.403c0,11.923,9.665,21.599,21.599,21.599h378.127c11.934,0,21.599-9.674,21.599-21.599V145.167H95.34V590.403z
-                                        "/>
-                                </g>
+                                <path d="M540.346,19.437H389.4C388.323,8.529,379.114,0,367.917,0H244.084c-11.201,0-20.405,8.529-21.489,19.437H71.655
+                                    c-11.93,0-21.599,9.669-21.599,21.602v41.036c0,11.934,9.669,21.6,21.599,21.6h468.691c11.93,0,21.599-9.667,21.599-21.6V41.04
+                                    C561.945,29.106,552.276,19.437,540.346,19.437z"/>
+                                <path d="M95.34,590.403c0,11.923,9.665,21.599,21.599,21.599h378.127c11.934,0,21.599-9.674,21.599-21.599V145.167H95.34V590.403z
+                                    "/>
                             </svg>
 
                         </div>
@@ -154,183 +151,176 @@ class Module {
 
         </div>
         `;
-    }
+  }
 
-    cardHtml({ term, defenition }) {
-        return {
-            class: 'module__card',
-            id: '',
-            html: /*html*/`
+  cardHtml({ term, defenition }) {
+    return {
+      class: "module__card",
+      id: "",
+      html: /*html*/ `
                 <div class="module__card-term">
                     ${term}
                 </div>
-                <div class="module__card-definition">
-                    ${defenition}
+                <div class="module__card-definition-container">
+                    <div class="module__card-definition">
+                        ${defenition}
+                    </div>
+                    <div class="module__card-img-container">
+                        <div class="module__card-img">
+                        </div>
+                    </div>
                 </div>
-            `
-        }
-    }
+            `,
+    };
+  }
 
-    nonefoundHtml({value}) {
-        return {
-            class: 'module__none-found',
-            id: '',
-            html: /*html*/`
+  nonefoundHtml({ value }) {
+    return {
+      class: "module__none-found",
+      id: "",
+      html: /*html*/ `
             <p>No cards matching <b>'${value}'</b> found</p>
-            `
+            `,
+    };
+  }
+
+  appendCards(arr) {
+    let html;
+    arr.forEach((item) => {
+      if (typeof item.term == "string") {
+        html = this.cardHtml(item);
+      } else {
+        html = this.nonefoundHtml(item);
+      }
+
+      let el = htmlGen.createEl(html);
+      this.cardsContainer.appendChild(el);
+    });
+  }
+
+  async render(id) {
+    htmlGen.deleteEl(active.class);
+
+    let response = await this.getModule(id);
+    Object.assign(this, response);
+    this.homeHtml();
+
+    let el = htmlGen.createEl(this);
+
+    htmlGen.toggleSpinner();
+    document.body.appendChild(el);
+    this.cardsContainer = document.querySelector(".module__card-cont");
+    this.matchFilter = document.querySelector(".module__filter");
+
+    this.filterTimeout = false;
+
+    let edit = document.getElementById("edit-item");
+    let remove = document.getElementById("remove-item");
+
+    edit.addEventListener("click", () => {
+      htmlGen.edit(this._id);
+    });
+
+    remove.addEventListener("click", () => {
+      htmlGen.delete();
+    });
+
+    this.matchFilter.addEventListener("input", (e) => {
+      clearTimeout(this.filterTimeout);
+
+      this.filterTimeout = setTimeout(() => {
+        this.cardsContainer.innerHTML = "";
+
+        let result;
+
+        if (e.target.value != "") {
+          if (!this.findMatch(e.target.value)) {
+            this.filteredCards = [
+              {
+                value: e.target.value,
+              },
+            ];
+          }
+
+          result = this.filteredCards;
+        } else {
+          result = this.cards;
         }
-    }
 
-    appendCards(arr) {
+        this.appendCards(result);
 
-        let html;
-        arr.forEach(item => {
+        // if(this.findMatch(e.target.value)) {
 
-            if(typeof item.term == 'string') {
-                html = this.cardHtml(item);
-            } else {
-                html = this.nonefoundHtml(item);
-            };
-    
-            let el = htmlGen.createEl(html);
-            this.cardsContainer.appendChild(el);
-        });
-    }
+        //     this.appendCards(this.filteredCards);
 
-    async render(id) {
+        // } else {
 
-        htmlGen.deleteEl(active.class);
+        //     this.appendCards(this.cards);
+        // }
+      }, 800);
+    });
 
-        let response = await this.getModule(id);
-        Object.assign(this, response);
-        this.homeHtml();
+    this.appendCards(this.cards);
+  }
 
-        let el = htmlGen.createEl(this);
+  findMatch(value) {
+    value = value.toLowerCase();
 
-        htmlGen.toggleSpinner();
-        document.body.appendChild(el);
-        this.cardsContainer = document.querySelector('.module__card-cont');
-        this.matchFilter = document.querySelector('.module__filter');
+    let result = false;
 
-        this.filterTimeout = false;
-
-        let edit = document.getElementById('edit-item');
-        let remove = document.getElementById('remove-item');
-
-        edit.addEventListener('click', () => {
-            htmlGen.edit(this._id);
-        });
-
-        remove.addEventListener('click', () => {
-            htmlGen.delete();
-        });
-
-        
-
-        this.matchFilter.addEventListener('input', (e) => {
-            clearTimeout(this.filterTimeout);
-
-            this.filterTimeout = setTimeout(() => {
-
-                this.cardsContainer.innerHTML = '';
-
-                let result;
-
-                if(e.target.value != '') {
-
-                    if (!this.findMatch(e.target.value)) {
-
-                        this.filteredCards = [
-                            {
-                                value: e.target.value,
-                            }
-                        ]
-                    }
-
-                    result = this.filteredCards
-                    
-                } else {
-                    result = this.cards;
-                }
-
-                this.appendCards(result);
-
-                // if(this.findMatch(e.target.value)) {
-
-                //     this.appendCards(this.filteredCards);
-
-                // } else {
-                    
-                //     this.appendCards(this.cards);
-                // }
-
-            }, 800);
-
-        });
-
-        this.appendCards(this.cards);
-    }
-
-    findMatch(value) {
-        
-        value = value.toLowerCase();
-
-        let result = false;
-        
-        this.filteredCards = this.cards.filter(card => {
-            if (card.term.toLowerCase().indexOf(value) != -1) {
-                result = true;
-                return true;
-            }
-            return false;
-        }).map(card => {
-            let newCard = Object.assign({}, card);
-            let regExp = new RegExp(`${value}`, 'g');
-            let replacement = `<span class='bcc-yellow'>${value}</span>`;
-            newCard.term = newCard.term.replace(regExp, replacement);
-            return newCard;
-        });
-
-        return result;
-    }
-
-    // findMatch(value) {
-    //     if (value == '') return false;
-        
-    //     value = value.toLowerCase();
-        
-    //     this.filteredCards = this.cards.filter(card => {
-    //         if (card.term.toLowerCase().indexOf(value) != -1) return true;
-    //         return false;
-    //     }).map(card => {
-    //         let newCard = Object.assign({}, card);
-    //         let regExp = new RegExp(`${value}`, 'g');
-    //         let replacement = `<span class='bcc-yellow'>${value}</span>`;
-    //         newCard.term = newCard.term.replace(regExp, replacement);
-    //         return newCard;
-    //     });
-
-    //     return true;
-    // }
-    
-    async deleteModule(_id) {
-        let reqData = {
-            _id,
+    this.filteredCards = this.cards
+      .filter((card) => {
+        if (card.term.toLowerCase().indexOf(value) != -1) {
+          result = true;
+          return true;
         }
-        let httpParam = new HttpParam('POST', reqData, true);
-        let response = await fetch(url + '/edit/delete', httpParam);
-        htmlGen.home();
-    }
+        return false;
+      })
+      .map((card) => {
+        let newCard = Object.assign({}, card);
+        let regExp = new RegExp(`${value}`, "g");
+        let replacement = `<span class='bcc-yellow'>${value}</span>`;
+        newCard.term = newCard.term.replace(regExp, replacement);
+        return newCard;
+      });
 
-    async getModule(id) {
-        let reqData = {
-            id,
-        }
-        let httpParam = new HttpParam('POST', reqData, true);
-        let response = await fetch(url + '/edit/get_module', httpParam);
-        return JSON.parse(await response.text());
-    }
+    return result;
+  }
 
-    
-    
-};
+  // findMatch(value) {
+  //     if (value == '') return false;
+
+  //     value = value.toLowerCase();
+
+  //     this.filteredCards = this.cards.filter(card => {
+  //         if (card.term.toLowerCase().indexOf(value) != -1) return true;
+  //         return false;
+  //     }).map(card => {
+  //         let newCard = Object.assign({}, card);
+  //         let regExp = new RegExp(`${value}`, 'g');
+  //         let replacement = `<span class='bcc-yellow'>${value}</span>`;
+  //         newCard.term = newCard.term.replace(regExp, replacement);
+  //         return newCard;
+  //     });
+
+  //     return true;
+  // }
+
+  async deleteModule(_id) {
+    let reqData = {
+      _id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/delete", httpParam);
+    htmlGen.home();
+  }
+
+  async getModule(id) {
+    let reqData = {
+      id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/get_module", httpParam);
+    return JSON.parse(await response.text());
+  }
+}
