@@ -153,7 +153,7 @@ class Module {
         `;
   }
 
-  cardHtml({ term, defenition }) {
+  cardHtml({ term, defenition, imgurl }) {
     return {
       class: "module__card",
       id: "",
@@ -165,8 +165,12 @@ class Module {
                     <div class="module__card-definition">
                         ${defenition}
                     </div>
-                    <div class="module__card-img-container">
-                        <div class="module__card-img">
+                    <div class="module__card-img-container" style="${
+                      imgurl !== "" ? "" : "display: none"
+                    }">
+                        <div class="module__card-img" style="background-image: url(${
+                          imgurl !== "" ? imgurl : ""
+                        })">
                         </div>
                     </div>
                 </div>

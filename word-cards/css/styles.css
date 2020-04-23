@@ -559,6 +559,8 @@ input {
   width: 20%;
   min-width: 12rem;
   margin-left: 1rem; }
+  .module__card-img-container--inactive {
+    display: none; }
   @media (max-width: 991px) {
     .module__card-img-container {
       margin-left: 0;
@@ -570,7 +572,6 @@ input {
   width: 12rem;
   height: 10rem;
   border-radius: 5px;
-  background-image: url(https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2020/01/931/524/Charlotte-Moccia-1.jpg?ve=1&tl=1);
   background-size: cover;
   background-position: center; }
   @media (max-width: 991px) {
@@ -683,22 +684,27 @@ input {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0;
   width: 20%;
   margin-left: 1rem;
-  border: #c7c7c7 dashed 2px;
-  border-radius: 5px; }
-  .edit__addimg--background {
-    border: none;
-    padding: 2rem;
-    background-size: cover;
-    background-position: center;
-    background-image: url(https://a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2020/01/931/524/Charlotte-Moccia-1.jpg?ve=1&tl=1); }
-    .edit__addimg--background .edit__img-delete {
-      visibility: inherit; }
-    .edit__addimg--background .edit__img-logo,
-    .edit__addimg--background span {
+  background-size: cover;
+  background-position: center;
+  border: none;
+  border-radius: 5px;
+  padding: 2rem;
+  transition: all 0.2s; }
+  .edit__addimg .edit__img-delete {
+    visibility: inherit; }
+  .edit__addimg .edit__img-logo,
+  .edit__addimg span {
+    visibility: hidden; }
+  .edit__addimg[data-imgurl~="false"] {
+    border: #c7c7c7 dashed 2px;
+    padding: 1rem 0; }
+    .edit__addimg[data-imgurl~="false"] .edit__img-delete {
       visibility: hidden; }
+    .edit__addimg[data-imgurl~="false"] .edit__img-logo,
+    .edit__addimg[data-imgurl~="false"] span {
+      visibility: inherit; }
   .edit__addimg span {
     font-size: 1rem; }
   .edit__addimg:hover .edit__img-logo svg {

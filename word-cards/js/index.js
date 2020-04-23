@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "https://word-cards-15-12-2019.herokuapp.com"; //  'http://localhost:5000'
+const url = "https://word-cards-15-12-2019.herokuapp.com"; //  'http://localhost:5000 '
 const htmlGen = {
   menuListner: false,
 
@@ -30,7 +30,7 @@ const htmlGen = {
     Object.keys(params).forEach((key) => {
       if (key.match(/data_/)) {
         let dataAttName = key.replace(/data_/, "");
-        el.dataset[`${dataAttName}`] = type[key];
+        el.dataset[`${dataAttName}`] = params[key];
       }
     });
 

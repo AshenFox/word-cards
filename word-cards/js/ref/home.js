@@ -9,7 +9,8 @@ class Home {
     this.render();
   }
 
-  moduleHtml({ author, number, title, draft, _id }) {
+  moduleHtml({ author, number, title, draft, _id }, img) {
+    // console.log(img);
     return {
       class: "home__module",
       id: _id,
@@ -30,7 +31,9 @@ class Home {
 
                 <div class="home__module-title ${draft ? "blue" : ""}">
                     ${draft ? "(Draft)" : title}
-                    <svg viewBox="0 0 426.667 426.667">
+                    <svg class="${
+                      img ? "" : "hidden"
+                    }" viewBox="0 0 426.667 426.667">
                         <path d="M42.667,85.333H0V384c0,23.573,19.093,42.667,42.667,42.667h298.667V384H42.667V85.333z"/>
                         <path d="M384,0H128c-23.573,0-42.667,19.093-42.667,42.667v256c0,23.573,19.093,42.667,42.667,42.667h256
                         c23.573,0,42.667-19.093,42.667-42.667v-256C426.667,19.093,407.573,0,384,0z M128,298.667l64-85.333l43.307,57.813L298.667,192
@@ -110,11 +113,12 @@ class Home {
     for (let i of this.modules) {
       if (i.draft) {
         let separatorName = "in progress";
-        let separator = this.moduleContainer.appendChild(
+        this.moduleContainer.appendChild(
           htmlGen.createEl(this.separatorHtml(separatorName))
         );
+        let img = this.checkImg(i);
         let draft = this.moduleContainer.appendChild(
-          htmlGen.createEl(this.moduleHtml(i))
+          htmlGen.createEl(this.moduleHtml(i, img))
         );
         draft.dataset.id = i._id;
         this.moduleListener(draft, i.draft);
@@ -131,7 +135,8 @@ class Home {
 
         case "object":
           if (item._id) {
-            html = this.moduleHtml(item);
+            let img = this.checkImg(item);
+            html = this.moduleHtml(item, img);
           } else {
             html = this.nonefoundHtml(item);
           }
@@ -148,6 +153,14 @@ class Home {
 
       this.moduleContainer.appendChild(el);
     });
+  }
+
+  checkImg(module) {
+    for (let card of module.cards) {
+      if (!card.imgurl) continue;
+      if (card.imgurl != "") return true;
+    }
+    return false;
   }
 
   moduleListener(module, draft) {
