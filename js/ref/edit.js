@@ -86,7 +86,8 @@ class Edit {
         </div>`;
   }
 
-  cardHtml({ term = "", defenition = "" }) {
+  cardHtml({ term = "", defenition = "", imgurl = "" }) {
+    // Add img field
     return {
       class: "edit__cards-card",
       id: "",
@@ -121,7 +122,9 @@ class Edit {
                             <div class="edit__cards-label" for="cards__definition-input1">DEFINITION</div>
                         </div>
 
-                        <div class="edit__addimg edit__addimg--background">
+                        <div class="edit__addimg" style="background-image: url(${
+                          imgurl !== "" ? imgurl : ""
+                        })" data-imgurl="${imgurl !== "" ? imgurl : "false"}">
                             <div class="edit__img-logo" >
                                 <svg viewBox="0 0 426.667 426.667">
                                   <path d="M42.667,85.333H0V384c0,23.573,19.093,42.667,42.667,42.667h298.667V384H42.667V85.333z"/>
@@ -296,15 +299,38 @@ class Edit {
     this.cardsCont.addEventListener("click", (e) => {
       let addimg = e.target.closest(".edit__addimg");
       let imgdel = e.target.closest(".edit__img-delete");
+      let chooseImg = e.target.closest(".edit__gallery-item");
       if (addimg && !imgdel) {
         let imgSearchCont = addimg
           .closest(".edit__cards-card")
           .querySelector(".edit__img-search-container");
         imgSearchCont.classList.toggle("edit__img-search-container--active");
       } else if (imgdel) {
-        console.log("Delete the img of the card");
+        let addImg = imgdel
+          .closest(".edit__cards-card")
+          .querySelector(".edit__addimg");
+
+        addImg.dataset.imgurl = "false";
+        addImg.style = `background-image: url()`;
+      } else if (chooseImg) {
+        let addImg = chooseImg
+          .closest(".edit__cards-card")
+          .querySelector(".edit__addimg");
+
+        let imgurl = chooseImg.dataset.url;
+        addImg.dataset.imgurl = imgurl;
+        addImg.style = `background-image: url(${imgurl})`;
       }
     });
+
+    /*
+    
+    class="edit__addimg" style="background-image: url(${
+      imgurl !== "" ? imgurl : ""
+    })" data-imgurl="${imgurl !== "" ? imgurl : "false"}">
+    
+    
+    */
 
     this.cardsCont.addEventListener("transitionstart", (e) => {
       let element = e.target;
@@ -544,6 +570,14 @@ class Edit {
         .addEventListener("input", async (e) => {
           await this.editDraft();
         });
+
+      let observer = new MutationObserver(async (records) => {
+        await this.editDraft();
+      });
+
+      observer.observe(el.querySelector(".edit__addimg"), {
+        attributes: true,
+      });
     }
 
     if (this.newModule) {
@@ -588,10 +622,15 @@ class Edit {
       let defenition = item
         .querySelector(".edit__cards-definition-input")
         .querySelector(".textarea").innerHTML;
-      return {
+      let imgurl = item.querySelector(".edit__addimg").dataset.imgurl;
+      let result = {
         term,
-        defenition,
+        defenition, // EDIT ... add ing url field
       };
+
+      result.imgurl = imgurl !== "false" ? imgurl : "";
+
+      return result;
     });
 
     return {
