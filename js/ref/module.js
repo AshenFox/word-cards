@@ -40,7 +40,7 @@ class Module {
                     </div>
 
                     <div class="module__study-item">
-                        <button class="btn" onclick="htmlGen.game();">
+                        <button class="btn" onclick="location.href = hashValues.game">
                             <svg height="31" width="31" viewBox="0 0 315.944 315.943">
                                 <g>
                                     <path d="M198.587,206.706c0.231,0.031,0.464,0.047,0.696,0.047c0.774,0,1.539-0.168,2.246-0.49l111.254-50.746

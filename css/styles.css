@@ -1443,10 +1443,9 @@ input {
 
 .hidden {
   display: none; }
-
-@media (max-width: 991px) {
-  .hidden_media-tablet {
-    display: none; } }
+  @media (max-width: 991px) {
+    .hidden__media-tablet {
+      display: none; } }
 
 .ai-c {
   align-items: center; }
