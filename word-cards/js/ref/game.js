@@ -17,7 +17,7 @@ class Game {
                     <div class="game__controls">
 
                         <div class="game__back">
-                            <button class="btn grey ai-c ta-l fz17 width100 pad15-20 h-bcc-yellow" onclick="htmlGen.home()">
+                            <button class="btn grey ai-c ta-l fz17 width100 pad15-20 h-bcc-yellow" onclick="location.href = hashValues.home">
                                 <svg height="15" width="15" viewBox="0 0 490.661 490.661">
                                     <g>
                                         <g>

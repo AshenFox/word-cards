@@ -2,11 +2,11 @@
 
 .hidden {
   display: none;
-}
 
-.hidden_media-tablet {
-  @media (max-width: $tablet) {
-    display: none;
+  &__media-tablet {
+    @media (max-width: $tablet) {
+      display: none;
+    }
   }
 }
 
