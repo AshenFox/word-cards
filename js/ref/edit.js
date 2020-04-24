@@ -655,7 +655,8 @@ class Edit {
       let response = await fetch(url + "/edit/edit", httpParam);
 
       if (response.status == 200) {
-        htmlGen.module(_id);
+        console.log("Fire!");
+        location.href = `${hashValues.module}?id=${_id}`;
         return;
       } else if (response.status == 500) {
         this.scrollToTop();
@@ -664,7 +665,7 @@ class Edit {
       }
     }
 
-    htmlGen.module(_id);
+    location.href = `${hashValues.module}?id=${_id}`;
     return;
   }
 
