@@ -287,7 +287,7 @@ class Game {
 
     let el = htmlGen.createEl(this);
 
-    // htmlGen.toggleSpinner();
+    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
 
     this.cards = [...document.querySelectorAll(".game__card")];

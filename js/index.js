@@ -3,7 +3,16 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "https://word-cards-15-12-2019.herokuapp.com"; //  'http://localhost:5000 '
+const url = "https://word-cards-15-12-2019.herokuapp.com"; //  "http://localhost:5000"
+
+const hashValues = {
+  start: "#start",
+  home: "#home",
+  module: "#module",
+  edit: "#edit",
+  game: "#game",
+};
+
 const htmlGen = {
   menuListner: false,
 
@@ -15,17 +24,12 @@ const htmlGen = {
   },
 
   createEl(params) {
-    // console.log(type);
     const { id, html, style, type } = params;
     let el = document.createElement(`${type ? type : "div"}`);
     if (params.class) el.className = params.class;
     if (id) el.id = id;
     if (html) el.innerHTML = html;
-    if (style) el.style = style; // ?????
-
-    // el.dataset["max"] = "max";
-    // console.log(type["data-"]);
-    // console.log(type);
+    if (style) el.style = style;
 
     Object.keys(params).forEach((key) => {
       if (key.match(/data_/)) {
@@ -34,7 +38,6 @@ const htmlGen = {
       }
     });
 
-    // console.log(el["className"]);
     return el;
   },
 
@@ -81,23 +84,37 @@ const htmlGen = {
   },
 
   startDashboard() {
+    let [url, hash, id] = formatHash();
     let el = document.querySelector(".header__buttons-start");
+
+    if (hash === "start" && !el.classList.contains("hidden")) return;
     el.classList.toggle("hidden");
   },
 
   regularDashboard() {
+    let [url, hash, id] = formatHash();
     let el = document.querySelector(".header__buttons-regular");
+
+    if (
+      (hash === "home" || hash === "module" || hash === "edit") &&
+      !el.classList.contains("hidden")
+    )
+      return;
     el.classList.toggle("hidden");
   },
 
-  toggleSpinner() {
-    spinner.classList.toggle("hidden");
+  toggleSpinner(on) {
+    if (on) {
+      spinner.classList.remove("hidden");
+    } else {
+      spinner.classList.add("hidden");
+    }
   },
 
   start() {
-    if (!active.empty) {
-      this.toggleSpinner();
-    }
+    // if (!active.empty) {
+    //   this.toggleSpinner();
+    // }
     active = new Start();
   },
 
@@ -114,25 +131,18 @@ const htmlGen = {
   },
 
   home() {
-    if (!active.empty) {
-      if (spinner.classList.contains("hidden")) this.toggleSpinner();
-    }
     active = new Home();
   },
 
   module(id) {
-    this.toggleSpinner();
     active = new Module(id);
   },
 
   edit(id) {
-    this.toggleSpinner();
     active = new Edit(id);
   },
 
   game() {
-    // id parameter
-    // this.toggleSpinner();
     active = new Game(); // id parameter
   },
 
@@ -152,37 +162,142 @@ class HttpParam {
   }
 }
 
+// NEW CODE ---------------------------------------------------------------------------
+
 async function loggedInCheck() {
   try {
     let httpParam = new HttpParam("GET", false, true);
-    htmlGen.toggleSpinner();
     let response = await fetch(url + "/home/auth", httpParam);
 
     if (response.status == 200) {
-      htmlGen.regularDashboard();
-      htmlGen.home();
-    } else {
-      htmlGen.startDashboard();
-      htmlGen.start();
+      return true;
     }
   } catch (err) {
     // add connection with the server is absent message
     console.log(err);
-    htmlGen.startDashboard();
-    htmlGen.start();
   }
+
+  return false;
 }
 
 async function log_out() {
   // add a cookie deletion
   let httpParam = new HttpParam("GET", false, true);
   let response = await fetch(url + "/home/log-out", httpParam);
-  htmlGen.regularDashboard();
-  htmlGen.startDashboard();
-  htmlGen.start();
+
+  location.href = hashValues.start;
 }
+
+window.addEventListener("load", async (e) => {
+  let [url, hash, id] = formatHash();
+
+  htmlGen.toggleSpinner(true);
+
+  if (!(await loggedInCheck())) {
+    if (hash != "start") {
+      location.href = hashValues.start;
+    } else {
+      hashHandler(hash, id);
+    }
+  } else {
+    if (hash != "home" && hash != "module" && hash != "edit") {
+      location.href = hashValues.home;
+    } else {
+      hashHandler(hash, id);
+    }
+  }
+});
+
+window.addEventListener("hashchange", async (e) => {
+  let [url, hash, id] = formatHash();
+
+  htmlGen.toggleSpinner(true);
+
+  if (!(await loggedInCheck())) {
+    if (hash != "start") {
+      location.href = hashValues.start;
+    } else {
+      hashHandler(hash, id);
+    }
+  } else {
+    if (hash != "home" && hash != "module" && hash != "edit") {
+      location.href = hashValues.home;
+    } else {
+      hashHandler(hash, id);
+    }
+  }
+});
+
+async function hashHandler(hash, id) {
+  switch (hash) {
+    case "start":
+      if (!active.empty) {
+        htmlGen.regularDashboard();
+      }
+      htmlGen.startDashboard();
+      htmlGen.start();
+
+      break;
+
+    case "home":
+      htmlGen.regularDashboard();
+      htmlGen.home();
+      break;
+
+    case "module":
+      htmlGen.regularDashboard();
+      htmlGen.module(id);
+      break;
+
+    case "edit":
+      htmlGen.regularDashboard();
+      htmlGen.edit(id);
+      break;
+
+    default:
+  }
+}
+
+function formatHash() {
+  return location.href.split(/#|\?id=/);
+}
+
+//  */
+
+// NEW CODE ---------------------------------------------------------------------------
 
 const spinner = document.querySelector(".spinner__container");
 
-loggedInCheck();
 // htmlGen.game();
+
+// async function loggedInCheck() {
+//   try {
+//     let httpParam = new HttpParam("GET", false, true);
+//     htmlGen.toggleSpinner();
+//     let response = await fetch(url + "/home/auth", httpParam);
+
+//     if (response.status == 200) {
+//       htmlGen.regularDashboard();
+//       htmlGen.home();
+//     } else {
+//       htmlGen.startDashboard();
+//       htmlGen.start();
+//     }
+//   } catch (err) {
+//     // add connection with the server is absent message
+//     console.log(err);
+//     htmlGen.startDashboard();
+//     htmlGen.start();
+//   }
+// }
+
+// async function log_out() {
+//   // add a cookie deletion
+//   let httpParam = new HttpParam("GET", false, true);
+//   let response = await fetch(url + "/home/log-out", httpParam);
+//   htmlGen.regularDashboard();
+//   htmlGen.startDashboard();
+//   htmlGen.start();
+// }
+
+// loggedInCheck();

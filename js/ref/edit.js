@@ -33,7 +33,7 @@ class Edit {
                         }</h2>
                     </div>
                     <div class="edit__intro-return">
-                        <button class="btn bcc-lightblue pad12-30 brr10 white fz15 fw-normal h-grey h-bcc-yellow" type="button" onclick="active.newModule ? htmlGen.home() : htmlGen.module(active._id)">
+                        <button class="btn bcc-lightblue pad12-30 brr10 white fz15 fw-normal h-grey h-bcc-yellow" type="button" onclick="active.return();">
                             ${this.newModule ? "Cancel" : "Return"}
                         </button>
                     </div>
@@ -236,13 +236,18 @@ class Edit {
 
   async render(id) {
     htmlGen.deleteEl(active.class);
-
+    let response;
     if (!this.newModule) {
-      let response = await this.getModule(id);
+      response = await this.getModule(id);
       Object.assign(this, response);
     } else {
-      let response = await this.getModule(id, true);
+      response = await this.getModule(id, true);
       Object.assign(this, response);
+    }
+
+    if (!response && !this.newModule) {
+      location.href = hashValues.home;
+      return;
     }
 
     this.editHtml();
@@ -256,7 +261,7 @@ class Edit {
       document.execCommand("insertHTML", false, text);
     });
 
-    htmlGen.toggleSpinner();
+    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
 
     this.titleCont = document.querySelector(".edit__module-title");
@@ -686,7 +691,8 @@ class Edit {
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_module", httpParam);
-    return JSON.parse(await response.text());
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
   }
 
   async getImages(inquiry) {
@@ -714,7 +720,7 @@ class Edit {
     let response = await fetch(url + "/edit/save_module", httpParam);
 
     if (response.status == 200) {
-      htmlGen.home();
+      location.href = hashValues.home;
     } else if (response.status == 500) {
       this.scrollToTop();
       this.errorTitle();
@@ -761,6 +767,16 @@ class Edit {
       let httpParam = new HttpParam("POST", reqData, true);
       let response = await fetch(url + "/edit/edit_draft", httpParam);
     }, 1000);
+  }
+
+  return() {
+    if (this.newModule) {
+      location.href = hashValues.home;
+    } else {
+      // console.log("Fire!");
+      location.href = `${hashValues.module}?id=${this._id}`;
+      // console.log(location.href);
+    }
   }
 }
 

@@ -1,13 +1,13 @@
 "use strict";
 
 class Log_in {
-    constructor() {
-        this.class = "modal";
-        this.id = "active-modal";
-        this.el;
-        this.userRegExp = /[A-z0-9]/;
-        this.passRegExp = /[A-z0-9"!#$%&'()*+,.:;<=>?@\]\[^_`{}~"\/\\\-]/;
-        this.html = /*html*/ `
+  constructor() {
+    this.class = "modal";
+    this.id = "active-modal";
+    this.el;
+    this.userRegExp = /[A-z0-9]/;
+    this.passRegExp = /[A-z0-9"!#$%&'()*+,.:;<=>?@\]\[^_`{}~"\/\\\-]/;
+    this.html = /*html*/ `
 
         <div class="modal__dialog">
             
@@ -48,167 +48,161 @@ class Log_in {
             
         </div>`;
 
-        this.render();
+    this.render();
 
-        this.userEl = this.el.querySelector(".username");
-        this.passEl = this.el.querySelector(".password");
-        this.userErrEl = this.el.querySelector(".modal__username-error");
-        this.passErrEl = this.el.querySelector(".modal__password-error");
+    this.userEl = this.el.querySelector(".username");
+    this.passEl = this.el.querySelector(".password");
+    this.userErrEl = this.el.querySelector(".modal__username-error");
+    this.passErrEl = this.el.querySelector(".modal__password-error");
+  }
+
+  // Methods
+
+  render() {
+    this.checkForModal();
+    let el = htmlGen.createEl(this);
+    document.body.appendChild(el);
+    setTimeout(() => {
+      el.querySelector(".modal__dialog").classList.add("activated");
+    }, 0);
+
+    this.el = el;
+
+    el.querySelector(".modal__close").addEventListener("mousedown", () => {
+      htmlGen.deleteEl(this.class);
+    });
+
+    el.addEventListener("mousedown", (e) => {
+      if (e.target === el) {
+        htmlGen.deleteEl(this.class);
+      }
+    });
+  }
+
+  checkForModal() {
+    let el = document.getElementById("active-modal");
+    if (el) {
+      el.parentNode.removeChild(el);
+    }
+  }
+
+  async checkValues(el) {
+    let userValue = this.userEl.value,
+      passValue = this.passEl.value,
+      userErrValue,
+      passErrValue;
+
+    if (await this.checkValue(userValue, "/log_in/no_user")) {
+      userErrValue = `Username ${userValue} does not exist`;
     }
 
-    // Methods
-
-    render() {
-        this.checkForModal();
-        let el = htmlGen.createEl(this);
-        document.body.appendChild(el);
-        setTimeout(() => {
-            el.querySelector(".modal__dialog").classList.add("activated");
-        }, 0);
-
-        this.el = el;
-
-        el.querySelector(".modal__close").addEventListener("mousedown", () => {
-            htmlGen.deleteEl(this.class);
-        });
-
-        el.addEventListener("mousedown", e => {
-            if (e.target === el) {
-                htmlGen.deleteEl(this.class);
-            }
-        });
+    if (await this.checkValue(userValue, "/log_in/invalid_char/username")) {
+      userErrValue =
+        "Your username may only contain latin letters and numbers.";
     }
 
-    checkForModal() {
-        let el = document.getElementById("active-modal");
-        if (el) {
-            el.parentNode.removeChild(el);
-        }
+    if (await this.checkValue(userValue, "/log_in/is_empty")) {
+      userErrValue = "Please enter a username.";
     }
 
-    async checkValues(el) {
-        let userValue = this.userEl.value,
-            passValue = this.passEl.value,
-            userErrValue,
-            passErrValue;
+    if (this.createError(this.userErrEl, this.passErrEl, userErrValue)) {
+      if (
+        await this.checkValue(
+          passValue,
+          "/log_in/incorrect_password",
+          userValue
+        )
+      ) {
+        passErrValue = "The password you entered is incorrect. Try again...";
+      }
 
-        if (await this.checkValue(userValue, "/log_in/no_user")) {
-            userErrValue = `Username ${userValue} does not exist`;
-        }
+      if (await this.checkValue(passValue, "/log_in/invalid_char/password")) {
+        passErrValue =
+          "Your password may only contain latin letters, numbers and special symbols.";
+      }
 
-        if (await this.checkValue(userValue, "/log_in/invalid_char/username")) {
-            userErrValue =
-                "Your username may only contain latin letters and numbers.";
-        }
+      if (await this.checkValue(passValue, "/log_in/is_empty")) {
+        passErrValue = "Please enter a password.";
+      }
 
-        if (await this.checkValue(userValue, "/log_in/is_empty")) {
-            userErrValue = "Please enter a username.";
-        }
-
-        if (this.createError(this.userErrEl, this.passErrEl, userErrValue)) {
-            if (
-                await this.checkValue(
-                    passValue,
-                    "/log_in/incorrect_password",
-                    userValue
-                )
-            ) {
-                passErrValue =
-                    "The password you entered is incorrect. Try again...";
-            }
-
-            if (
-                await this.checkValue(
-                    passValue,
-                    "/log_in/invalid_char/password"
-                )
-            ) {
-                passErrValue =
-                    "Your password may only contain latin letters, numbers and special symbols.";
-            }
-
-            if (await this.checkValue(passValue, "/log_in/is_empty")) {
-                passErrValue = "Please enter a password.";
-            }
-
-            this.createError(this.passErrEl, this.userErrEl, passErrValue);
-        }
-
-        if (!userErrValue && !passErrValue) {
-            htmlGen.toggleSpinner();
-            await this.login(userValue, passValue);
-        }
+      this.createError(this.passErrEl, this.userErrEl, passErrValue);
     }
 
-    createError(target1, target2, errValue) {
-        if (!errValue) {
-            target1.innerHTML = "";
-            target2.innerHTML = "";
+    if (!userErrValue && !passErrValue) {
+      await this.login(userValue, passValue);
+    }
+  }
 
-            return true;
-        } else {
-            target1.innerHTML = "";
-            target2.innerHTML = "";
+  createError(target1, target2, errValue) {
+    if (!errValue) {
+      target1.innerHTML = "";
+      target2.innerHTML = "";
 
-            let el = document.createElement("ul");
-            el.className = "modal__error-list";
+      return true;
+    } else {
+      target1.innerHTML = "";
+      target2.innerHTML = "";
 
-            let li = document.createElement("li");
-            li.innerHTML = errValue;
-            el.appendChild(li);
+      let el = document.createElement("ul");
+      el.className = "modal__error-list";
 
-            target1.appendChild(el);
+      let li = document.createElement("li");
+      li.innerHTML = errValue;
+      el.appendChild(li);
 
-            return false;
-        }
+      target1.appendChild(el);
+
+      return false;
+    }
+  }
+
+  httpParam(method, data, cred) {
+    let obj = {
+      method: method,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      body: JSON.stringify(data),
+    };
+    if (cred) obj.credentials = "include";
+    return obj;
+  }
+
+  async checkValue(str, route, opt) {
+    let reqData = {
+      data: str,
+    };
+
+    if (opt) {
+      reqData = {
+        username: opt,
+        password: str,
+      };
     }
 
-    httpParam(method, data, cred) {
-        let obj = {
-            method: method,
-            headers: {
-                "Content-Type": "text/plain"
-            },
-            body: JSON.stringify(data)
-        };
-        if (cred) obj.credentials = "include";
-        return obj;
+    let httpParam = new HttpParam("POST", reqData);
+
+    let response = await fetch(url + route, httpParam);
+    let resData = JSON.parse(await response.text());
+    return resData.result;
+  }
+
+  async login(username, password) {
+    let reqData = {
+      username,
+      password,
+    };
+
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/log_in/log_in", httpParam);
+
+    if (response.status == 200) {
+      this.checkForModal();
+      location.href = hashValues.home;
+      htmlGen.startDashboard();
+      // htmlGen.regularDashboard();
+      // htmlGen.home();
     }
-
-    async checkValue(str, route, opt) {
-        let reqData = {
-            data: str
-        };
-
-        if (opt) {
-            reqData = {
-                username: opt,
-                password: str
-            };
-        }
-
-        let httpParam = new HttpParam("POST", reqData);
-
-        let response = await fetch(url + route, httpParam);
-        let resData = JSON.parse(await response.text());
-        return resData.result;
-    }
-
-    async login(username, password) {
-        let reqData = {
-            username,
-            password
-        };
-
-        let httpParam = new HttpParam("POST", reqData, true);
-        let response = await fetch(url + "/log_in/log_in", httpParam);
-
-        if (response.status == 200) {
-            this.checkForModal();
-            htmlGen.startDashboard();
-            htmlGen.regularDashboard();
-            htmlGen.home();
-        }
-        return;
-    }
+    return;
+  }
 }
