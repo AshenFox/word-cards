@@ -167,7 +167,10 @@ class Home {
     module.addEventListener("click", async (e) => {
       let id = e.currentTarget.dataset.id;
 
-      draft ? htmlGen.edit() : htmlGen.module(id);
+      // draft ? htmlGen.edit() : htmlGen.module(id);
+      draft
+        ? (location.href = hashValues.edit)
+        : (location.href = `${hashValues.module}?id=${id}`);
     });
   }
 
@@ -198,7 +201,7 @@ class Home {
 
     let el = htmlGen.createEl(this);
 
-    htmlGen.toggleSpinner();
+    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
 
     this.moduleContainer = document.querySelector(".home__modules");

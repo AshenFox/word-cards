@@ -13,7 +13,7 @@ class Module {
     this.render(id);
   }
 
-  homeHtml() {
+  moduleHtml() {
     this.html = /*html*/ `
             <div class="module__header">
 
@@ -24,7 +24,7 @@ class Module {
                         <h1>${this.title}</h1>
                     </div>
                     <div class="module__return">
-                        <button class="btn bcc-lightblue pad12-30 brr10 white fz15 fw-normal h-grey h-bcc-yellow" onclick="htmlGen.home()">
+                        <button class="btn bcc-lightblue pad12-30 brr10 white fz15 fw-normal h-grey h-bcc-yellow" onclick="location.href = hashValues.home">
                             Return
                         </button>
                     </div>
@@ -206,12 +206,16 @@ class Module {
     htmlGen.deleteEl(active.class);
 
     let response = await this.getModule(id);
+    if (!response) {
+      location.href = hashValues.home;
+      return;
+    }
     Object.assign(this, response);
-    this.homeHtml();
+    this.moduleHtml();
 
     let el = htmlGen.createEl(this);
 
-    htmlGen.toggleSpinner();
+    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
     this.cardsContainer = document.querySelector(".module__card-cont");
     this.matchFilter = document.querySelector(".module__filter");
@@ -222,7 +226,8 @@ class Module {
     let remove = document.getElementById("remove-item");
 
     edit.addEventListener("click", () => {
-      htmlGen.edit(this._id);
+      // htmlGen.edit(this._id);
+      location.href = `${hashValues.edit}?id=${this._id}`;
     });
 
     remove.addEventListener("click", () => {
@@ -315,8 +320,8 @@ class Module {
       _id,
     };
     let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/delete", httpParam);
-    htmlGen.home();
+    await fetch(url + "/edit/delete", httpParam);
+    location.href = hashValues.home;
   }
 
   async getModule(id) {
@@ -325,6 +330,7 @@ class Module {
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_module", httpParam);
-    return JSON.parse(await response.text());
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
   }
 }

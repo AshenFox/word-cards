@@ -14,7 +14,7 @@
 			<div class="header__content">
 
 				
-				<button class="btn header__title" onclick="active.class !== 'start' ? htmlGen.home() : '';">
+				<button class="btn header__title" onclick="active.class !== 'start' ? location.href = hashValues.home : '';">
 					<h1>Flash Cards</h1>
 				</button>
 
@@ -44,7 +44,7 @@
 				<div class="header__buttons-regular hidden">
 
 					<div class="header__btn-holder regular" id="new-module-regular">
-						<button class="btn white fz175 h-thinblue" onclick="htmlGen.edit()">
+					<button class="btn white fz175 h-thinblue" onclick="location.href = hashValues.edit">
 							<svg fill="#ffffff" width="20" height="20" viewBox="0 0 55 55">
 							<g>
 								<path d="M49,8.5v-8H0v47h7v7h48v-46H49z M2,45.5v-43h45v6H7v37H2z M53,52.5H9v-5v-37h40h4V52.5z"/>
