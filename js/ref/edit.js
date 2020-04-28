@@ -97,14 +97,8 @@ class Edit {
                     <div class="edit__cards-number"></div>
                     <div class="edit__cards-delete">
                         <button class="btn">
-                            <svg width="17" height="17" viewBox="0 0 612.002 612.002">
-                                <g>
-                                    <path d="M540.346,19.437H389.4C388.323,8.529,379.114,0,367.917,0H244.084c-11.201,0-20.405,8.529-21.489,19.437H71.655
-                                        c-11.93,0-21.599,9.669-21.599,21.602v41.036c0,11.934,9.669,21.6,21.599,21.6h468.691c11.93,0,21.599-9.667,21.599-21.6V41.04
-                                        C561.945,29.106,552.276,19.437,540.346,19.437z"/>
-                                    <path d="M95.34,590.403c0,11.923,9.665,21.599,21.599,21.599h378.127c11.934,0,21.599-9.674,21.599-21.599V145.167H95.34V590.403z
-                                        "/>
-                                </g>
+                            <svg width="17" height="17">
+                              <use href="img/sprite.svg#icon__delete"></use>
                             </svg>
                         </button>
                     </div>
@@ -126,22 +120,13 @@ class Edit {
                           imgurl !== "" ? imgurl : ""
                         })" data-imgurl="${imgurl !== "" ? imgurl : "false"}">
                             <div class="edit__img-logo" >
-                                <svg viewBox="0 0 426.667 426.667">
-                                  <path d="M42.667,85.333H0V384c0,23.573,19.093,42.667,42.667,42.667h298.667V384H42.667V85.333z"/>
-                                  <path d="M384,0H128c-23.573,0-42.667,19.093-42.667,42.667v256c0,23.573,19.093,42.667,42.667,42.667h256
-                                      c23.573,0,42.667-19.093,42.667-42.667v-256C426.667,19.093,407.573,0,384,0z M128,298.667l64-85.333l43.307,57.813L298.667,192
-                                      L384,298.667H128z"/>
+                                <svg>
+                                  <use href="img/sprite.svg#icon__img"></use>
                                 </svg>
                             </div>
                             <div class="edit__img-delete">
-                              <svg viewBox="0 0 612.002 612.002">
-                                  <g>
-                                      <path d="M540.346,19.437H389.4C388.323,8.529,379.114,0,367.917,0H244.084c-11.201,0-20.405,8.529-21.489,19.437H71.655
-                                          c-11.93,0-21.599,9.669-21.599,21.602v41.036c0,11.934,9.669,21.6,21.599,21.6h468.691c11.93,0,21.599-9.667,21.599-21.6V41.04
-                                          C561.945,29.106,552.276,19.437,540.346,19.437z"/>
-                                      <path d="M95.34,590.403c0,11.923,9.665,21.599,21.599,21.599h378.127c11.934,0,21.599-9.674,21.599-21.599V145.167H95.34V590.403z
-                                          "/>
-                                  </g>
+                              <svg>
+                                <use href="img/sprite.svg#icon__delete"></use>
                               </svg>
                             </div>
                             <span>IMAGE</span>
@@ -157,10 +142,8 @@ class Edit {
                       <label class="edit__searchbar-input-label">
                         <input type="text" class="edit__searchbar-input" placeholder="Search images..."/>
                         <div class="edit__searchbar-icon" data-searching="false">
-                          <svg viewBox="0 0 31.49 31.49">
-                          <path d="M21.205,5.007c-0.429-0.444-1.143-0.444-1.587,0c-0.429,0.429-0.429,1.143,0,1.571l8.047,8.047H1.111
-                            C0.492,14.626,0,15.118,0,15.737c0,0.619,0.492,1.127,1.111,1.127h26.554l-8.047,8.032c-0.429,0.444-0.429,1.159,0,1.587
-                            c0.444,0.444,1.159,0.444,1.587,0l9.952-9.952c0.444-0.429,0.444-1.143,0-1.571L21.205,5.007z"/>
+                          <svg>
+                            <use href="img/sprite.svg#icon__arrow_right"></use>
                           </svg>
                         </div>
                       </label>
@@ -179,14 +162,9 @@ class Edit {
                         
                         <div class="edit__gallery-control--left" data-control_el="true" data-active="true" data-dir="left">
                         
-                        
                           <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow mar-left-a p-r" onclick="">
-                            <svg viewBox="0 0 490.661 490.661">
-                              
-                              <path d="M453.331,1.424c-3.307-1.899-7.381-1.899-10.688,0L37.309,236.091c-3.285,1.92-5.312,5.44-5.312,9.237
-                                  s2.027,7.317,5.312,9.237l405.333,234.667c1.664,0.96,3.499,1.429,5.355,1.429c1.835,0,3.691-0.469,5.333-1.429
-                                  c3.285-1.899,5.333-5.419,5.333-9.237V10.661C458.664,6.843,456.616,3.323,453.331,1.424z"/>
-                                    
+                            <svg>
+                              <use href="img/sprite.svg#icon__triangle_left"></use>
                             </svg>
                         </button>
                         
@@ -199,14 +177,8 @@ class Edit {
                         <div class="edit__gallery-control--right" data-control_el="true" data-active="true" data-dir="right">
                         
                           <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow p-r" onclick="">
-                            <svg viewBox="0 0 490.661 490.661">
-                                <g>
-                                    <g>
-                                        <path d="M453.352,236.091L48.019,1.424c-3.285-1.899-7.36-1.899-10.688,0c-3.285,1.899-5.333,5.419-5.333,9.237v469.333
-                                            c0,3.819,2.048,7.339,5.333,9.237c1.643,0.939,3.499,1.429,5.333,1.429c1.856,0,3.691-0.469,5.355-1.429l405.333-234.667
-                                            c3.285-1.92,5.312-5.44,5.312-9.237S456.637,237.989,453.352,236.091z"/>
-                                    </g>
-                                </g>
+                            <svg>
+                              <use href="img/sprite.svg#icon__triangle_right"></use>
                             </svg>
                           </button>
 
@@ -780,20 +752,3 @@ class Edit {
     }
   }
 }
-
-/*
-
-<div class="edit__gallery-item edit__gallery-item--1"></div>
-<div class="edit__gallery-item edit__gallery-item--2"></div>
-<div class="edit__gallery-item edit__gallery-item--3"></div>
-<div class="edit__gallery-item edit__gallery-item--4"></div>
-<div class="edit__gallery-item edit__gallery-item--5"></div>
-<div class="edit__gallery-item edit__gallery-item--6"></div>
-<div class="edit__gallery-item edit__gallery-item--7"></div>
-<div class="edit__gallery-item edit__gallery-item--8"></div>
-<div class="edit__gallery-item edit__gallery-item--9"></div>
-<div class="edit__gallery-item edit__gallery-item--10"></div>
-<div class="edit__gallery-item edit__gallery-item--11"></div>
-<div class="edit__gallery-item edit__gallery-item--12"></div>
-
-*/

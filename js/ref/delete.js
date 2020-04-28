@@ -1,10 +1,10 @@
 class Delete {
-    constructor() {
-        this.class = "modal";
-        this.id = "active-modal";
-        this.el;
+  constructor() {
+    this.class = "modal";
+    this.id = "active-modal";
+    this.el;
 
-        this.html = /*html*/ `
+    this.html = /*html*/ `
 
 		<div class="modal__dialog">
             
@@ -14,8 +14,11 @@ class Delete {
                     <div class="modal__title">
                         <h3>Delete this set?</h3>
                     </div>
+                    <!-- close -->
                     <div class="modal__close">
-                        <img src="./img/close.svg" alt="" height="15" width="15">
+                      <svg height="17" width="17" fill="#fff">
+                        <use href="img/sprite.svg#icon__close"></use>
+                      </svg>
                     </div>
                 </div>
 
@@ -54,38 +57,38 @@ class Delete {
             
         </div>`;
 
-        this.render();
+    this.render();
+  }
+
+  render() {
+    this.checkForModal();
+
+    let el = htmlGen.createEl(this);
+    document.body.appendChild(el);
+    setTimeout(() => {
+      el.querySelector(".modal__dialog").classList.add("activated");
+    }, 0);
+    this.el = el;
+
+    // Close modal
+
+    el.querySelector(".modal__close").addEventListener("mousedown", () => {
+      htmlGen.deleteEl(this.class);
+      modal = false;
+    });
+
+    el.addEventListener("mousedown", (e) => {
+      if (e.target === el) {
+        htmlGen.deleteEl(this.class);
+        modal = false;
+      }
+    });
+  }
+
+  checkForModal() {
+    let el = document.getElementById("active-modal");
+    if (el) {
+      el.parentNode.removeChild(el);
     }
-
-    render() {
-        this.checkForModal();
-
-        let el = htmlGen.createEl(this);
-        document.body.appendChild(el);
-        setTimeout(() => {
-            el.querySelector(".modal__dialog").classList.add("activated");
-        }, 0);
-        this.el = el;
-
-        // Close modal
-
-        el.querySelector(".modal__close").addEventListener("mousedown", () => {
-            htmlGen.deleteEl(this.class);
-            modal = false;
-        });
-
-        el.addEventListener("mousedown", e => {
-            if (e.target === el) {
-                htmlGen.deleteEl(this.class);
-                modal = false;
-            }
-        });
-    }
-
-    checkForModal() {
-        let el = document.getElementById("active-modal");
-        if (el) {
-            el.parentNode.removeChild(el);
-        }
-    }
+  }
 }

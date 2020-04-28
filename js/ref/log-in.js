@@ -18,7 +18,9 @@ class Log_in {
                         <h3>Log in</h3>
                     </div>
                     <div class="modal__close">
-                        <img src="./img/close.svg" alt="" height="15" width="15">
+                      <svg height="17" width="17" fill="#fff">
+                        <use href="img/sprite.svg#icon__close"></use>
+                      </svg>
                     </div>
                 </div>
 
