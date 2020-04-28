@@ -11,9 +11,18 @@ class Voice {
         this.voices.forEach((voice) => {
           if (voice.name === "Google US English") this.english = voice;
           if (voice.name === "Google русский") this.russian = voice;
-          if (voice.lang === "en-US" && !this.engBackup) this.engBackup = voice;
-          if (voice.lang === "ru-RU" && !this.rusBackup) this.rusBackup = voice;
+          if (/en.+US/.test(voice.lang) && !this.engBackup)
+            this.engBackup = voice;
+          if (/ru.+RU/.test(voice.lang) && !this.rusBackup)
+            this.rusBackup = voice;
+          console.log();
         });
+
+        if (!this.engBackup && !this.rusBackup) {
+          this.working = false;
+        } else {
+          this.working = true;
+        }
         // console.log(this.english, this.russian, this.engBackup, this.rusBackup);
       });
     }

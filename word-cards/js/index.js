@@ -4,7 +4,6 @@ let active = { empty: true };
 let modal = false;
 
 const url = "https://word-cards-15-12-2019.herokuapp.com"; // "http://localhost:5000"
-
 const hashValues = {
   start: "#start",
   home: "#home",
