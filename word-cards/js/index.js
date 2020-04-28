@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "https://word-cards-15-12-2019.herokuapp.com"; // "http://localhost:5000"
+const url = "http://localhost:5000"; // "https://word-cards-15-12-2019.herokuapp.com"
 
 const hashValues = {
   start: "#start",
@@ -12,6 +12,8 @@ const hashValues = {
   edit: "#edit",
   game: "#game",
 };
+
+const voice = new Voice();
 
 const htmlGen = {
   menuListner: false,

@@ -330,6 +330,10 @@ input {
 
   transition: all 0.1s linear;
 
+  svg {
+    transform: translate(1px, 1px);
+  }
+
   &:hover {
     background-color: $darkblue;
   }
@@ -728,9 +732,10 @@ input {
 }
 
 .module__card-term {
+  position: relative;
   width: 30%;
   text-align: center;
-  padding: 0 1.5rem;
+  padding: 2rem 1.5rem 0 1.5rem;
   border-right: 2px solid $grey-light;
 
   font-size: 1.7rem;
@@ -742,13 +747,69 @@ input {
     text-align: left;
     border-right: none;
     border-bottom: 2px solid $grey-light;
-    padding-bottom: 1.5rem;
+    padding: 2rem 1rem 1.5rem 1rem;
+  }
+}
+
+.module__speaker {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 0;
+
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+
+  svg {
+    transition: all 0.2s;
+    fill: $black;
+    // transform: scale(1.5);
+  }
+
+  &:hover {
+    svg {
+      fill: $yellow;
+    }
+  }
+
+  &[data-active="false"] {
+    cursor: initial;
+
+    svg {
+      fill: $grey-medium;
+    }
+
+    &:hover {
+      svg {
+        fill: $grey-medium;
+      }
+    }
+  }
+
+  &[data-speaking="true"] {
+    svg {
+      fill: $yellow;
+    }
+
+    animation-name: example;
+  }
+}
+
+@keyframes example {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }
 
 .module__card-definition-container {
   width: 70%;
-  padding: 0 1.5rem;
 
   display: flex;
 
@@ -763,15 +824,24 @@ input {
 }
 
 .module__card-definition {
+  padding: 2rem 1.5rem 0 1.5rem;
+  position: relative;
+  padding-top: 2rem;
   // display: none;
   font-size: 1.7rem;
   overflow-wrap: break-word;
   text-align: left;
 
   flex: 1;
+
+  @media (max-width: $tablet) {
+    padding: 2rem 1rem 0 1rem;
+    flex-direction: column;
+  }
 }
 
 .module__card-img-container {
+  padding: 0 1.5rem;
   align-self: center;
   width: 20%;
   min-width: 12rem;
@@ -783,6 +853,7 @@ input {
   }
 
   @media (max-width: $tablet) {
+    padding: 0 1rem;
     margin-left: 0;
     margin-top: 1rem;
     width: 100%;
@@ -1352,6 +1423,8 @@ input {
   border: 4px solid transparent;
   border-top: 4px solid #ff5722;
   animation: spin 2s linear infinite;
+
+  z-index: 1000;
 
   &--small {
     width: 75px;
