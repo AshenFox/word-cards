@@ -118,7 +118,9 @@ class Module {
                 <div class="module__card-term" data-textfield="true">
                 ${term}
                 <div class="module__speaker" data-active="${
-                  term !== "" && voice.detectLanguage(term) ? "true" : "false"
+                  voice.working && term !== "" && voice.detectLanguage(term)
+                    ? "true"
+                    : "false"
                 }" data-speaking="false">
                       <svg height="17" width="17">
                         <use href="img/sprite.svg#icon__speaker"></use>
@@ -129,7 +131,9 @@ class Module {
                     <div class="module__card-definition" data-textfield="true">
                     ${defenition}
                     <div class="module__speaker" data-active="${
-                      defenition !== "" && voice.detectLanguage(defenition)
+                      voice.working &&
+                      defenition !== "" &&
+                      voice.detectLanguage(defenition)
                         ? "true"
                         : "false"
                     }" data-speaking="false">
