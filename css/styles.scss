@@ -751,11 +751,11 @@ input {
   }
 }
 
-.module__speaker {
+.module__speaker,
+.game__speaker {
   cursor: pointer;
+  display: flex;
   position: absolute;
-  right: 10px;
-  top: 0;
 
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
@@ -793,6 +793,16 @@ input {
 
     animation-name: example;
   }
+}
+
+.module__speaker {
+  right: 10px;
+  top: 0;
+}
+
+.game__speaker {
+  right: 20px;
+  top: 20px;
 }
 
 @keyframes example {
@@ -1932,9 +1942,15 @@ input {
 }
 
 .game__img-container {
+  margin: 0 auto;
   position: relative;
   height: 100%;
   width: 55%;
+
+  &.full {
+    width: 100%;
+    margin: 0 3rem;
+  }
 
   @media (max-height: $h-tablet) {
     width: 50%;
@@ -1962,9 +1978,20 @@ input {
 }
 
 .game__defenition-container {
+  text-align: center;
   position: relative;
   height: 100%;
   width: 45%;
+
+  &.full {
+    width: 100%;
+    padding: 0 3rem;
+
+    & .game__defenition {
+      right: 3rem;
+      left: 3rem;
+    }
+  }
 
   @media (max-height: $h-tablet) {
     width: 50%;
@@ -1981,9 +2008,9 @@ input {
 
 .game__defenition {
   position: absolute;
-  top: 3rem;
+  top: 6rem;
   right: 1.5rem;
-  bottom: 3rem;
+  bottom: 6rem;
   left: 0.75rem;
   overflow: auto;
   font-size: 1.9rem;
@@ -2007,15 +2034,11 @@ input {
   }
 }
 
-.game__term {
-  display: grid;
+.game__term-container {
+  position: relative;
+
   height: 100%;
   width: 100%;
-
-  p {
-    margin: auto;
-    text-align: center;
-  }
 
   font-size: 3rem;
   color: $grey;
@@ -2031,6 +2054,19 @@ input {
   @media (max-width: $mobile-sm) {
     font-size: 2.4rem;
   }
+}
+
+.game__term {
+  overflow: scroll;
+  position: absolute;
+  top: 6rem;
+  right: 1.5rem;
+  bottom: 6rem;
+  left: 1.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game__card-message {

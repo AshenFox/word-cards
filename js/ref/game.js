@@ -140,13 +140,28 @@ class Game {
         <div class="game__card-front ${defAnswer ? "rearside" : ""} ${
         active ? "" : "transparent next"
       }">
-            <div class="game__img-container">
+            <div class="game__img-container ${imgurl === "" ? "hidden" : ""} ${
+        defenition === "" ? "full" : ""
+      }">
                 <div class="game__img" style="background-image: url(${
                   imgurl !== "" ? imgurl : ""
                 });"></div>
             </div>
 
-            <div class="game__defenition-container">
+            <div class="game__defenition-container ${
+              imgurl === "" ? "full" : ""
+            } ${defenition === "" ? "hidden" : ""}">
+                <div class="game__speaker" data-active="${
+                  voice.working &&
+                  defenition !== "" &&
+                  voice.detectLanguage(defenition)
+                    ? "true"
+                    : "false"
+                }" data-speaking="false">
+                  <svg height="22" width="22">
+                    <use href="img/sprite.svg#icon__speaker"></use>
+                  </svg>
+                </div>
                 <div class="game__defenition">
                     <p>${defenition}</p>
                 </div>
@@ -155,8 +170,21 @@ class Game {
         <div class="game__card-back ${defAnswer ? "" : "rearside"} ${
         active ? "" : "transparent next"
       }">
-            <div class="game__term">
-                <p>${term}</p>
+            <div class="game__term-container ${term === "" ? "hidden" : ""}">
+                <div class="game__speaker" data-active="${
+                  voice.working && term !== "" && voice.detectLanguage(term)
+                    ? "true"
+                    : "false"
+                }" data-speaking="false">
+                  <svg height="22" width="22">
+                    <use href="img/sprite.svg#icon__speaker"></use>
+                  </svg>
+                  
+                </div>
+                <div class="game__term">
+                  <p>${term}</p>
+                </div>
+                
             </div>
         </div>`,
     };
@@ -223,8 +251,30 @@ class Game {
       }
     });
 
-    // this.prevBtn = document.querySelectorAll('.game__nav-item.prev');
-    // this.nextBtn = document.querySelectorAll('.game__nav-item.next');
+    this.cardsContainer.addEventListener("click", (e) => {
+      let speaker = e.target.closest(".game__speaker[data-active=true]");
+      if (speaker && !voice.synth.speaking) {
+        let term = speaker.closest(".game__term-container");
+        let defenition = speaker.closest(".game__defenition-container");
+
+        let text;
+        if (term) text = term.querySelector(".game__term p").textContent;
+        if (defenition)
+          text = defenition.querySelector(".game__defenition p").textContent;
+
+        if (text !== "" && speaker.dataset.active !== "false") {
+          speaker.dataset.speaking = true;
+          let speakText = voice.speak(text);
+
+          speakText.onend = (e) => {
+            speaker.dataset.speaking = false;
+          };
+        }
+      } else if (speaker && voice.synth.speaking) {
+        voice.cancel();
+      }
+    });
+
     this.appendCards(this.cards);
 
     this.cardsEl = [...document.querySelectorAll(".game__card")];
@@ -298,7 +348,10 @@ class Game {
   }
 
   flipCard(event) {
-    if (event.target.closest(".game__card")) {
+    if (
+      event.target.closest(".game__card") &&
+      !event.target.closest(".game__speaker")
+    ) {
       active.activeFront.classList.toggle("rearside");
       active.activeBack.classList.toggle("rearside");
     }
@@ -360,7 +413,7 @@ class Game {
     this.setProgress(0);
     if (this.shuffled) {
       // Save original order
-      if (!this.originalCards) this.originalCards = this.cards;
+      if (!this.originalCards) this.originalCards = [...this.cards];
       // Shuffle cards
       let arr = this.cards;
       for (let i = this.number - 1; i > 0; i--) {
@@ -369,7 +422,7 @@ class Game {
       }
       this.cards = arr;
     } else {
-      if (this.originalCards) this.cards = this.originalCards;
+      if (this.originalCards) this.cards = [...this.originalCards];
     }
 
     this.appendCards(this.cards, this.answerWithDefenition);
@@ -418,6 +471,17 @@ class Game {
 </div> */
 
 /*
+
+
+<div class="game__speaker" data-active="${
+  voice.working && term !== "" && voice.detectLanguage(term)
+    ? "true"
+    : "false"
+}" data-speaking="false">
+    <svg height="17" width="17">
+      <use href="img/sprite.svg#icon__speaker"></use>
+    </svg>
+  </div>
 
 <div class="game__card">
                                     <div class="game__card-front prev transparent">
