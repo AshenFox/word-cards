@@ -539,28 +539,43 @@ input {
       border-bottom: 2px solid #f0f0f0;
       padding: 2rem 1rem 1.5rem 1rem; } }
 
-.module__speaker {
+.module__speaker,
+.game__speaker {
   cursor: pointer;
+  display: flex;
   position: absolute;
-  right: 10px;
-  top: 0;
   animation-duration: 1.5s;
   animation-iteration-count: infinite; }
-  .module__speaker svg {
+  .module__speaker svg,
+  .game__speaker svg {
     transition: all 0.2s;
     fill: #2b2a2c; }
-  .module__speaker:hover svg {
+  .module__speaker:hover svg,
+  .game__speaker:hover svg {
     fill: #ffcd1f; }
-  .module__speaker[data-active="false"] {
+  .module__speaker[data-active="false"],
+  .game__speaker[data-active="false"] {
     cursor: initial; }
-    .module__speaker[data-active="false"] svg {
+    .module__speaker[data-active="false"] svg,
+    .game__speaker[data-active="false"] svg {
       fill: #c7c7c7; }
-    .module__speaker[data-active="false"]:hover svg {
+    .module__speaker[data-active="false"]:hover svg,
+    .game__speaker[data-active="false"]:hover svg {
       fill: #c7c7c7; }
-  .module__speaker[data-speaking="true"] {
+  .module__speaker[data-speaking="true"],
+  .game__speaker[data-speaking="true"] {
     animation-name: example; }
-    .module__speaker[data-speaking="true"] svg {
+    .module__speaker[data-speaking="true"] svg,
+    .game__speaker[data-speaking="true"] svg {
       fill: #ffcd1f; }
+
+.module__speaker {
+  right: 10px;
+  top: 0; }
+
+.game__speaker {
+  right: 20px;
+  top: 20px; }
 
 @keyframes example {
   0% {
@@ -1328,9 +1343,13 @@ input {
   z-index: 0; }
 
 .game__img-container {
+  margin: 0 auto;
   position: relative;
   height: 100%;
   width: 55%; }
+  .game__img-container.full {
+    width: 100%;
+    margin: 0 3rem; }
   @media (max-height: 840px) {
     .game__img-container {
       width: 50%; } }
@@ -1353,9 +1372,16 @@ input {
   background-position: center; }
 
 .game__defenition-container {
+  text-align: center;
   position: relative;
   height: 100%;
   width: 45%; }
+  .game__defenition-container.full {
+    width: 100%;
+    padding: 0 3rem; }
+    .game__defenition-container.full .game__defenition {
+      right: 3rem;
+      left: 3rem; }
   @media (max-height: 840px) {
     .game__defenition-container {
       width: 50%; } }
@@ -1368,9 +1394,9 @@ input {
 
 .game__defenition {
   position: absolute;
-  top: 3rem;
+  top: 6rem;
   right: 1.5rem;
-  bottom: 3rem;
+  bottom: 6rem;
   left: 0.75rem;
   overflow: auto;
   font-size: 1.9rem;
@@ -1389,24 +1415,32 @@ input {
     .game__defenition {
       font-size: 1.6rem; } }
 
-.game__term {
-  display: grid;
+.game__term-container {
+  position: relative;
   height: 100%;
   width: 100%;
   font-size: 3rem;
   color: #4e4e4e; }
-  .game__term p {
-    margin: auto;
-    text-align: center; }
   @media (max-width: 991px) {
-    .game__term {
+    .game__term-container {
       font-size: 2.8rem; } }
   @media (max-width: 620px) {
-    .game__term {
+    .game__term-container {
       font-size: 2.6rem; } }
   @media (max-width: 350px) {
-    .game__term {
+    .game__term-container {
       font-size: 2.4rem; } }
+
+.game__term {
+  overflow: scroll;
+  position: absolute;
+  top: 6rem;
+  right: 1.5rem;
+  bottom: 6rem;
+  left: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 .game__card-message {
   font-size: 4.5rem;
