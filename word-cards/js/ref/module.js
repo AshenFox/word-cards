@@ -203,7 +203,6 @@ class Module {
     let remove = document.getElementById("remove-item");
     let flashcards = document.querySelector("#flashcards-game button");
     let write = document.querySelector("#write-game button");
-    console.log(flashcards, write);
 
     edit.addEventListener("click", () => {
       // htmlGen.edit(this._id);

@@ -17,7 +17,8 @@ class Game {
                     <div class="game__controls">
 
                         <div class="game__back">
-                            <button class="btn grey ai-c ta-l fz17 width100 pad15-20 h-bcc-yellow" onclick="location.href = hashValues.home">
+                            <button class="btn grey ai-c ta-l fz17 width100 pad15-20 h-bcc-yellow" onclick="active.return()">
+                            
                                 <svg height="15" width="15">
                                   <use href="img/sprite.svg#icon__triangle_left"></use>
                                 </svg>
@@ -169,7 +170,7 @@ class Game {
         <div class="game__card-front unturnable next transparent">
             <h1 class="game__card-message">Nice work!</h1>
             <p class="game__card-message-info">You've just studied ${num} terms!</p>
-            <button class="btn bcc-lightblue pad30 brr5 white fz175 h-grey h-bcc-yellow width50">Finish up</button>
+            <button class="btn bcc-lightblue pad30 brr5 white fz175 h-grey h-bcc-yellow width50" onclick="active.end()">Finish up</button>
         </div>
         <div class="game__card-back unturnable rearside next transparent"></div>
         `,
@@ -180,15 +181,12 @@ class Game {
     htmlGen.deleteEl(active.class);
     htmlGen.toggleGameButtons();
 
-    // let response = await this.getModule(id);  edit/get-module
-    console.log(id);
-
     let response = await this.getModule(id);
     if (!response) {
       location.href = hashValues.home;
       return;
     }
-    console.log(response);
+
     Object.assign(this, response);
 
     this.gameHtml();
@@ -200,6 +198,7 @@ class Game {
 
     this.progress = 0;
     this.answerWithDefenition = false;
+    this.shuffled = false;
 
     this.cardsContainer = document.querySelector(".game__cards-container");
     this.gameControls = document.querySelector(".game__controls");
@@ -335,15 +334,15 @@ class Game {
     }
 
     if (defenition) {
-      this.appendCards(this.cards, true);
+      this.answerWithDefenition = true;
+      this.appendCards(this.cards, this.answerWithDefenition);
       this.methodTitle.textContent = "Defenition";
       if (modal) methodTitleModal.textContent = "Defenition";
-      this.answerWithDefenition = true;
     } else {
-      this.appendCards(this.cards, false);
+      this.answerWithDefenition = false;
+      this.appendCards(this.cards, this.answerWithDefenition);
       this.methodTitle.textContent = "Term";
       if (modal) methodTitleModal.textContent = "Term";
-      this.answerWithDefenition = false;
     }
 
     this.cardsEl = [...document.querySelectorAll(".game__card")];
@@ -352,7 +351,43 @@ class Game {
 
   toggleShuffle(target) {
     target.classList.toggle("active");
+    this.shuffle();
   }
+
+  shuffle() {
+    this.shuffled = !this.shuffled;
+    this.cardsContainer.innerHTML = "";
+    this.setProgress(0);
+    if (this.shuffled) {
+      // Save original order
+      if (!this.originalCards) this.originalCards = this.cards;
+      // Shuffle cards
+      let arr = this.cards;
+      for (let i = this.number - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      this.cards = arr;
+    } else {
+      if (this.originalCards) this.cards = this.originalCards;
+    }
+
+    this.appendCards(this.cards, this.answerWithDefenition);
+    this.cardsEl = [...document.querySelectorAll(".game__card")];
+    this.activeCard = this.cardsEl[0];
+  }
+
+  /*
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  */
   // async getUserData() {
   //     let httpParam = new HttpParam('GET', false, true);
   //     let response = await fetch(url + '/home/get_user_data', httpParam);
@@ -366,6 +401,15 @@ class Game {
     let response = await fetch(url + "/edit/get_module", httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
+  }
+
+  return() {
+    location.href = `${hashValues.module}?id=${this._id}`;
+  }
+
+  end() {
+    console.log("Saving and sending statistcs...");
+    location.href = `${hashValues.module}?id=${this._id}`;
   }
 }
 
