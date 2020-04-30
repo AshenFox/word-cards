@@ -39,15 +39,15 @@ class Module {
                         STUDY:
                     </div>
 
-                    <div class="module__study-item">
-                        <button class="btn" onclick="location.href = hashValues.game">
+                    <div class="module__study-item" id="flashcards-game">
+                        <button class="btn">
                             <svg height="31" width="31">
                               <use href="img/sprite.svg#icon__cards"></use>
                             </svg>
                             <span>Flashcards</span>
                         </button>
                     </div> 
-                    <div class="module__study-item">
+                    <div class="module__study-item" id="write-game">
                         <button class="btn">
                         <svg height="30" width="30">
                           <use href="img/sprite.svg#icon__write"></use>
@@ -201,6 +201,9 @@ class Module {
 
     let edit = document.getElementById("edit-item");
     let remove = document.getElementById("remove-item");
+    let flashcards = document.querySelector("#flashcards-game button");
+    let write = document.querySelector("#write-game button");
+    console.log(flashcards, write);
 
     edit.addEventListener("click", () => {
       // htmlGen.edit(this._id);
@@ -209,6 +212,10 @@ class Module {
 
     remove.addEventListener("click", () => {
       htmlGen.delete();
+    });
+
+    flashcards.addEventListener("click", () => {
+      location.href = `${hashValues.game}?id=${this._id}`;
     });
 
     this.matchFilter.addEventListener("input", (e) => {

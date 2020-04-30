@@ -32,14 +32,18 @@ class Options {
                                 <svg height="13" width="13">
                                   <use href="img/sprite.svg#icon__down_arrow"></use>
                                 </svg>
-                                <span>Term</span>
+                                <span>${
+                                  active.answerWithDefenition
+                                    ? "Defenition"
+                                    : "Term"
+                                }</span>
                             </button>
                             <div class="game__method-menu-container-modal hidden">
                                 <div class="game__method-menu">
-                                    <div class="game__method-menu-item">
+                                    <div class="game__method-menu-item" data-method="term">
                                         <span>Term</span>
                                     </div>
-                                    <div class="game__method-menu-item">
+                                    <div class="game__method-menu-item" data-method="defenition">
                                         <span>Defenition</span>
                                     </div>
                                 </div>
@@ -79,6 +83,16 @@ class Options {
     this.methodMenu = document.querySelector(
       ".game__method-menu-container-modal"
     );
+
+    this.optionContent = document.querySelector(".modal__content");
+
+    this.optionContent.addEventListener("click", (e) => {
+      let el = e.target.closest(".game__method-menu-item");
+      if (el) {
+        if (el.dataset.method === "term") active.methodChange(false);
+        if (el.dataset.method === "defenition") active.methodChange(true);
+      }
+    });
 
     setTimeout(() => {
       el.querySelector(".modal__dialog").classList.add("activated");

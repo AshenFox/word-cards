@@ -6,7 +6,6 @@ class Voice {
       let s = this.getVoices();
       s.then((result) => {
         this.voices = result;
-        console.log(this.voices);
 
         this.voices.forEach((voice) => {
           if (voice.name === "Google US English") this.english = voice;
@@ -55,8 +54,6 @@ class Voice {
       let lengthEng = arrEng ? arrEng.length : 0;
 
       let lengthTotal = lengthRus + lengthEng;
-      console.log(lengthEng / lengthTotal);
-      console.log(lengthEng / lengthTotal > 0.5 ? "english" : "russian");
       return lengthEng / lengthTotal > 0.5 ? "english" : "russian";
     } else {
       return false;
@@ -122,7 +119,6 @@ class Voice {
       speakText.pitch = 1;
 
       let int = setInterval(() => {
-        console.log(this.synth.speaking);
         if (!this.synth.speaking) {
           clearInterval(int);
         } else {
