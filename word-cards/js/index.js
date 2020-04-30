@@ -143,8 +143,8 @@ const htmlGen = {
     active = new Edit(id);
   },
 
-  game() {
-    active = new Game(); // id parameter
+  game(id) {
+    active = new Game(id); // id parameter
   },
 
   options() {
@@ -240,6 +240,7 @@ window.addEventListener("hashchange", async (e) => {
 });
 
 async function hashHandler(hash, id) {
+  console.log(hash, id);
   switch (hash) {
     case "start":
       if (!active.empty) {

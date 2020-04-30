@@ -1615,8 +1615,9 @@ input {
   top: 0;
   left: 0;
   height: 100%;
-  width: 50%;
+  width: 0%;
   background-color: $blue;
+  transition: all 0.2s;
 }
 
 .game__progress-info {
