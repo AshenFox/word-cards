@@ -97,7 +97,10 @@ const htmlGen = {
     let el = document.querySelector(".header__buttons-regular");
 
     if (
-      (hash === "home" || hash === "module" || hash === "edit") &&
+      (hash === "home" ||
+        hash === "module" ||
+        hash === "edit" ||
+        hash === "game") &&
       !el.classList.contains("hidden")
     )
       return;
