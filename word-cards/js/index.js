@@ -3,13 +3,14 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "https://word-cards-15-12-2019.herokuapp.com"; // "http://localhost:5000"
+const url = "http://localhost:5000"; // "https://word-cards-15-12-2019.herokuapp.com"
 const hashValues = {
   start: "#start",
   home: "#home",
   module: "#module",
   edit: "#edit",
-  game: "#game",
+  flashcards: "#flashcards",
+  write: "#write",
 };
 
 const voice = new Voice();
@@ -100,7 +101,8 @@ const htmlGen = {
       (hash === "home" ||
         hash === "module" ||
         hash === "edit" ||
-        hash === "game") &&
+        hash === "flashcards" ||
+        hash === "write") &&
       !el.classList.contains("hidden")
     )
       return;
@@ -146,8 +148,12 @@ const htmlGen = {
     active = new Edit(id);
   },
 
-  game(id) {
-    active = new Game(id); // id parameter
+  flashcards(id) {
+    active = new Flashcards(id); // id parameter
+  },
+
+  write(id) {
+    active = new Write(id); // id parameter
   },
 
   options() {
@@ -208,7 +214,8 @@ window.addEventListener("load", async (e) => {
       hash != "home" &&
       hash != "module" &&
       hash != "edit" &&
-      hash != "game"
+      hash != "flashcards" &&
+      hash != "write"
     ) {
       location.href = hashValues.home;
     } else {
@@ -233,7 +240,8 @@ window.addEventListener("hashchange", async (e) => {
       hash != "home" &&
       hash != "module" &&
       hash != "edit" &&
-      hash != "game"
+      hash != "flashcards" &&
+      hash != "write"
     ) {
       location.href = hashValues.home;
     } else {
@@ -264,9 +272,14 @@ async function hashHandler(hash, id) {
       htmlGen.module(id);
       break;
 
-    case "game":
+    case "flashcards":
       htmlGen.regularDashboard();
-      htmlGen.game(id);
+      htmlGen.flashcards(id);
+      break;
+
+    case "write":
+      htmlGen.regularDashboard();
+      htmlGen.write(id);
       break;
 
     case "edit":

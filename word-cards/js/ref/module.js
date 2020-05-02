@@ -3,7 +3,8 @@
 class Module {
   constructor(id) {
     if (active.newModule) htmlGen.hideCreateModule();
-    if (active.class == "game") htmlGen.toggleGameButtons();
+    if (active.class == "flashcards" || active.class == "write")
+      htmlGen.toggleGameButtons();
 
     this.class = "module";
     // this.html = /*html*/ `
@@ -214,7 +215,11 @@ class Module {
     });
 
     flashcards.addEventListener("click", () => {
-      location.href = `${hashValues.game}?id=${this._id}`;
+      location.href = `${hashValues.flashcards}?id=${this._id}`;
+    });
+
+    write.addEventListener("click", () => {
+      location.href = `${hashValues.write}?id=${this._id}`;
     });
 
     this.matchFilter.addEventListener("input", (e) => {

@@ -58,6 +58,13 @@
   padding: 1.5rem 2rem;
 }
 
+.pad10-30 {
+  padding: 1rem 3rem;
+  @media (max-width: $mobile) {
+    padding: 1rem 2rem;
+  }
+}
+
 .pad15-30 {
   padding: 1.5rem 3rem;
   @media (max-width: $mobile) {
@@ -132,6 +139,12 @@
   }
 }
 
+.h-brc-red {
+  &:hover {
+    border-color: $red;
+  }
+}
+
 .bc-none {
   background: none;
 }
@@ -185,6 +198,12 @@
 .h-yellow {
   &:hover {
     color: $yellow;
+  }
+}
+
+.h-red {
+  &:hover {
+    color: $red;
   }
 }
 
