@@ -1,8 +1,8 @@
-class Game {
+class Flashcards {
   constructor(id) {
     if (active.newModule) htmlGen.hideCreateModule();
 
-    this.class = "game";
+    this.class = "flashcards";
     this.render(id);
   }
 
@@ -151,7 +151,7 @@ class Game {
             <div class="game__defenition-container ${
               imgurl === "" ? "full" : ""
             } ${defenition === "" ? "hidden" : ""}">
-                <div class="game__speaker" data-active="${
+                <div class="game__speaker-flashcards" data-active="${
                   voice.working &&
                   defenition !== "" &&
                   voice.detectLanguage(defenition)
@@ -171,7 +171,7 @@ class Game {
         active ? "" : "transparent next"
       }">
             <div class="game__term-container ${term === "" ? "hidden" : ""}">
-                <div class="game__speaker" data-active="${
+                <div class="game__speaker-flashcards" data-active="${
                   voice.working && term !== "" && voice.detectLanguage(term)
                     ? "true"
                     : "false"
@@ -252,7 +252,9 @@ class Game {
     });
 
     this.cardsContainer.addEventListener("click", (e) => {
-      let speaker = e.target.closest(".game__speaker[data-active=true]");
+      let speaker = e.target.closest(
+        ".game__speaker-flashcards[data-active=true]"
+      );
       if (speaker && !voice.synth.speaking) {
         let term = speaker.closest(".game__term-container");
         let defenition = speaker.closest(".game__defenition-container");
@@ -350,7 +352,7 @@ class Game {
   flipCard(event) {
     if (
       event.target.closest(".game__card") &&
-      !event.target.closest(".game__speaker")
+      !event.target.closest(".game__speaker-flashcards")
     ) {
       active.activeFront.classList.toggle("rearside");
       active.activeBack.classList.toggle("rearside");
@@ -430,22 +432,6 @@ class Game {
     this.activeCard = this.cardsEl[0];
   }
 
-  /*
-
-  function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  */
-  // async getUserData() {
-  //     let httpParam = new HttpParam('GET', false, true);
-  //     let response = await fetch(url + '/home/get_user_data', httpParam);
-  //     return JSON.parse(await response.text());
-  // }
   async getModule(id) {
     let reqData = {
       id,
@@ -465,108 +451,3 @@ class Game {
     location.href = `${hashValues.module}?id=${this._id}`;
   }
 }
-
-/* <div class="game__card">
-    <h1>Second card</h1>
-</div> */
-
-/*
-
-
-<div class="game__speaker" data-active="${
-  voice.working && term !== "" && voice.detectLanguage(term)
-    ? "true"
-    : "false"
-}" data-speaking="false">
-    <svg height="17" width="17">
-      <use href="img/sprite.svg#icon__speaker"></use>
-    </svg>
-  </div>
-
-<div class="game__card">
-                                    <div class="game__card-front prev transparent">
-                                        <div class="game__img-container">
-                                            <div class="game__img" style="background-image: url(https://img.huffingtonpost.com/asset/5dcc613f1f00009304dee539.jpeg?cache=QaTFuOj2IM&ops=crop_834_777_4651_2994%2Cscalefit_720_noupscale);"></div>
-                                        </div>
-
-                                        <div class="game__defenition-container">
-                                            <div class="game__defenition">
-                                                <p>
-                                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ipsum esse, nobis facilis sapiente doloribus impedit beatae laudantium sed atque animi rerum recusandae molestiae maxime nostrum similique suscipit culpa explicabo.
-                                                    
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="game__card-back rearside prev transparent">
-                                        <div class="game__term">
-                                            <p>Cat</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="game__card">
-                                    <div class="game__card-front">
-                                        <div class="game__img-container">
-                                            <div class="game__img" style="background-image: url(https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg?r=1a0fc22192d0c808b8bb2b9bcfbf4a45b1793687);"></div>
-                                        </div>
-
-                                        <div class="game__defenition-container">
-                                            <div class="game__defenition">
-                                                <p>
-                                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ipsum esse, nobis facilis sapiente doloribus impedit beatae laudantium sed atque animi rerum recusandae molestiae maxime nostrum similique suscipit culpa explicabo.
-                                                    
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="game__card-back rearside">
-                                        <div class="game__term">
-                                            <p>Turquoise</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                
-
-                                <div class="game__card">
-
-                                    <div class="game__card-front next transparent">
-                                        <div class="game__img-container">
-                                            <div class="game__img" style="background-image: url(https://www.billboard.com/files/styles/article_main_image/public/media/Billie-Eilish-bb12-2019-feat-billboard-strgoia-1548.jpg);"></div>
-                                        </div>
-
-                                        <div class="game__defenition-container">
-                                            <div class="game__defenition">
-                                                <p>
-                                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ipsum esse, nobis facilis sapiente doloribus impedit beatae laudantium sed atque animi rerum recusandae molestiae maxime nostrum similique suscipit culpa explicabo.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="game__card-back rearside next transparent">
-                                        <div class="game__term">
-                                            <p>Billie Eilish</p>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="game__card">
-
-                                    <div class="game__card-front unturnable next transparent">
-                                        <h1 class="game__card-message">Nice work!</h1>
-                                        <p class="game__card-message-info">You've just studied 3 terms!</p>
-                                        <button class="btn bcc-lightblue pad30 brr5 white fz175 h-grey h-bcc-yellow width50">Finish up</button>
-                                    </div>
-
-                                    <div class="game__card-back unturnable rearside next transparent">
-                                        
-                                    </div>
-
-                                </div>
-
-
-*/
