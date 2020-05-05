@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "http://localhost:5000"; // "https://word-cards-15-12-2019.herokuapp.com"
+const url = "https://word-cards-15-12-2019.herokuapp.com"; // "http://localhost:5000"
 const hashValues = {
   start: "#start",
   home: "#home",
@@ -297,7 +297,7 @@ function formatHash() {
   return location.href.split(/#|\?id=/);
 }
 
-const spinner = document.querySelector(".spinner__background");
+const spinner = document.querySelector(".spinner__container");
 
 function reveal() {
   htmlGen.toggleSpinner(true);
