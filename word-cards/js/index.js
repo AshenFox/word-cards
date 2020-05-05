@@ -297,7 +297,7 @@ function formatHash() {
   return location.href.split(/#|\?id=/);
 }
 
-const spinner = document.querySelector(".spinner__background");
+const spinner = document.querySelector(".spinner__container");
 
 function reveal() {
   htmlGen.toggleSpinner(true);

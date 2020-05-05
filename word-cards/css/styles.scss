@@ -69,6 +69,7 @@ input {
   background-color: $blue;
   position: relative;
   transition: all 0.1 linear;
+  z-index: 40;
 }
 
 .header__content {
@@ -1523,34 +1524,33 @@ input {
   }
 }
 
-.spinner__container {
+.spinner__background-container {
   position: relative;
   z-index: 20;
+}
+
+.spinner__container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 30;
+
+  @supports (-webkit-bkacdrop-filter: blur(10px)) or
+    (backdrop-filter: blur(10px)) {
+    -webkit-bkacdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    background-color: rgba($black, 0.1);
+  }
 }
 
 .spinner__background {
   position: absolute;
   top: 0;
-  // top: 8.5rem;
   left: 0;
-  // height: 100vh;
-  height: calc(100vh - 8.5rem);
+  height: 100vh;
   width: 100vw;
-
-  @media (max-width: $tablet) {
-    // top: 7rem;
-    height: calc(100vh - 7rem);
-  }
-
-  @media (max-width: $mobile) {
-    // top: 5.6rem;
-    height: calc(100vh - 5.6rem);
-  }
-
-  @media (max-width: $mobile-sm) {
-    // top: 5rem;
-    height: calc(100vh - 4rem);
-  }
 
   @supports (-webkit-bkacdrop-filter: blur(10px)) or
     (backdrop-filter: blur(10px)) {
