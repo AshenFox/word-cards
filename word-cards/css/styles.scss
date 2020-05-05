@@ -352,8 +352,42 @@ input {
   margin-bottom: 1.5rem;
 }
 
-.modal__log-in {
+.modal__log-in,
+.modal__sign-up {
   text-align: center;
+  position: relative;
+
+  &[data-checking="true"] {
+    & button {
+      background-color: $yellow;
+      cursor: auto;
+
+      & span {
+        visibility: hidden;
+      }
+    }
+
+    & .modal__loading-spinner {
+      display: block;
+    }
+  }
+}
+
+.modal__loading-spinner {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(180deg);
+  transform-origin: center;
+  margin: -1.5rem 0 0 -1.5rem;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  border: 4px solid $white;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  animation: spin 1.25s linear infinite;
 }
 
 .modal__options {
@@ -366,7 +400,7 @@ input {
 }
 
 .modal__error-list {
-  color: green;
+  color: red;
   padding: 1rem 4rem;
   border: 2px solid red;
   border-radius: 2rem;
@@ -1491,7 +1525,7 @@ input {
   left: 0;
   height: 100vh;
   width: 100vw;
-  z-index: -10;
+  // z-index: -10;
 }
 
 // =========== Game
@@ -2181,8 +2215,8 @@ input {
   color: $grey-lighter;
 }
 
-.game__finish-body {
-}
+// .game__finish-body {
+// }
 
 .game__finish-body-item {
   display: flex;
@@ -2245,18 +2279,6 @@ input {
 
   background-size: cover;
   background-position: center;
-
-  &.img1 {
-    background-image: url(https://o.quizlet.com/i/uciWMuqwyE5ZOOeEovsbGg.jpg);
-  }
-
-  &.img2 {
-    background-image: url(https://o.quizlet.com/bYq6kI1cPulhQTo2zetepQ_b.jpg);
-  }
-
-  &.img3 {
-    background-image: url(https://farm8.staticflickr.com/7056/6869762317_78487198aa_z.jpg);
-  }
 }
 
 // Flashcard game -----

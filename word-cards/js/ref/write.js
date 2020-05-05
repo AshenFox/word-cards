@@ -38,8 +38,8 @@ class Write {
 
                         <div class="game__progress">
                           <div class="game__progress-item">
-                            <div class="game__progress-bar full">
-                              <div class="game__bar-fill" style="width: 50%"></div>
+                            <div class="game__progress-bar full" id="bar-remaining">
+                              <div class="game__bar-fill" style="width: 100%" id="fill-remaining"></div>
                             </div>
                             <div class="game__progress-info">
 
@@ -47,15 +47,15 @@ class Write {
                                   <span>remaining</span>
                               </div>
 
-                              <div class="game__progress-count">
-                                  <span>0</span>
+                              <div class="game__progress-count" >
+                                  <span id="count-remaining">${this.number}</span>
                               </div>
                             </div>
                           </div>
 
                           <div class="game__progress-item">
-                            <div class="game__progress-bar full red">
-                              <div class="game__bar-fill red" style="width: 50%"></div>
+                            <div class="game__progress-bar full red" id="bar-incorrect">
+                              <div class="game__bar-fill red" style="width: 0%" id="fill-incorrect"></div>
                             </div>
                             <div class="game__progress-info">
 
@@ -63,15 +63,15 @@ class Write {
                                   <span>incorrect</span>
                               </div>
 
-                              <div class="game__progress-count">
-                                  <span>0</span>
+                              <div class="game__progress-count" >
+                                  <span id="count-incorrect">0</span>
                               </div>
                             </div>
                           </div>
 
                           <div class="game__progress-item">
-                            <div class="game__progress-bar full green">
-                              <div class="game__bar-fill green" style="width: 50%"></div>
+                            <div class="game__progress-bar full green" id="bar-correct">
+                              <div class="game__bar-fill green" style="width: 0%" id="fill-correct"></div>
                             </div>
                             <div class="game__progress-info">
  
@@ -80,7 +80,7 @@ class Write {
                               </div>
 
                               <div class="game__progress-count">
-                                  <span>0</span>
+                                  <span id="count-correct">0</span>
                               </div>
                             </div>
                           </div>
@@ -89,8 +89,8 @@ class Write {
                         <div class="game__control-buttons">
 
                             <div class="game__startover">
-                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-red h-brc-red" onclick="">
-                                    <span>Start over</span>
+                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow h-brc-yellow" onclick="">
+                                    <span>Options</span>
                                 </button>
                             </div>
                         </div>
@@ -227,7 +227,7 @@ class Write {
         </div>
 
         <div class="game__answer-continue" data-correct="${
-          correct ? "true" : "false"
+          correct || type.id === 2 ? "true" : "false"
         }">
           <button class="btn bcc-lightblue pad10-30 brr5 white fz15 fw-normal h-grey h-bcc-yellow">Click to continue</button>
         </div>
@@ -299,7 +299,7 @@ class Write {
       )}%</h3>
         </div>
         <div class="game__finish-header-item">
-          <button class="btn bcc-lightblue pad10-30 brr5 white fz15 fw-normal h-grey h-bcc-yellow">Start over</button>
+          <button class="btn bcc-lightblue pad10-30 brr5 white fz15 fw-normal h-grey h-bcc-yellow" onclick="active.startOver()">Start over</button>
         </div>
       </div>
     
@@ -343,9 +343,9 @@ class Write {
       <div class="game__finish-body-right">
         <div class="game__finish-defenition">
           <p>${defenition ? defenition : ""}</p>
-          <div class="game__finish-img" style="background-image: url(${
-            imgurl ? imgurl : ""
-          });"></div>
+          <div class="game__finish-img ${
+            imgurl ? "" : "hidden"
+          }" style="background-image: url(${imgurl ? imgurl : ""});"></div>
         </div>
       </div>
       `,
@@ -367,15 +367,27 @@ class Write {
     correct
       ? (this.round.answer = "correct")
       : (this.round.answer = "incorrect");
+
+    this.saveAnswer();
+    this.setProgress();
+
     let { curCard } = this.round;
     let html = this.answerHtml(curCard, correct, answer);
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
   }
 
-  continue(override) {
+  override() {
     let round = this.round;
-    if (override) round.answer = "correct";
+
+    round.incorrect.number--;
+    round.incorrect.cards.pop();
+    round.allAnswers.pop();
+    round.answer = "correct";
+  }
+
+  saveAnswer() {
+    let round = this.round;
 
     if (round.answer === "correct") {
       round.correct.number++;
@@ -388,6 +400,60 @@ class Write {
       let number = round.allAnswers.length + 1;
       round.allAnswers.push({ correct: false, card: round.curCard, number });
     }
+  }
+
+  setProgress() {
+    let {
+      allCards,
+      allCorrect,
+      cardsInRound,
+      incorrectInRound,
+      correctInRound,
+    } = this.collectRoundData();
+    console.log(
+      `allCards: ${allCards}`,
+      `allCorrect: ${allCorrect}`,
+      `cardsInRound: ${cardsInRound}`,
+      `incorrectInRound: ${incorrectInRound}`
+    );
+
+    this.fillCorrect.style = `width: ${Math.round(
+      (allCorrect / allCards) * 100
+    )}%`;
+    this.fillIncorrect.style = `width: ${Math.round(
+      (incorrectInRound / allCards) * 100
+    )}%`;
+    this.fillRemaining.style = `width: ${Math.round(
+      ((cardsInRound - incorrectInRound - correctInRound) / allCards) * 100
+    )}%`;
+
+    this.countCorrect.textContent = allCorrect;
+    this.countIncorrect.textContent = incorrectInRound;
+    this.countRemaining.textContent =
+      cardsInRound - incorrectInRound - correctInRound;
+  }
+
+  continue(override) {
+    let round = this.round;
+    // if (override) round.answer = "correct";
+
+    if (override) {
+      this.override();
+      this.saveAnswer();
+      this.setProgress();
+    }
+
+    // if (round.answer === "correct") {
+    //   round.correct.number++;
+    //   round.correct.cards.push(round.curCard);
+    //   let number = round.allAnswers.length + 1;
+    //   round.allAnswers.push({ correct: true, card: round.curCard, number });
+    // } else if (round.answer === "incorrect") {
+    //   round.incorrect.number++;
+    //   round.incorrect.cards.push(round.curCard);
+    //   let number = round.allAnswers.length + 1;
+    //   round.allAnswers.push({ correct: false, card: round.curCard, number });
+    // }
 
     round.answer = false;
     round.status = false;
@@ -421,6 +487,7 @@ class Write {
   nextRound() {
     let newRoundCards = this.round.incorrect.cards;
     this.createRound(newRoundCards);
+    this.setProgress();
     this.question();
   }
 
@@ -443,6 +510,20 @@ class Write {
 
       this.gameComponents.append(el);
     });
+  }
+
+  startOver() {
+    if (modal) {
+      htmlGen.deleteEl("modal");
+      modal = false;
+    }
+
+    this.gameComponents.innerHTML = "";
+    this.round = false;
+    this.rounds = false;
+    this.createRound(this.cards);
+    this.setProgress();
+    this.question();
   }
 
   collectRoundData(round = this.round) {
@@ -512,7 +593,22 @@ class Write {
 
     this.gameComponents = document.querySelector(".game__components");
     this.gameControls = document.querySelector(".game__controls");
+    // -------------------------------
+    this.barRemaining = document.querySelector("#bar-remaining");
+    this.fillRemaining = document.querySelector("#fill-remaining");
+    this.countRemaining = document.querySelector("#count-remaining");
+    this.barIncorrect = document.querySelector("#bar-incorrect");
+    this.fillIncorrect = document.querySelector("#fill-incorrect");
+    this.countIncorrect = document.querySelector("#count-incorrect");
+    this.barCorrect = document.querySelector("#bar-correct");
+    this.fillCorrect = document.querySelector("#fill-correct");
+    this.countCorrect = document.querySelector("#count-correct");
+    // -------------------------------
 
+    // console.log(this.barRemaining, this.fillRemaining, this.countRemaining);
+    // console.log(this.barIncorrect, this.fillIncorrect, this.countIncorrect);
+    // console.log(this.barCorrect, this.fillCorrect, this.countCorrect);
+    this.setProgress();
     this.question();
 
     this.gameComponents.addEventListener("click", (e) => {
@@ -554,6 +650,16 @@ class Write {
       if (target.closest(".game__round-continue button")) {
         console.log("Continue to the next round!");
         this.nextRound();
+      }
+    });
+
+    this.gameControls.addEventListener("click", (e) => {
+      let target = e.target;
+
+      // Open options
+      if (target.closest(".game__startover button")) {
+        console.log("fire!");
+        htmlGen.options();
       }
     });
 

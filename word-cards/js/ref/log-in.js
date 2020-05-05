@@ -34,10 +34,11 @@ class Log_in {
                     <input type="password" class="input pad5 fz17 height4r br-bottom2 bcc-whiteblue brc-grey f-brc-yellow password" id="password" placeholder="Type your password">
                     <label for="" class="label modal__label">PASSWORD</label>
 
-                    <div class="modal__log-in">
+                    <div class="modal__log-in" data-checking="false">
                         <button class="btn width100 bcc-lightblue pad15-30 brr5 fz175 white h-grey h-bcc-yellow" onclick="modal.checkValues.call(modal)">
-                            Log in
+                            <span>Log in</span>
                         </button>
+                        <div class="modal__loading-spinner"></div>
                     </div>
 
                     <div class="modal__options">
@@ -56,6 +57,7 @@ class Log_in {
     this.passEl = this.el.querySelector(".password");
     this.userErrEl = this.el.querySelector(".modal__username-error");
     this.passErrEl = this.el.querySelector(".modal__password-error");
+    this.logInBtn = this.el.querySelector(".modal__log-in");
   }
 
   // Methods
@@ -89,6 +91,8 @@ class Log_in {
   }
 
   async checkValues(el) {
+    this.logInBtn.dataset.checking = true;
+
     let userValue = this.userEl.value,
       passValue = this.passEl.value,
       userErrValue,
@@ -136,15 +140,12 @@ class Log_in {
   }
 
   createError(target1, target2, errValue) {
-    if (!errValue) {
-      target1.innerHTML = "";
-      target2.innerHTML = "";
+    target1.innerHTML = "";
+    target2.innerHTML = "";
 
+    if (!errValue) {
       return true;
     } else {
-      target1.innerHTML = "";
-      target2.innerHTML = "";
-
       let el = document.createElement("ul");
       el.className = "modal__error-list";
 
@@ -153,6 +154,8 @@ class Log_in {
       el.appendChild(li);
 
       target1.appendChild(el);
+
+      this.logInBtn.dataset.checking = false;
 
       return false;
     }

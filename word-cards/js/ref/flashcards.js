@@ -81,7 +81,7 @@ class Flashcards {
                             </div>
 
                             <div class="game__shuffle">
-                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.toggleShuffle(active.cardShuffle);">
+                                <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.toggleShuffle();">
                                     <svg height="20" width="20">
                                         <use href="img/sprite.svg#icon__shuffle"></use>
                                     </svg>
@@ -404,8 +404,9 @@ class Flashcards {
     this.activeCard = this.cardsEl[0];
   }
 
-  toggleShuffle(target) {
-    target.classList.toggle("active");
+  toggleShuffle() {
+    this.cardShuffle.classList.toggle("active");
+    if (modal) modal.cardShuffle.classList.toggle("active");
     this.shuffle();
   }
 
