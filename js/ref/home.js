@@ -206,8 +206,7 @@ class Home {
 
     let el = htmlGen.createEl(this);
 
-    // document.body.appendChild(el);
-    document.querySelector("main").appendChild(el);
+    document.body.appendChild(el);
     htmlGen.toggleSpinner(false);
 
     this.moduleContainer = document.querySelector(".home__modules");
