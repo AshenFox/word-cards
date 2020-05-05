@@ -14,6 +14,9 @@ body {
   font-size: 1.5rem;
   color: black; }
 
+main {
+  position: relative; }
+
 h1,
 h2,
 h3,
@@ -1084,22 +1087,19 @@ input {
 
 .spinner__container {
   position: absolute;
-  top: 8.5rem;
+  top: 0;
   left: 0;
   height: calc(100vh - 8.5rem);
   width: 100vw;
   z-index: 10; }
   @media (max-width: 991px) {
     .spinner__container {
-      top: 7rem;
       height: calc(100vh - 7rem); } }
   @media (max-width: 620px) {
     .spinner__container {
-      top: 5.6rem;
       height: calc(100vh - 5.6rem); } }
   @media (max-width: 350px) {
     .spinner__container {
-      top: 5rem;
       height: calc(100vh - 5rem); } }
   @supports (-webkit-bkacdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
     .spinner__container {
