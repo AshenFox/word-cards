@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "https://word-cards-15-12-2019.herokuapp.com"; //  "http://localhost:5000"
+const url = "https://word-cards-15-12-2019.herokuapp.com"; //    "http://localhost:5000"
 const hashValues = {
   start: "#start",
   home: "#home",
@@ -112,8 +112,10 @@ const htmlGen = {
   toggleSpinner(on) {
     if (on) {
       spinner.classList.remove("hidden");
+      document.body.classList.add("overflow-hid");
     } else {
       spinner.classList.add("hidden");
+      document.body.classList.remove("overflow-hid");
     }
   },
 
@@ -296,3 +298,7 @@ function formatHash() {
 }
 
 const spinner = document.querySelector(".spinner__container");
+
+// function reveal() {
+//   htmlGen.toggleSpinner(true);
+// }

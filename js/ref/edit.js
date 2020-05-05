@@ -233,8 +233,8 @@ class Edit {
       document.execCommand("insertHTML", false, text);
     });
 
-    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
+    htmlGen.toggleSpinner(false);
 
     this.titleCont = document.querySelector(".edit__module-title");
     this.cardsCont = document.querySelector(".edit__cards-container");
