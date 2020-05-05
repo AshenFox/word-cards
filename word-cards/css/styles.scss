@@ -1524,6 +1524,11 @@ input {
 }
 
 .spinner__container {
+  position: relative;
+  z-index: 20;
+}
+
+.spinner__background {
   position: absolute;
   top: 0;
   // top: 8.5rem;
@@ -1531,7 +1536,6 @@ input {
   // height: 100vh;
   height: calc(100vh - 8.5rem);
   width: 100vw;
-  z-index: 10;
 
   @media (max-width: $tablet) {
     // top: 7rem;
@@ -1545,7 +1549,7 @@ input {
 
   @media (max-width: $mobile-sm) {
     // top: 5rem;
-    height: calc(100vh - 5rem);
+    height: calc(100vh - 4rem);
   }
 
   @supports (-webkit-bkacdrop-filter: blur(10px)) or
