@@ -193,8 +193,8 @@ class Module {
 
     let el = htmlGen.createEl(this);
 
-    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
+    htmlGen.toggleSpinner(false);
     this.cardsContainer = document.querySelector(".module__card-cont");
     this.matchFilter = document.querySelector(".module__filter");
 

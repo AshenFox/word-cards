@@ -586,8 +586,8 @@ class Write {
 
     let el = htmlGen.createEl(this);
 
-    htmlGen.toggleSpinner(false);
     document.body.append(el);
+    htmlGen.toggleSpinner(false);
 
     this.createRound(this.cards);
 

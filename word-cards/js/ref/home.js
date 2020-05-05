@@ -206,8 +206,8 @@ class Home {
 
     let el = htmlGen.createEl(this);
 
-    htmlGen.toggleSpinner(false);
     document.body.appendChild(el);
+    htmlGen.toggleSpinner(false);
 
     this.moduleContainer = document.querySelector(".home__modules");
     this.matchFilter = document.querySelector(".home__input-cont input");

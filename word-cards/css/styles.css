@@ -1084,10 +1084,28 @@ input {
 
 .spinner__container {
   position: absolute;
-  top: 0;
+  top: 8.5rem;
   left: 0;
-  height: 100vh;
-  width: 100vw; }
+  height: calc(100vh - 8.5rem);
+  width: 100vw;
+  z-index: 10; }
+  @media (max-width: 991px) {
+    .spinner__container {
+      top: 7rem;
+      height: calc(100vh - 7rem); } }
+  @media (max-width: 620px) {
+    .spinner__container {
+      top: 5.6rem;
+      height: calc(100vh - 5.6rem); } }
+  @media (max-width: 350px) {
+    .spinner__container {
+      top: 5rem;
+      height: calc(100vh - 5rem); } }
+  @supports (-webkit-bkacdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+    .spinner__container {
+      -webkit-bkacdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      background-color: rgba(43, 42, 44, 0.1); } }
 
 .flashcards,
 .write {
@@ -2073,3 +2091,6 @@ input {
   border: 2px solid #23c823; }
   .border-green:focus {
     border: 2px solid #23c823; }
+
+.overflow-hid {
+  overflow: hidden; }
