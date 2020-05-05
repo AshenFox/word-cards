@@ -221,7 +221,8 @@ class Flashcards {
 
     let el = htmlGen.createEl(this);
 
-    document.body.append(el);
+    // document.body.append(el);
+    document.querySelector("main").appendChild(el);
     htmlGen.toggleSpinner(false);
 
     this.progress = 0;

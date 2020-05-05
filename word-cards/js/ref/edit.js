@@ -233,7 +233,8 @@ class Edit {
       document.execCommand("insertHTML", false, text);
     });
 
-    document.body.appendChild(el);
+    // document.body.appendChild(el);
+    document.querySelector("main").appendChild(el);
     htmlGen.toggleSpinner(false);
 
     this.titleCont = document.querySelector(".edit__module-title");
