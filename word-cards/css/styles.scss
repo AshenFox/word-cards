@@ -1872,6 +1872,10 @@ input {
   background-color: $white;
   padding: 2.5rem 4rem;
   margin-bottom: 1rem;
+
+  @media (max-width: $mobile) {
+    padding: 1.5rem 3rem;
+  }
 }
 
 .game__question-dontknow {
@@ -1935,6 +1939,7 @@ input {
     color: $grey-lighter;
     font-size: 1.2rem;
     letter-spacing: 0.2rem;
+    transition: all 0.2s;
   }
 }
 
@@ -1968,6 +1973,24 @@ input {
     height: 2px;
     width: 100%;
     transition: all 0.2s;
+  }
+
+  &[data-correct="true"] {
+    border-color: $green;
+
+    & + label {
+      color: $green;
+    }
+
+    &:focus-within {
+      &:after {
+        background-color: $green;
+      }
+    }
+
+    &:after {
+      background-color: $green;
+    }
   }
 }
 
@@ -2063,6 +2086,17 @@ input {
 .game__answer-continue {
   margin-top: 3rem;
   text-align: center;
+
+  &[data-correct="false"] {
+    & button {
+      background-color: $grey-lighter;
+
+      &:hover {
+        background-color: $grey-lighter;
+        color: $white;
+      }
+    }
+  }
 }
 
 // Game round ----

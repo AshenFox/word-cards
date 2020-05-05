@@ -1332,6 +1332,12 @@ input {
   background-color: #ffffff;
   padding: 2.5rem 4rem;
   margin-bottom: 1rem; }
+  @media (max-width: 620px) {
+    .game__question,
+    .game__answer,
+    .game__round,
+    .game__finish {
+      padding: 1.5rem 3rem; } }
 
 .game__question-dontknow {
   margin-bottom: 2rem;
@@ -1380,7 +1386,8 @@ input {
     text-transform: uppercase;
     color: #97a5aa;
     font-size: 1.2rem;
-    letter-spacing: 0.2rem; }
+    letter-spacing: 0.2rem;
+    transition: all 0.2s; }
 
 .game__form-input {
   padding: 0.2rem 1rem;
@@ -1404,6 +1411,14 @@ input {
     height: 2px;
     width: 100%;
     transition: all 0.2s; }
+  .game__form-input[data-correct="true"] {
+    border-color: #23b26d; }
+    .game__form-input[data-correct="true"] + label {
+      color: #23b26d; }
+    .game__form-input[data-correct="true"]:focus-within:after {
+      background-color: #23b26d; }
+    .game__form-input[data-correct="true"]:after {
+      background-color: #23b26d; }
 
 .game__form-btn-container {
   margin-left: 2rem; }
@@ -1475,6 +1490,11 @@ input {
 .game__answer-continue {
   margin-top: 3rem;
   text-align: center; }
+  .game__answer-continue[data-correct="false"] button {
+    background-color: #97a5aa; }
+    .game__answer-continue[data-correct="false"] button:hover {
+      background-color: #97a5aa;
+      color: #ffffff; }
 
 .game__round-title {
   margin-bottom: 2.5rem;
