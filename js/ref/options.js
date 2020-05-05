@@ -7,68 +7,70 @@ class Options {
     this.html = /*html*/ `
 
 		<div class="modal__dialog">
-            
-            <div class="delete-set">
+      <div class="modal__header">
+          <div class="modal__title">
+              <h3>Options</h3>
+          </div>
+          <!-- cards -->
+          <div class="modal__close">
+            <svg height="17" width="17" fill="#fff">
+              <use href="img/sprite.svg#icon__close"></use>
+            </svg>
+          </div>
+      </div>
 
-                <div class="modal__header">
-                    <div class="modal__title">
-                        <h3>Options</h3>
+      <div class="modal__content">
+
+        <div class="game__method ${
+          active.class === "flashcards" ? "" : "hidden"
+        }">
+            <div class="game__method-tilte">
+                Answer with:
+            </div>
+            <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.methodMenuToggle();">
+                <svg height="13" width="13">
+                  <use href="img/sprite.svg#icon__down_arrow"></use>
+                </svg>
+                <span>${
+                  active.answerWithDefenition ? "Defenition" : "Term"
+                }</span>
+            </button>
+            <div class="game__method-menu-container-modal hidden">
+                <div class="game__method-menu">
+                    <div class="game__method-menu-item" data-method="term">
+                        <span>Term</span>
                     </div>
-                    <!-- cards -->
-                    <div class="modal__close">
-                      <svg height="17" width="17" fill="#fff">
-                        <use href="img/sprite.svg#icon__close"></use>
-                      </svg>
+                    <div class="game__method-menu-item" data-method="defenition">
+                        <span>Defenition</span>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal__content">
-
-                        <div class="game__method">
-                            <div class="game__method-tilte">
-                                Answer with:
-                            </div>
-                            <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.methodMenuToggle();">
-                                <svg height="13" width="13">
-                                  <use href="img/sprite.svg#icon__down_arrow"></use>
-                                </svg>
-                                <span>${
-                                  active.answerWithDefenition
-                                    ? "Defenition"
-                                    : "Term"
-                                }</span>
-                            </button>
-                            <div class="game__method-menu-container-modal hidden">
-                                <div class="game__method-menu">
-                                    <div class="game__method-menu-item" data-method="term">
-                                        <span>Term</span>
-                                    </div>
-                                    <div class="game__method-menu-item" data-method="defenition">
-                                        <span>Defenition</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-                            
-                        </div>
-
-                        <div class="game__shuffle-modal">
-                            <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.toggleShuffle(modal.cardShuffle);">
-                                <svg height="20" width="20">
-                                  <use href="img/sprite.svg#icon__shuffle"></use>
-                                </svg>
-                                <span>Shuffle</span>
-                            </button>
-                        </div>
-                    
-                    
-
-                </div>
-
-            </div>	
             
-        </div>`;
+            
+        </div>
+
+        <div class="game__shuffle-modal ${
+          active.class === "flashcards" ? "" : "hidden"
+        } ${active.shuffled ? "active" : ""}">
+            <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-yellow" onclick="active.toggleShuffle();">
+                <svg height="20" width="20">
+                  <use href="img/sprite.svg#icon__shuffle"></use>
+                </svg>
+                <span>Shuffle</span>
+            </button>
+        </div>
+
+        <div class="game__startover ${
+          active.class === "write" ? "" : "hidden"
+        } ${""}">
+            <button class="btn width100 fz15 pad7 br2 brc-grey-medium brr5 lightblue h-red h-brc-red" onclick="active.startOver();">
+                Start over
+            </button>
+        </div>
+      </div>
+ 
+    </div>`;
 
     this.render();
   }
@@ -136,3 +138,6 @@ class Options {
   //     }
   // }
 }
+
+/*
+ */

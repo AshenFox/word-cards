@@ -252,8 +252,36 @@ input {
 .modal__label {
   margin-bottom: 1.5rem; }
 
-.modal__log-in {
-  text-align: center; }
+.modal__log-in,
+.modal__sign-up {
+  text-align: center;
+  position: relative; }
+  .modal__log-in[data-checking="true"] button,
+  .modal__sign-up[data-checking="true"] button {
+    background-color: #ffcd1f;
+    cursor: auto; }
+    .modal__log-in[data-checking="true"] button span,
+    .modal__sign-up[data-checking="true"] button span {
+      visibility: hidden; }
+  .modal__log-in[data-checking="true"] .modal__loading-spinner,
+  .modal__sign-up[data-checking="true"] .modal__loading-spinner {
+    display: block; }
+
+.modal__loading-spinner {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(180deg);
+  transform-origin: center;
+  margin: -1.5rem 0 0 -1.5rem;
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  animation: spin 1.25s linear infinite; }
 
 .modal__options {
   text-align: center;
@@ -262,7 +290,7 @@ input {
     margin: 0; }
 
 .modal__error-list {
-  color: green;
+  color: red;
   padding: 1rem 4rem;
   border: 2px solid red;
   border-radius: 2rem;
@@ -1059,8 +1087,7 @@ input {
   top: 0;
   left: 0;
   height: 100vh;
-  width: 100vw;
-  z-index: -10; }
+  width: 100vw; }
 
 .flashcards,
 .write {
@@ -1597,12 +1624,6 @@ input {
   margin-top: 1rem;
   background-size: cover;
   background-position: center; }
-  .game__finish-img.img1 {
-    background-image: url(https://o.quizlet.com/i/uciWMuqwyE5ZOOeEovsbGg.jpg); }
-  .game__finish-img.img2 {
-    background-image: url(https://o.quizlet.com/bYq6kI1cPulhQTo2zetepQ_b.jpg); }
-  .game__finish-img.img3 {
-    background-image: url(https://farm8.staticflickr.com/7056/6869762317_78487198aa_z.jpg); }
 
 .game__cards-container {
   width: 100%;
@@ -2039,6 +2060,7 @@ input {
   display: inline-block; }
 
 .inactive {
+  cursor: auto;
   background-color: #da2626; }
   .inactive:hover {
     color: #ffffff;
@@ -2049,3 +2071,5 @@ input {
 
 .border-green {
   border: 2px solid #23c823; }
+  .border-green:focus {
+    border: 2px solid #23c823; }

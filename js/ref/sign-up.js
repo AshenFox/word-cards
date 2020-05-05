@@ -42,8 +42,11 @@ class Sign_up {
                     <label for="password" class="label">PASSWORD:</label>
                     <input type="password" class="pad20-15 fz17 height4r br2 bc-none brc-grey f-brc-yellow mar-bottom20 password" id="password" placeholder="Enter a password">
                     
-                    <div class="modal__sign-up">
-                        <button id="btn-sign-up" class="btn width100 bcc-lightblue pad15-30 brr5 fz175 white h-grey h-bcc-yellow inactive" onclick="modal.signup(modal.el)">Sign up</button>
+                    <div class="modal__sign-up" data-checking="false">
+                        <button id="btn-sign-up" class="btn width100 bcc-lightblue pad15-30 brr5 fz175 white h-grey h-bcc-yellow inactive" onclick="modal.signup(modal.el)">
+                          <span>Sign up</span>
+                        </button>
+                        <div class="modal__loading-spinner"></div>
                     </div>
 
                     <div class="modal__options">
@@ -66,6 +69,7 @@ class Sign_up {
     }, 0);
     this.el = el;
 
+    this.signUpBtn = document.querySelector(".modal__sign-up");
     // Close modal
 
     el.querySelector(".modal__close").addEventListener("mousedown", () => {
@@ -80,111 +84,138 @@ class Sign_up {
       }
     });
 
-    el.querySelector(".username").addEventListener("change", async (e) => {
-      let errorEl = el.querySelector(".modal__username-error");
-      let errValues = [];
-      let input = document.getElementById("username");
-
-      if (
-        await this.checkValue(e.target.value, "/sign_up/min_length/username")
-      ) {
-        errValues.push(
-          "Your username is too short. The minimum length is 5 characters."
-        );
+    this.usernameTimer = false;
+    el.querySelector(".username").addEventListener("input", async (e) => {
+      if (this.usernameTimer) {
+        clearTimeout(this.usernameTimer);
       }
 
-      if (
-        await this.checkValue(e.target.value, "/sign_up/invalid_char/username")
-      ) {
-        errValues.push(
-          "Your username may only contain latin letters or numbers."
-        );
-      }
+      this.usernameTimer = setTimeout(async () => {
+        let errorEl = el.querySelector(".modal__username-error");
+        let errValues = [];
+        let input = document.getElementById("username");
 
-      if (await this.checkValue(e.target.value, "/sign_up/user_exists")) {
-        errValues.push("Username taken.");
-      }
+        if (
+          await this.checkValue(e.target.value, "/sign_up/min_length/username")
+        ) {
+          errValues.push(
+            "Your username is too short. The minimum length is 5 characters."
+          );
+        }
 
-      if (e.target.value == "") {
-        errValues = [];
-        errValues.push("Please enter a username.");
-      }
+        if (
+          await this.checkValue(
+            e.target.value,
+            "/sign_up/invalid_char/username"
+          )
+        ) {
+          errValues.push(
+            "Your username may only contain latin letters or numbers."
+          );
+        }
 
-      if (this.createError(errorEl, errValues, input)) {
-        this.username = true;
-      } else {
-        this.username = false;
-      }
+        if (await this.checkValue(e.target.value, "/sign_up/user_exists")) {
+          errValues.push("Username taken.");
+        }
 
-      this.signupToggle(el);
+        if (e.target.value == "") {
+          errValues = [];
+          errValues.push("Please enter a username.");
+        }
+
+        if (this.createError(errorEl, errValues, input)) {
+          this.username = true;
+        } else {
+          this.username = false;
+        }
+
+        this.signupToggle(el);
+      }, 1000);
     });
 
-    el.querySelector(".email").addEventListener("change", async (e) => {
-      let errorEl = el.querySelector(".modal__email-error");
-      let errValues = [];
-      let input = document.getElementById("email");
-
-      if (await this.checkValue(e.target.value, "/sign_up/email_format")) {
-        errValues.push("Invalid email format.");
+    this.emailTimer = false;
+    el.querySelector(".email").addEventListener("input", async (e) => {
+      if (this.emailTimer) {
+        clearTimeout(this.emailTimer);
       }
 
-      if (await this.checkValue(e.target.value, "/sign_up/email_taken")) {
-        errValues.push("This email has already been taken.");
-      }
+      this.emailTimer = setTimeout(async () => {
+        let errorEl = el.querySelector(".modal__email-error");
+        let errValues = [];
+        let input = document.getElementById("email");
 
-      if (e.target.value == "") {
-        errValues = [];
-        errValues.push("Please enter an email.");
-      }
+        if (await this.checkValue(e.target.value, "/sign_up/email_format")) {
+          errValues.push("Invalid email format.");
+        }
 
-      if (this.createError(errorEl, errValues, input)) {
-        this.email = true;
-      } else {
-        this.email = false;
-      }
+        if (await this.checkValue(e.target.value, "/sign_up/email_taken")) {
+          errValues.push("This email has already been taken.");
+        }
 
-      this.signupToggle(el);
+        if (e.target.value == "") {
+          errValues = [];
+          errValues.push("Please enter an email.");
+        }
+
+        if (this.createError(errorEl, errValues, input)) {
+          this.email = true;
+        } else {
+          this.email = false;
+        }
+
+        this.signupToggle(el);
+      }, 1000);
     });
 
-    el.querySelector(".password").addEventListener("change", async (e) => {
-      let errorEl = el.querySelector(".modal__password-error");
-      let errValues = [];
-      let input = document.getElementById("password");
-
-      if (await this.checkValue(e.target.value, "/sign_up/one_uppercase")) {
-        errValues.push(
-          "Your password must have at least one uppercase letter."
-        );
+    this.passwordTimer = false;
+    el.querySelector(".password").addEventListener("input", async (e) => {
+      if (this.passwordTimer) {
+        clearTimeout(this.passwordTimer);
       }
 
-      if (
-        await this.checkValue(e.target.value, "/sign_up/min_length/password")
-      ) {
-        errValues.push(
-          "Your password is too short. The minimum length is 7 characters."
-        );
-      }
+      this.passwordTimer = setTimeout(async () => {
+        let errorEl = el.querySelector(".modal__password-error");
+        let errValues = [];
+        let input = document.getElementById("password");
 
-      if (
-        await this.checkValue(e.target.value, "/sign_up/invalid_char/password")
-      ) {
-        errValues.push(
-          "Your password may only contain latin letters, numbers and special symbols."
-        );
-      }
+        if (await this.checkValue(e.target.value, "/sign_up/one_uppercase")) {
+          errValues.push(
+            "Your password must have at least one uppercase letter."
+          );
+        }
 
-      if (e.target.value == "") {
-        errValues = [];
-        errValues.push("Please enter a password.");
-      }
+        if (
+          await this.checkValue(e.target.value, "/sign_up/min_length/password")
+        ) {
+          errValues.push(
+            "Your password is too short. The minimum length is 7 characters."
+          );
+        }
 
-      if (this.createError(errorEl, errValues, input)) {
-        this.password = true;
-      } else {
-        this.password = false;
-      }
+        if (
+          await this.checkValue(
+            e.target.value,
+            "/sign_up/invalid_char/password"
+          )
+        ) {
+          errValues.push(
+            "Your password may only contain latin letters, numbers and special symbols."
+          );
+        }
 
-      this.signupToggle(el);
+        if (e.target.value == "") {
+          errValues = [];
+          errValues.push("Please enter a password.");
+        }
+
+        if (this.createError(errorEl, errValues, input)) {
+          this.password = true;
+        } else {
+          this.password = false;
+        }
+
+        this.signupToggle(el);
+      }, 1000);
     });
   }
 
@@ -261,6 +292,8 @@ class Sign_up {
 
   async signup(el) {
     if (this.username && this.email && this.password) {
+      this.signUpBtn.dataset.checking = true;
+
       let username = el.querySelector(".username");
       let email = el.querySelector(".email");
       let password = el.querySelector(".password");
@@ -282,10 +315,13 @@ class Sign_up {
           this.checkForModal();
           location.href = hashValues.home;
           htmlGen.startDashboard();
+          return;
           // htmlGen.regularDashboard();
           // htmlGen.home();
         }
       }
+
+      this.signUpBtn.dataset.checking = false;
 
       return;
     }

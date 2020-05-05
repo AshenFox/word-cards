@@ -271,6 +271,7 @@
 }
 
 .inactive {
+  cursor: auto;
   background-color: rgb(218, 38, 38);
 
   &:hover {
@@ -287,4 +288,8 @@
 
 .border-green {
   border: 2px solid rgb(35, 200, 35);
+
+  &:focus {
+    border: 2px solid rgb(35, 200, 35);
+  }
 }

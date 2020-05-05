@@ -51,13 +51,17 @@ class Home {
   }
 
   nonefoundHtml({ value }) {
-    return {
+    let result = {
       class: "home__none-found",
       id: "",
       html: /*html*/ `
             <p>No sets matching <b>'${value}'</b> found</p>
             `,
     };
+
+    if (!value) result.html = /*html*/ `You don't have any sets yet...`;
+
+    return result;
   }
 
   homeHtml() {
@@ -120,34 +124,40 @@ class Home {
       }
     }
 
-    arr.forEach((item) => {
-      let html;
+    let html;
 
-      switch (typeof item) {
-        case "string":
-          html = this.separatorHtml(item);
-          break;
-
-        case "object":
-          if (item._id) {
-            let img = this.checkImg(item);
-            html = this.moduleHtml(item, img);
-          } else {
-            html = this.nonefoundHtml(item);
-          }
-
-          break;
-      }
-
+    if (arr.length === 0) {
+      html = this.nonefoundHtml({});
       let el = htmlGen.createEl(html);
-
-      if (typeof item === "object") {
-        el.dataset.id = item._id;
-        this.moduleListener(el, item.draft);
-      }
-
       this.moduleContainer.appendChild(el);
-    });
+    } else {
+      arr.forEach((item) => {
+        switch (typeof item) {
+          case "string":
+            html = this.separatorHtml(item);
+            break;
+
+          case "object":
+            if (item._id) {
+              let img = this.checkImg(item);
+              html = this.moduleHtml(item, img);
+            } else {
+              html = this.nonefoundHtml(item);
+            }
+
+            break;
+        }
+
+        let el = htmlGen.createEl(html);
+
+        if (typeof item === "object") {
+          el.dataset.id = item._id;
+          this.moduleListener(el, item.draft);
+        }
+
+        this.moduleContainer.appendChild(el);
+      });
+    }
   }
 
   checkImg(module) {

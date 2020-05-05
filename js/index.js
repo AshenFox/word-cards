@@ -295,42 +295,4 @@ function formatHash() {
   return location.href.split(/#|\?id=/);
 }
 
-//  */
-
-// NEW CODE ---------------------------------------------------------------------------
-
 const spinner = document.querySelector(".spinner__container");
-
-// htmlGen.game();
-
-// async function loggedInCheck() {
-//   try {
-//     let httpParam = new HttpParam("GET", false, true);
-//     htmlGen.toggleSpinner();
-//     let response = await fetch(url + "/home/auth", httpParam);
-
-//     if (response.status == 200) {
-//       htmlGen.regularDashboard();
-//       htmlGen.home();
-//     } else {
-//       htmlGen.startDashboard();
-//       htmlGen.start();
-//     }
-//   } catch (err) {
-//     // add connection with the server is absent message
-//     console.log(err);
-//     htmlGen.startDashboard();
-//     htmlGen.start();
-//   }
-// }
-
-// async function log_out() {
-//   // add a cookie deletion
-//   let httpParam = new HttpParam("GET", false, true);
-//   let response = await fetch(url + "/home/log-out", httpParam);
-//   htmlGen.regularDashboard();
-//   htmlGen.startDashboard();
-//   htmlGen.start();
-// }
-
-// loggedInCheck();
