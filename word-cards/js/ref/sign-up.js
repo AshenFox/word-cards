@@ -312,6 +312,12 @@ class Sign_up {
         response = await fetch(url + "/log_in/log_in", httpParam);
 
         if (response.status == 200) {
+          let data = JSON.parse(await response.text());
+
+          console.log(data);
+
+          localStorage.setItem("value", data.token);
+
           this.checkForModal();
           location.href = hashValues.home;
           htmlGen.startDashboard();

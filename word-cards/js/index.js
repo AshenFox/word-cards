@@ -169,8 +169,14 @@ class HttpParam {
     this.headers = {
       "Content-Type": "text/plain",
     };
+    if (cred && localStorage.getItem("value"))
+      this.headers["Authorization"] = `Bearer ${localStorage.getItem("value")}`;
+    console.log(this.headers);
     if (data) this.body = JSON.stringify(data);
-    if (cred) this.credentials = "include";
+    if (cred) {
+      this.withCredentials = true;
+      this.credentials = "include";
+    }
   }
 }
 
@@ -178,6 +184,8 @@ class HttpParam {
 
 async function loggedInCheck() {
   try {
+    // let token = localStorage.getItem('token');
+    // console.log(token);
     let httpParam = new HttpParam("GET", false, true);
     let response = await fetch(url + "/home/auth", httpParam);
 
@@ -194,8 +202,10 @@ async function loggedInCheck() {
 
 async function log_out() {
   // add a cookie deletion
-  let httpParam = new HttpParam("GET", false, true);
-  let response = await fetch(url + "/home/log-out", httpParam);
+  // let httpParam = new HttpParam("GET", false, true);
+  // let response = await fetch(url + "/home/log-out", httpParam);
+
+  localStorage.removeItem("value");
 
   location.href = hashValues.start;
 }
