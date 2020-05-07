@@ -112,9 +112,11 @@ const htmlGen = {
   toggleSpinner(on) {
     if (on) {
       spinner.classList.remove("hidden");
+      spinnerBackground.classList.remove("hidden");
       document.body.classList.add("overflow-hid");
     } else {
       spinner.classList.add("hidden");
+      spinnerBackground.classList.add("hidden");
       document.body.classList.remove("overflow-hid");
     }
   },
@@ -308,6 +310,9 @@ function formatHash() {
 }
 
 const spinner = document.querySelector(".spinner__container");
+const spinnerBackground = document.querySelector(".spinner__background");
+const main = document.querySelector("main");
+console.log(main);
 
 function reveal() {
   htmlGen.toggleSpinner(true);
