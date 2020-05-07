@@ -122,9 +122,6 @@ const htmlGen = {
   },
 
   start() {
-    // if (!active.empty) {
-    //   this.toggleSpinner();
-    // }
     active = new Start();
   },
 
@@ -173,7 +170,6 @@ class HttpParam {
     };
     if (cred && localStorage.getItem("value"))
       this.headers["Authorization"] = `Bearer ${localStorage.getItem("value")}`;
-    console.log(this.headers);
     if (data) this.body = JSON.stringify(data);
     if (cred) {
       this.withCredentials = true;
@@ -203,10 +199,6 @@ async function loggedInCheck() {
 }
 
 async function log_out() {
-  // add a cookie deletion
-  // let httpParam = new HttpParam("GET", false, true);
-  // let response = await fetch(url + "/home/log-out", httpParam);
-
   localStorage.removeItem("value");
 
   location.href = hashValues.start;
@@ -265,7 +257,7 @@ window.addEventListener("hashchange", async (e) => {
 });
 
 async function hashHandler(hash, id) {
-  console.log(hash, id);
+  // console.log(hash, id);
   switch (hash) {
     case "start":
       if (!active.empty) {
@@ -312,7 +304,6 @@ function formatHash() {
 const spinner = document.querySelector(".spinner__container");
 const spinnerBackground = document.querySelector(".spinner__background");
 const main = document.querySelector("main");
-console.log(main);
 
 function reveal() {
   htmlGen.toggleSpinner(true);

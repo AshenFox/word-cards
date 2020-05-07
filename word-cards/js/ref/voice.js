@@ -43,7 +43,7 @@ class Voice {
   }
 
   detectLanguage(text) {
-    if (text !== "") {
+    if (text !== "" && text) {
       let length = text.length;
       let arrRus = text.match(/[а-яА-ЯЁё]/g);
       let arrEng = text.match(/[a-zA-Z]/g);
