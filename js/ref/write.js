@@ -124,6 +124,17 @@ class Write {
         }" style="background-image: url(${imgurl !== "" ? imgurl : ""});"></div>
         <div class="game__question-defenition">
           <p>${defenition}</p>
+          <div class="game__speaker-write relative" data-active="${
+            voice.working &&
+            defenition !== "" &&
+            voice.detectLanguage(defenition)
+              ? "true"
+              : "false"
+          }">
+            <svg height="22" width="22">
+              <use href="img/sprite.svg#icon__speaker"></use>
+            </svg>
+          </div>
         </div>
         <form action="" class="game__form">
           <fieldset class="game__form-fieldset">
@@ -156,11 +167,12 @@ class Write {
       }
     }
 
+    let termLang = voice.detectLanguage(term);
+    let defLang = voice.detectLanguage(defenition);
+
     if (term === "") term = false;
     if (defenition === "") defenition = false;
     if (imgurl === "") imgurl = false;
-
-    console.log(term, defenition, imgurl);
 
     return {
       class: "game__answer", // next transparent
@@ -181,7 +193,9 @@ class Write {
             }" style="background-image: url(${!imgurl ? "" : imgurl});"></div>
             <div class="game__section-body ${defenition ? "" : "hidden"}">
               <p class="game__section-text">${defenition}</p>
-              <div class="game__speaker-write relative">
+              <div class="game__speaker-write relative" data-active="${
+                voice.working && defLang ? "true" : "false"
+              }">
                 <svg height="22" width="22">
                   <use href="img/sprite.svg#icon__speaker"></use>
                 </svg>
@@ -206,7 +220,9 @@ class Write {
             <span class="game__section-title">Correct</span>
             <div class="game__section-body ${term ? "" : "hidden"}">
               <p class="game__section-text">${term}</p>
-              <div class="game__speaker-write relative">
+              <div class="game__speaker-write relative" data-active="${
+                voice.working && termLang ? "true" : "false"
+              }">
                 <svg height="22" width="22">
                   <use href="img/sprite.svg#icon__speaker"></use>
                 </svg>
@@ -309,8 +325,6 @@ class Write {
   }
 
   finishItemHtml({ correct, card: { term, defenition, imgurl }, number }) {
-    // console.log(correct, term, defenition, imgurl, number);
-
     if (term === "") term = false;
     if (defenition === "") term = false;
     if (imgurl === "") term = false;
@@ -359,11 +373,16 @@ class Write {
     let html = this.questionHtml(curCard);
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
+    document.querySelector(".game__form-input input").focus();
+    // setTimeout(() => {
+    //   document.querySelector(".game__form-input input").focus();
+    // }, 0);
   }
 
   answer(correct, answer) {
     this.gameComponents.innerHTML = "";
     this.round.status = "answer";
+    this.round.answerValue = answer;
     correct
       ? (this.round.answer = "correct")
       : (this.round.answer = "incorrect");
@@ -375,6 +394,8 @@ class Write {
     let html = this.answerHtml(curCard, correct, answer);
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
+    let input = document.querySelector(".game__form-input input");
+    if (input) input.focus();
   }
 
   override() {
@@ -410,12 +431,6 @@ class Write {
       incorrectInRound,
       correctInRound,
     } = this.collectRoundData();
-    console.log(
-      `allCards: ${allCards}`,
-      `allCorrect: ${allCorrect}`,
-      `cardsInRound: ${cardsInRound}`,
-      `incorrectInRound: ${incorrectInRound}`
-    );
 
     this.fillCorrect.style = `width: ${Math.round(
       (allCorrect / allCards) * 100
@@ -443,18 +458,6 @@ class Write {
       this.setProgress();
     }
 
-    // if (round.answer === "correct") {
-    //   round.correct.number++;
-    //   round.correct.cards.push(round.curCard);
-    //   let number = round.allAnswers.length + 1;
-    //   round.allAnswers.push({ correct: true, card: round.curCard, number });
-    // } else if (round.answer === "incorrect") {
-    //   round.incorrect.number++;
-    //   round.incorrect.cards.push(round.curCard);
-    //   let number = round.allAnswers.length + 1;
-    //   round.allAnswers.push({ correct: false, card: round.curCard, number });
-    // }
-
     round.answer = false;
     round.status = false;
 
@@ -474,12 +477,8 @@ class Write {
 
   finishRound() {
     this.gameComponents.innerHTML = "";
-    console.log("Finish round!");
-
-    // console.log(this.rounds);
 
     let html = this.roundHtml(this.collectRoundData());
-    console.log(html);
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
   }
@@ -495,12 +494,10 @@ class Write {
     this.gameComponents.innerHTML = "";
 
     this.rounds.forEach((round) => {
-      // console.log(round); allAnswers
       let data = this.collectRoundData(round);
       let html = this.finishHtml(data);
       let el = htmlGen.createEl(html);
       let finishBody = el.querySelector(".game__finish-body");
-      console.log(finishBody);
 
       data.allAnswers.forEach((answer) => {
         let html = this.finishItemHtml(answer);
@@ -556,6 +553,7 @@ class Write {
       curCard: cards[0],
       status: false,
       answer: false,
+      answerValue: false,
       correct: {
         number: 0,
         cards: [],
@@ -595,20 +593,14 @@ class Write {
     this.gameComponents = document.querySelector(".game__components");
     this.gameControls = document.querySelector(".game__controls");
     // -------------------------------
-    this.barRemaining = document.querySelector("#bar-remaining");
     this.fillRemaining = document.querySelector("#fill-remaining");
     this.countRemaining = document.querySelector("#count-remaining");
-    this.barIncorrect = document.querySelector("#bar-incorrect");
     this.fillIncorrect = document.querySelector("#fill-incorrect");
     this.countIncorrect = document.querySelector("#count-incorrect");
-    this.barCorrect = document.querySelector("#bar-correct");
     this.fillCorrect = document.querySelector("#fill-correct");
     this.countCorrect = document.querySelector("#count-correct");
     // -------------------------------
 
-    // console.log(this.barRemaining, this.fillRemaining, this.countRemaining);
-    // console.log(this.barIncorrect, this.fillIncorrect, this.countIncorrect);
-    // console.log(this.barCorrect, this.fillCorrect, this.countCorrect);
     this.setProgress();
     this.question();
 
@@ -633,7 +625,6 @@ class Write {
 
       // Override answer
       if (target.closest(".game__override button")) {
-        console.log("Override!");
         this.continue(true);
       }
 
@@ -643,14 +634,34 @@ class Write {
           target.closest(".game__answer-continue").dataset.correct === "false"
         )
           return;
-        console.log("Continue!");
         this.continue(false);
       }
 
       // Continue to the next round
       if (target.closest(".game__round-continue button")) {
-        console.log("Continue to the next round!");
         this.nextRound();
+      }
+
+      // -------------------------------------------
+      // Voice
+      let speaker = e.target.closest(".game__speaker-write[data-active=true]");
+      if (speaker && !voice.synth.speaking) {
+        let parent = speaker.closest(".game__question-defenition");
+        if (!parent) parent = speaker.closest(".game__section-body");
+
+        let text;
+        if (parent) text = parent.querySelector("p").textContent;
+
+        if (text !== "" && speaker.dataset.active !== "false") {
+          speaker.dataset.speaking = true;
+          let speakText = voice.speak(text);
+
+          speakText.onend = (e) => {
+            speaker.dataset.speaking = false;
+          };
+        }
+      } else if (speaker && voice.synth.speaking) {
+        voice.cancel();
       }
     });
 
@@ -659,7 +670,6 @@ class Write {
 
       // Open options
       if (target.closest(".game__startover button")) {
-        console.log("fire!");
         htmlGen.options();
       }
     });
@@ -683,8 +693,10 @@ class Write {
       }
     });
 
-    this.gameComponents.addEventListener("keydown", (e) => {
-      let { status } = this.round;
+    this.gameComponents.addEventListener("keydown", (e) => {});
+
+    window.addEventListener("keydown", (e) => {
+      let { status, answer, answerValue, allAnswers, cards } = this.round;
 
       // Input the aswer
       if (e.keyCode === 13 && status === "question") {
@@ -696,6 +708,7 @@ class Write {
         let value = input.value;
         let result = this.checkAnswer(value);
         this.answer(result, value);
+        return;
       }
 
       // Input copied answer
@@ -705,8 +718,39 @@ class Write {
         let gameAnsBtn = document.querySelector(".game__answer-continue");
         if (gameAnsBtn.dataset.correct !== "true") return;
 
-        console.log("Continue!");
         this.continue(false);
+        return;
+      }
+
+      // Continue
+      if (
+        status === "answer" &&
+        (answer === "correct" ||
+          (answer === "incorrect" && answerValue !== "")) &&
+        e.keyCode === 13
+      ) {
+        e.preventDefault();
+        this.continue(false);
+        return;
+      }
+
+      // Next round
+      if (allAnswers.length === cards.length && e.keyCode === 13) {
+        e.preventDefault();
+        this.nextRound();
+        return;
+      }
+
+      // Override
+      if (
+        status === "answer" &&
+        answer === "incorrect" &&
+        answerValue !== "" &&
+        e.keyCode === 79
+      ) {
+        e.preventDefault();
+        this.continue(true);
+        return;
       }
     });
 
@@ -715,35 +759,7 @@ class Write {
     // )[0];
     // this.progressBar = document.querySelector(".game__bar-fill");
 
-    this.gameControls.addEventListener("click", (e) => {});
-
-    /* --- Voice functionality
-
-    this.cardsContainer.addEventListener("click", (e) => {
-      let speaker = e.target.closest(".game__speaker[data-active=true]");
-      if (speaker && !voice.synth.speaking) {
-        let term = speaker.closest(".game__term-container");
-        let defenition = speaker.closest(".game__defenition-container");
-
-        let text;
-        if (term) text = term.querySelector(".game__term p").textContent;
-        if (defenition)
-          text = defenition.querySelector(".game__defenition p").textContent;
-
-        if (text !== "" && speaker.dataset.active !== "false") {
-          speaker.dataset.speaking = true;
-          let speakText = voice.speak(text);
-
-          speakText.onend = (e) => {
-            speaker.dataset.speaking = false;
-          };
-        }
-      } else if (speaker && voice.synth.speaking) {
-        voice.cancel();
-      }
-    });
-
-    */
+    // this.gameControls.addEventListener("click", (e) => {});
   }
 
   checkAnswer(answer) {

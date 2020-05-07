@@ -1983,7 +1983,12 @@ input {
 }
 
 .game__question-defenition {
+  display: flex;
   font-size: 2rem;
+
+  & p {
+    flex: 1;
+  }
 
   @media (max-width: $mobile) {
     font-size: 1.5rem;

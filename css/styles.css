@@ -1405,7 +1405,10 @@ input {
       width: 100%; } }
 
 .game__question-defenition {
+  display: flex;
   font-size: 2rem; }
+  .game__question-defenition p {
+    flex: 1; }
   @media (max-width: 620px) {
     .game__question-defenition {
       font-size: 1.5rem; } }
