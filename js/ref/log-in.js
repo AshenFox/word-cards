@@ -202,6 +202,10 @@ class Log_in {
     let response = await fetch(url + "/log_in/log_in", httpParam);
 
     if (response.status == 200) {
+      let data = JSON.parse(await response.text());
+
+      localStorage.setItem("value", data.token);
+
       this.checkForModal();
       location.href = hashValues.home;
       htmlGen.startDashboard();
