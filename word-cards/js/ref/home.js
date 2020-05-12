@@ -171,7 +171,7 @@ class Home {
   moduleListener(module, draft) {
     module.addEventListener("click", async (e) => {
       let id = e.currentTarget.dataset.id;
-
+      console.log(`${hashValues.module}?id=${id}`, "test");
       // draft ? htmlGen.edit() : htmlGen.module(id);
       draft
         ? (location.href = hashValues.edit)

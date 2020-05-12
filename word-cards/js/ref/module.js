@@ -191,6 +191,8 @@ class Module {
     Object.assign(this, response);
     this.moduleHtml();
 
+    this.cards = await this.getCards(this._id);
+
     let el = htmlGen.createEl(this);
 
     // document.body.appendChild(el);
@@ -326,16 +328,26 @@ class Module {
       _id,
     };
     let httpParam = new HttpParam("POST", reqData, true);
-    await fetch(url + "/edit/delete", httpParam);
+    await fetch(url + "/edit/delete_module", httpParam);
     location.href = hashValues.home;
   }
 
-  async getModule(id) {
+  async getModule(_id) {
     let reqData = {
-      id,
+      _id,
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_module", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async getCards(id) {
+    let reqData = {
+      moduleID: id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/get_cards", httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }

@@ -217,6 +217,8 @@ class Flashcards {
 
     Object.assign(this, response);
 
+    this.cards = await this.getCards(this._id);
+
     this.gameHtml();
 
     let el = htmlGen.createEl(this);
@@ -434,12 +436,22 @@ class Flashcards {
     this.activeCard = this.cardsEl[0];
   }
 
-  async getModule(id) {
+  async getModule(_id) {
     let reqData = {
-      id,
+      _id,
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_module", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async getCards(id) {
+    let reqData = {
+      moduleID: id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/get_cards", httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }

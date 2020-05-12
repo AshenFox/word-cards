@@ -63,6 +63,28 @@ input {
   }
 }
 
+// =========== Dev panel
+
+.devpanel {
+  position: fixed;
+  width: 300px;
+  box-shadow: 0 0.5rem 1.25rem 0 rgba(0, 0, 0, 0.28);
+  top: 100px;
+  right: 100px;
+  z-index: 10000;
+
+  &__header {
+    background-color: #4257b2;
+    padding: 1rem;
+  }
+
+  &__body {
+    min-height: 30px;
+    background-color: $white;
+    padding: 1rem;
+  }
+}
+
 // =========== Header
 
 .header {
@@ -563,6 +585,13 @@ input {
   background-color: $white;
   padding: 1rem 2rem;
   margin-bottom: 1rem;
+  border: 4px solid $white;
+  transition: all 0.2s;
+  border-radius: 5px;
+
+  &:hover {
+    border-bottom: 4px solid $yellow;
+  }
 }
 
 .home__module-info {
@@ -2581,7 +2610,7 @@ input {
 }
 
 .game__term {
-  overflow: scroll;
+  overflow: auto;
   position: absolute;
   top: 6rem;
   right: 1.5rem;
