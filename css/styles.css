@@ -44,6 +44,21 @@ input {
     .container {
       padding: 0.75rem; } }
 
+.devpanel {
+  position: fixed;
+  width: 300px;
+  box-shadow: 0 0.5rem 1.25rem 0 rgba(0, 0, 0, 0.28);
+  top: 100px;
+  right: 100px;
+  z-index: 10000; }
+  .devpanel__header {
+    background-color: #4257b2;
+    padding: 1rem; }
+  .devpanel__body {
+    min-height: 30px;
+    background-color: #ffffff;
+    padding: 1rem; }
+
 .header {
   padding: 0;
   background-color: #4257b2;
@@ -401,7 +416,12 @@ input {
   cursor: pointer;
   background-color: #ffffff;
   padding: 1rem 2rem;
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem;
+  border: 4px solid #ffffff;
+  transition: all 0.2s;
+  border-radius: 5px; }
+  .home__module:hover {
+    border-bottom: 4px solid #ffcd1f; }
 
 .home__module-info {
   display: flex;
@@ -1796,7 +1816,7 @@ input {
       font-size: 2.4rem; } }
 
 .game__term {
-  overflow: scroll;
+  overflow: auto;
   position: absolute;
   top: 6rem;
   right: 1.5rem;

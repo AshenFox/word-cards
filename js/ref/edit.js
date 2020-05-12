@@ -66,7 +66,7 @@ class Edit {
                 </div> <!-- cards__container -->
 
                 <div class="edit__cards-newcard">
-                    <button class="btn fz15 uppercase grey h-yellow pad-bot10 br-bottom5 brc-lightblue h-brc-yellow" type="button" onclick="active.addCard()">+ add card</button>
+                    <button class="btn fz15 uppercase grey h-yellow pad-bot10 br-bottom5 brc-lightblue h-brc-yellow" type="button" onclick="active.draft ? active.addCard({}, true) : active.addCard({}, false)">+ add card</button>
                 </div>
             </div> <!-- container -->
             
@@ -77,7 +77,7 @@ class Edit {
         <div class="edit__save">
             <div class="container">
                 <div class="edit__save-module">
-                    <button class="btn bcc-lightblue pad30-70 brr10 white fz20 fw-bold h-grey h-bcc-yellow" type="button" onclick="active.newModule ? active.saveModule(active._id) : active.edit(active._id)">
+                    <button class="btn bcc-lightblue pad30-70 brr10 white fz20 fw-bold h-grey h-bcc-yellow" type="button" onclick="active.newModule ? active.saveDraft() : active.edit()">
                         Save
                     </button>
                 </div>
@@ -86,11 +86,14 @@ class Edit {
         </div>`;
   }
 
-  cardHtml({ term = "", defenition = "", imgurl = "" }) {
+  cardHtml(card) {
+    let { term = "", defenition = "", imgurl = "", moduleID, _id } = card;
     // Add img field
     return {
       class: "edit__cards-card",
       id: "",
+      data_module_id: moduleID,
+      data_card_id: _id,
       html: /*html*/ `
                 
                 <div class="edit__cards-header">
@@ -222,6 +225,8 @@ class Edit {
       return;
     }
 
+    this.cards = await this.getCards(this._id);
+
     this.editHtml();
 
     let el = htmlGen.createEl(this);
@@ -244,6 +249,7 @@ class Edit {
     this.titleCont
       .querySelector(".textarea")
       .addEventListener("input", async (e) => {
+        if (!this.draft) return;
         await this.editDraft();
       });
 
@@ -252,6 +258,7 @@ class Edit {
       this.imagesSearch(searchBtn);
     });
 
+    // Gallery listners -----------------------------
     document.addEventListener("keydown", (e) => {
       let input = document.activeElement;
       if (
@@ -300,15 +307,6 @@ class Edit {
         addImg.style = `background-image: url(${imgurl})`;
       }
     });
-
-    /*
-    
-    class="edit__addimg" style="background-image: url(${
-      imgurl !== "" ? imgurl : ""
-    })" data-imgurl="${imgurl !== "" ? imgurl : "false"}">
-    
-    
-    */
 
     this.cardsCont.addEventListener("transitionstart", (e) => {
       let element = e.target;
@@ -359,6 +357,8 @@ class Edit {
       this.screenWidth = window.screen.width;
     });
 
+    // Gallery listners -----------------------------
+
     if (this.cards) {
       this.appendCards(this.cards);
       this.changeNumber();
@@ -406,6 +406,8 @@ class Edit {
       }
 
       let imagesArr = await this.getImages(inquiry);
+      console.log(imagesArr);
+
       if (!imagesArr) {
         this.toggleHide(errorContainer, "edit__error-container");
         this.toggleHide(spinnerContainer, "edit__spinner-container");
@@ -504,7 +506,11 @@ class Edit {
     element.classList.toggle(className + "--hide");
   }
 
-  async addCard(card = {}) {
+  async addCard(card = {}, createCard) {
+    if (createCard) {
+      card = await this.createCard(this._id);
+    }
+
     let newCard = this.cardHtml(card);
 
     let el = htmlGen.createEl(newCard);
@@ -521,17 +527,28 @@ class Edit {
       "click",
       async (e) => {
         if (this.cardsCont.children.length > 2) {
-          el.parentNode.removeChild(el);
+          let cardEl = e.target.closest(".edit__cards-card");
 
-          this.changeNumber();
+          let _id = cardEl.dataset.card_id;
 
-          if (this.cardsCont.children.length <= 2) {
-            this.toggleDelete(false);
+          let result = true;
+          if (this.draft) result = await this.deleteCard(_id);
+
+          console.log(result);
+
+          if (result) {
+            el.parentNode.removeChild(el);
+
+            this.changeNumber();
+
+            if (this.cardsCont.children.length <= 2) {
+              this.toggleDelete(false);
+            }
           }
 
-          if (this.newModule) {
-            await this.editDraft();
-          }
+          // if (this.newModule) {
+          //   await this.editDraft();
+          // }
         }
       }
     );
@@ -558,9 +575,9 @@ class Edit {
       });
     }
 
-    if (this.newModule) {
-      await this.editDraft();
-    }
+    // if (this.newModule) {
+    //   await this.editDraft();
+    // }
   }
 
   appendCards(arr) {
@@ -594,6 +611,12 @@ class Edit {
   collectData(titleCont, cardsCont) {
     let title = titleCont.querySelector(".textarea").innerHTML;
     let cards = [...cardsCont.children].map((item) => {
+      let moduleID = item.dataset.module_id;
+      let _id = item.dataset.card_id;
+
+      if (moduleID === "undefined") moduleID = false;
+      if (_id === "undefined") _id = false;
+
       let term = item
         .querySelector(".edit__cards-term")
         .querySelector(".textarea").innerHTML;
@@ -602,6 +625,8 @@ class Edit {
         .querySelector(".textarea").innerHTML;
       let imgurl = item.querySelector(".edit__addimg").dataset.imgurl;
       let result = {
+        moduleID,
+        _id,
         term,
         defenition, // EDIT ... add ing url field
       };
@@ -617,54 +642,85 @@ class Edit {
     };
   }
 
-  async edit(_id) {
-    if (await this.isChanged(_id)) {
-      let reqData = {
-        _id,
-        module: this.collectData(this.titleCont, this.cardsCont),
-      };
+  // async edit(_id) {
+  //   if (await this.isChanged(_id)) {
+  //     let reqData = {
+  //       _id,
+  //       module: this.collectData(this.titleCont, this.cardsCont),
+  //     };
 
-      let httpParam = new HttpParam("POST", reqData, true);
-      let response = await fetch(url + "/edit/edit", httpParam);
+  //     let httpParam = new HttpParam("POST", reqData, true);
+  //     let response = await fetch(url + "/edit/edit", httpParam);
 
-      if (response.status == 200) {
-        console.log("Fire!");
-        location.href = `${hashValues.module}?id=${_id}`;
-        return;
-      } else if (response.status == 500) {
-        this.scrollToTop();
-        this.errorTitle();
-        return;
-      }
-    }
+  //     if (response.status == 200) {
+  //       console.log("Fire!");
+  //       location.href = `${hashValues.module}?id=${_id}`;
+  //       return;
+  //     } else if (response.status == 500) {
+  //       this.scrollToTop();
+  //       this.errorTitle();
+  //       return;
+  //     }
+  //   }
 
-    location.href = `${hashValues.module}?id=${_id}`;
-    return;
-  }
+  //   location.href = `${hashValues.module}?id=${_id}`;
+  //   return;
+  // }
 
-  async isChanged(_id) {
+  // async isChanged(_id) {
+  //   let reqData = {
+  //     _id,
+  //     module: this.collectData(this.titleCont, this.cardsCont),
+  //   };
+
+  //   let httpParam = new HttpParam("POST", reqData, true);
+  //   let response = await fetch(url + "/edit/is_changed", httpParam);
+  //   if (response.status == 200) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  //   // return JSON.parse(await response.text());
+  // }
+
+  async getModule(_id, draft) {
     let reqData = {
       _id,
-      module: this.collectData(this.titleCont, this.cardsCont),
-    };
-
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/is_changed", httpParam);
-    if (response.status == 200) {
-      return true;
-    } else {
-      return false;
-    }
-    // return JSON.parse(await response.text());
-  }
-
-  async getModule(id, draft) {
-    let reqData = {
-      id,
       draft,
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_module", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async getCards(id) {
+    let reqData = {
+      moduleID: id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/get_cards", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async createCard(_id) {
+    let reqData = {
+      _id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/create_card", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async deleteCard(_id) {
+    let reqData = {
+      moduleID: this._id,
+      _id,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/delete_card", httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -685,17 +741,19 @@ class Edit {
     return false;
   }
 
-  async saveModule() {
-    clearTimeout(this.timer);
+  async saveDraft() {
+    if (this.timer) return;
 
-    let reqData = this.collectData(this.titleCont, this.cardsCont);
+    let { title } = this.collectData(this.titleCont, this.cardsCont);
+
+    let reqData = { title };
 
     let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/save_module", httpParam);
+    let response = await fetch(url + "/edit/save_draft", httpParam);
 
     if (response.status == 200) {
       location.href = hashValues.home;
-    } else if (response.status == 500) {
+    } else if (response.status == 400) {
       this.scrollToTop();
       this.errorTitle();
     }
@@ -720,27 +778,37 @@ class Edit {
     clearTimeout(this.timer);
 
     this.timer = setTimeout(async () => {
-      let draftData = this.collectData(this.titleCont, this.cardsCont);
+      await this.edit(this._id);
+      this.timer = false;
+    }, 500);
+  }
 
-      let counter = 0;
+  async edit() {
+    let draftData = this.collectData(this.titleCont, this.cardsCont);
 
-      for (let i in draftData.cards) {
-        let item = draftData.cards[i];
-        if (item.term.length >= 4 || item.defenition.length >= 4) {
-          counter++;
-        }
-        if (counter == 2) break;
-      }
+    let _id = this._id;
+    let draft = this.draft;
 
-      if (counter < 2) return;
+    let reqData = {
+      _id,
+      draft,
+      ...draftData,
+    };
+    // console.log(reqData);
 
-      let reqData = {
-        draftData,
-      };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/edit/edit", httpParam);
 
-      let httpParam = new HttpParam("POST", reqData, true);
-      let response = await fetch(url + "/edit/edit_draft", httpParam);
-    }, 1000);
+    if (this.draft) return;
+
+    if (response.status == 200) {
+      location.href = `${hashValues.module}?id=${_id}`;
+      return;
+    } else if (response.status == 500) {
+      this.scrollToTop();
+      this.errorTitle();
+      return;
+    }
   }
 
   return() {
