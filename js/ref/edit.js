@@ -88,6 +88,8 @@ class Edit {
 
   cardHtml(card) {
     let { term = "", defenition = "", imgurl = "", moduleID, _id } = card;
+
+    this.switchCounter++;
     // Add img field
     return {
       class: "edit__cards-card",
@@ -98,6 +100,20 @@ class Edit {
                 
                 <div class="edit__cards-header">
                     <div class="edit__cards-number"></div>
+                    <div class="edit__study-progress ${
+                      this.draft ? "hidden" : ""
+                    }">
+                      <input class="edit__checkbox" type="checkbox" id="toggleswitch${
+                        this.switchCounter
+                      }"/>
+                      <svg height="17" width="17">
+                        <use href="img/sprite.svg#icon__studyregime"></use>
+                      </svg>
+                      <span>Drop card study progress:</span>
+                      <label class="edit__toggle-switch sm" for="toggleswitch${
+                        this.switchCounter
+                      }"></label>
+                    </div>
                     <div class="edit__cards-delete">
                         <button class="btn">
                             <svg width="17" height="17">
@@ -245,6 +261,8 @@ class Edit {
     this.titleCont = document.querySelector(".edit__module-title");
     this.cardsCont = document.querySelector(".edit__cards-container");
     this.title_err = document.getElementById("title-error");
+
+    this.switchCounter = 0;
 
     this.titleCont
       .querySelector(".textarea")
@@ -526,7 +544,8 @@ class Edit {
     el.querySelector(".edit__cards-delete").addEventListener(
       "click",
       async (e) => {
-        if (this.cardsCont.children.length > 2) {
+        if (this.cardsCont.children.length > 2 && !this.deleting) {
+          this.deleting = true;
           let cardEl = e.target.closest(".edit__cards-card");
 
           let _id = cardEl.dataset.card_id;
@@ -534,7 +553,7 @@ class Edit {
           let result = true;
           if (this.draft) result = await this.deleteCard(_id);
 
-          console.log(result);
+          // console.log(result);
 
           if (result) {
             el.parentNode.removeChild(el);
@@ -544,6 +563,8 @@ class Edit {
             if (this.cardsCont.children.length <= 2) {
               this.toggleDelete(false);
             }
+
+            this.deleting = false;
           }
 
           // if (this.newModule) {
@@ -617,6 +638,9 @@ class Edit {
       if (moduleID === "undefined") moduleID = false;
       if (_id === "undefined") _id = false;
 
+      let dropSR = item.querySelector(".edit__checkbox").checked;
+      console.log(dropSR);
+
       let term = item
         .querySelector(".edit__cards-term")
         .querySelector(".textarea").innerHTML;
@@ -629,6 +653,7 @@ class Edit {
         _id,
         term,
         defenition, // EDIT ... add ing url field
+        dropSR,
       };
 
       result.imgurl = imgurl !== "false" ? imgurl : "";

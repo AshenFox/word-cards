@@ -39,6 +39,50 @@ class Home {
     };
   }
 
+  studyRegimeHtml() {
+    // console.log(img);
+    return {
+      class: "home__module home__module--v2",
+      id: "",
+      html: /*html*/ `
+        <div class="home__module-container">
+          <div class="home__module-title home__module-title--v2">
+            Study Regime
+          </div>
+          <ul class="home__study-regime-info">
+            <li><span>100 cards</span> in the regime.</li>
+            <li><span>9 more cards</span> to repeat in 10 minutes.</li>
+          </ul>
+        </div>
+
+        <div class="home__repeat">
+          <p>Currently you have <span>15 cards</span> to repeat.</p>
+          <p>Repeat with:</p>
+          <div class="home__repeat-methods">
+            <div class="home__counter-container">
+              <div class="home__counter">
+                <div class="home__counter-subtract"><span>-</span></div>
+                <div class="home__counter-number" contenteditable="true">15</div>
+                <div class="home__counter-add"><span>+</span></div>
+              </div>
+            </div>
+            <div class="home__repeat-item">
+              <svg height="35" width="35">
+                <use href="img/sprite.svg#icon__cards"></use>
+              </svg>
+              <!-- <span>Flashcards</span> -->
+            </div>
+            <div class="home__repeat-item">
+              <svg height="35" width="35">
+                <use href="img/sprite.svg#icon__write"></use>
+              </svg>
+              <!-- <span>Write</span> -->
+            </div>
+          </div>
+        </div>`,
+    };
+  }
+
   separatorHtml(separatorName) {
     return {
       class: "home__divider",
@@ -82,7 +126,7 @@ class Home {
                             <ul class="home__filter">
                                 <li class="home__filter-item" data-filter-method='Recent'>Recent</li>
                                 <li class="home__filter-item active" data-filter-method='Created'>Created</li>
-                                <li class="home__filter-item" data-filter-method='Studied'>Studied</li>
+                                <li class="home__filter-item" data-filter-method='Studied'>SR</li>
                             </ul>
                         </div>
 
@@ -108,19 +152,22 @@ class Home {
   }
 
   appendModules(arr) {
+    this.moduleContainer.innerHTML = "";
     // until I create other filter methods (костыль)
-    for (let i of this.modules) {
-      if (i.draft) {
-        let separatorName = "in progress";
-        this.moduleContainer.appendChild(
-          htmlGen.createEl(this.separatorHtml(separatorName))
-        );
-        let img = this.checkImg(i);
-        let draft = this.moduleContainer.appendChild(
-          htmlGen.createEl(this.moduleHtml(i, img))
-        );
-        draft.dataset.id = i._id;
-        this.moduleListener(draft, i.draft);
+    if (this.activeFilterMethod === "filterCreated") {
+      for (let i of this.modules) {
+        if (i.draft) {
+          let separatorName = "in progress";
+          this.moduleContainer.appendChild(
+            htmlGen.createEl(this.separatorHtml(separatorName))
+          );
+          let img = this.checkImg(i);
+          let draft = this.moduleContainer.appendChild(
+            htmlGen.createEl(this.moduleHtml(i, img))
+          );
+          draft.dataset.id = i._id;
+          this.moduleListener(draft, i.draft);
+        }
       }
     }
 
@@ -141,6 +188,8 @@ class Home {
             if (item._id) {
               let img = this.checkImg(item);
               html = this.moduleHtml(item, img);
+            } else if (item.studyRegime) {
+              html = this.studyRegimeHtml();
             } else {
               html = this.nonefoundHtml(item);
             }
@@ -150,7 +199,7 @@ class Home {
 
         let el = htmlGen.createEl(html);
 
-        if (typeof item === "object") {
+        if (typeof item === "object" && !item.studyRegime) {
           el.dataset.id = item._id;
           this.moduleListener(el, item.draft);
         }
@@ -212,14 +261,16 @@ class Home {
 
     this.moduleContainer = document.querySelector(".home__modules");
     this.matchFilter = document.querySelector(".home__input-cont input");
-
     this.filterList = document.querySelector(".home__filter");
 
     this.filterTimeout = false;
     this.activeFilterMethod = "filterCreated";
 
-    this.filterCreated(this.modules);
-    this.appendModules(this.filteredModules);
+    // Filter mehthiods and regimes --------------------------
+
+    // this.filterCreated(this.modules);
+    // this.appendModules(this.filteredModules);
+    this.callActiveFilter();
 
     this.filterList.addEventListener("click", (e) => {
       if (e.target.classList.contains("active")) return;
@@ -231,8 +282,12 @@ class Home {
       e.target.classList.add("active");
       this.activeFilterMethod = "filter".concat(e.target.dataset.filterMethod);
 
-      this.callActiveFilter(this.modules);
+      this.callActiveFilter();
     });
+
+    // Filter mehthiods and regimes --------------------------
+
+    // Filter for finding module by name --------------------------
 
     this.matchFilter.addEventListener("input", (e) => {
       clearTimeout(this.filterTimeout);
@@ -257,6 +312,8 @@ class Home {
         this.appendModules(this.filteredModules);
       }, 800);
     });
+
+    // Filter for finding module by name --------------------------
   }
 
   async getUserData() {
@@ -265,8 +322,9 @@ class Home {
     return JSON.parse(await response.text());
   }
 
-  callActiveFilter(modules) {
-    this[this.activeFilterMethod](modules);
+  callActiveFilter() {
+    this[this.activeFilterMethod](this.modules);
+    this.appendModules(this.filteredModules);
   }
 
   findMatch(value) {
@@ -293,7 +351,8 @@ class Home {
   }
 
   filterRecent() {
-    console.log("filterRecent");
+    this.filteredModules = [];
+    // console.log("filterRecent");
   }
 
   filterCreated(modules) {
@@ -308,8 +367,12 @@ class Home {
         return date_B - date_A;
       });
 
+    // console.log(sortedModules);
+
     let uniqueSeparators = [];
     this.filteredModules = [];
+
+    // console.log(uniqueSeparators);
 
     sortedModules.forEach((module) => {
       let name = this.nameSeparator(module.creation_date);
@@ -321,10 +384,17 @@ class Home {
 
       this.filteredModules.push(module);
     });
+
+    // console.log(this.filteredModules);
   }
 
   filterStudied() {
-    console.log("filterStudied");
+    this.filteredModules = [
+      {
+        studyRegime: true,
+      },
+    ];
+    // console.log("filterStudied");
   }
 
   nameSeparator(strDate, draft) {
@@ -355,3 +425,11 @@ class Home {
     }
   }
 }
+
+/*
+
+
+                      
+
+
+*/

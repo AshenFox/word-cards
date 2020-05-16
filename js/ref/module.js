@@ -50,22 +50,34 @@ class Module {
                     </div> 
                     <div class="module__study-item" id="write-game">
                         <button class="btn">
-                        <svg height="30" width="30">
-                          <use href="img/sprite.svg#icon__write"></use>
-                        </svg>
-                        <span>Write</span>
+                          <svg height="30" width="30">
+                            <use href="img/sprite.svg#icon__write"></use>
+                          </svg>
+                          <span>Write</span>
                         </button>
                     </div> 
-
                 </div>
 
                 <div class="module__info">
                     <div class="module__author">
                         <span class="module__author-created">Created by:</span>
-                        <span class="module__author-nickname">${this.author}</span>
+                        <span class="module__author-nickname">${
+                          this.author
+                        }</span>
                     </div>
 
                     <div class="module__nav">
+
+                        <div class="module__study-regime">
+                          <input class="module__checkbox" type="checkbox" id="toggleswitch" ${
+                            this.allCardsSR ? "checked" : ""
+                          }/>
+                          <svg height="30" width="30">
+                            <use href="img/sprite.svg#icon__studyregime"></use>
+                          </svg>
+                          <span>All cards study regime:</span>
+                          <label class="module__toggle-switch" for="toggleswitch"></label>
+                        </div>
                         <div id="edit-item" class="module__nav-item">
                             <svg width="25" height="25">
                               <use href="img/sprite.svg#icon__edit"></use>
@@ -76,6 +88,7 @@ class Module {
                               <use href="img/sprite.svg#icon__delete"></use>
                             </svg>
                         </div>
+                        
 
                     </div>
                 </div>
@@ -111,13 +124,27 @@ class Module {
         `;
   }
 
-  cardHtml({ term, defenition, imgurl }) {
+  cardHtml({ term, defenition, imgurl, studyRegime, _id }) {
+    this.switchCounter++;
+
     return {
       class: "module__card",
-      id: "",
+      id: _id,
       html: /*html*/ `
                 <div class="module__card-term" data-textfield="true">
-                ${term}
+                <p>${term}</p>
+                <div class="module__card-study-regime">
+                  <input class="module__checkbox" type="checkbox" id="toggleswitch${
+                    this.switchCounter
+                  }" ${studyRegime ? "checked" : ""}/>
+                  <svg height="17" width="17">
+                    <use href="img/sprite.svg#icon__studyregime"></use>
+                  </svg>
+                  <span>Card study regime:</span>
+                  <label class="module__toggle-switch sm" for="toggleswitch${
+                    this.switchCounter
+                  }"></label>
+                </div>
                 <div class="module__speaker" data-active="${
                   voice.working && term !== "" && voice.detectLanguage(term)
                     ? "true"
@@ -130,7 +157,7 @@ class Module {
                 </div>
                 <div class="module__card-definition-container">
                     <div class="module__card-definition" data-textfield="true">
-                    ${defenition}
+                    <p>${defenition}</p>
                     <div class="module__speaker" data-active="${
                       voice.working &&
                       defenition !== "" &&
@@ -189,19 +216,28 @@ class Module {
       return;
     }
     Object.assign(this, response);
-    this.moduleHtml();
 
     this.cards = await this.getCards(this._id);
+
+    this.allCardsSR = true;
+
+    for (let card of this.cards) {
+      if (!card.studyRegime) this.allCardsSR = false;
+    }
+
+    this.moduleHtml();
 
     let el = htmlGen.createEl(this);
 
     // document.body.appendChild(el);
     main.appendChild(el);
     htmlGen.toggleSpinner(false);
+    this.moduleEl = document.querySelector(".module");
     this.cardsContainer = document.querySelector(".module__card-cont");
     this.matchFilter = document.querySelector(".module__filter");
 
     this.filterTimeout = false;
+    this.switchCounter = 0;
 
     let edit = document.getElementById("edit-item");
     let remove = document.getElementById("remove-item");
@@ -248,22 +284,70 @@ class Module {
         }
 
         this.appendCards(result);
-
-        // if(this.findMatch(e.target.value)) {
-
-        //     this.appendCards(this.filteredCards);
-
-        // } else {
-
-        //     this.appendCards(this.cards);
-        // }
       }, 800);
+    });
+
+    this.moduleEl.addEventListener("click", async (e) => {
+      if (e.target.classList.contains("module__checkbox")) return;
+      e.preventDefault();
+      let allCardsSR = e.target.closest(".module__study-regime");
+      let cardSR = e.target.closest(".module__card-study-regime");
+
+      if (allCardsSR) {
+        let checkbox = allCardsSR.querySelector(".module__checkbox");
+
+        let result = await this.studyRegime({ moduleID: this._id });
+
+        if (result) {
+          checkbox.checked = !checkbox.checked;
+
+          let checkboxArr = document.querySelectorAll(".module__checkbox");
+
+          checkboxArr.forEach((item) => {
+            item.checked = checkbox.checked;
+          });
+          this.cards.forEach((item) => {
+            item.studyRegime = checkbox.checked;
+          });
+        }
+        // console.log(allCardsSR, checkbox);
+      }
+
+      if (cardSR) {
+        let checkbox = cardSR.querySelector(".module__checkbox");
+        let cardID = cardSR.closest(".module__card").id;
+
+        // let result = true;
+
+        let result = await this.studyRegime({ cardID });
+
+        if (result) {
+          checkbox.checked = !checkbox.checked;
+
+          let card = this.cards.find((item) => item._id === cardID);
+          card.studyRegime = checkbox.checked;
+
+          this.allCardsSR = true;
+          for (let item of this.cards) {
+            if (!item.studyRegime) {
+              this.allCardsSR = false;
+              break;
+            }
+          }
+
+          document
+            .querySelector(".module__study-regime")
+            .querySelector(".module__checkbox").checked = this.allCardsSR;
+        }
+      }
     });
 
     this.cardsContainer.addEventListener("click", (e) => {
       let speaker = e.target.closest(".module__speaker[data-active=true]");
       if (speaker && !voice.synth.speaking) {
-        let text = speaker.closest("[data-textfield=true]").textContent;
+        let text = speaker.closest("[data-textfield=true]").querySelector("p")
+          .textContent;
+        console.log(text);
         if (text !== "" && speaker.dataset.active !== "false") {
           speaker.dataset.speaking = true;
           let speakText = voice.speak(text);
@@ -348,6 +432,16 @@ class Module {
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_cards", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async studyRegime(data) {
+    let reqData = {
+      ...data,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/study_regime/control", httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
