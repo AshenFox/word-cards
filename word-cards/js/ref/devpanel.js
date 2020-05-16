@@ -44,3 +44,8 @@ async function clearCollectoins() {
     console.log(err);
   }
 }
+
+async function studyRegimeTest() {
+  let result = await active.studyRegime({ moduleID: active._id });
+  console.log(result);
+}

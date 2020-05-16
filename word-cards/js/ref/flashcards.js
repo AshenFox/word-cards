@@ -106,7 +106,17 @@ class Flashcards {
 
                             <div class="game__nav">
 
-                                <div class="game__nav-item prev">
+                                <div class="game__nav-question " data-active="true">
+                                  <p>Did you know the answer?</p>
+                                  <div class="game__nav-answer" data-answer="true">
+                                    <span>Yes</span>
+                                  </div>
+                                  <div class="game__nav-answer" data-answer="false">
+                                    <span>No</span>
+                                  </div>
+                                </div>
+
+                                <div class="game__nav-item prev hidden">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow mar-left-a p-r" onclick="active.switchCard(false)">
                                         <svg>
                                             <use href="img/sprite.svg#icon__triangle_left"></use>
@@ -114,7 +124,7 @@ class Flashcards {
                                     </button>
                                 </div>
 
-                                <div class="game__nav-item next">
+                                <div class="game__nav-item next hidden">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow p-r" onclick="active.switchCard(true)">
                                         <svg>
                                             <use href="img/sprite.svg#icon__triangle_right"></use>
