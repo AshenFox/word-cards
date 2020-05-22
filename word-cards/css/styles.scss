@@ -122,11 +122,24 @@ input {
 .header__btn-holder {
   padding-left: 2rem;
   margin: auto;
+  transition: all 0.2s;
 }
 
 .header__btn-holder.regular {
   @media (max-width: $mobile) {
     display: none;
+  }
+
+  & button svg {
+    transition: all 0.2s;
+  }
+
+  & button:hover {
+    color: rgb(137, 171, 235);
+
+    & svg {
+      fill: rgb(137, 171, 235);
+    }
   }
 }
 
@@ -549,6 +562,14 @@ input {
 .home__input-cont {
   max-width: 40rem;
   margin-left: auto;
+  transition: all 0.2s;
+
+  &[data-active="false"] {
+    opacity: 0.5;
+    input {
+      cursor: default;
+    }
+  }
 }
 
 .home__module-search {

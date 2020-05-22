@@ -247,10 +247,10 @@ class Edit {
 
     let el = htmlGen.createEl(this);
 
-    el.addEventListener("paste", (el) => {
+    el.addEventListener("paste", (e) => {
       // Influences paste on the page
-      el.preventDefault();
-      let text = (el.originalEvent || el).clipboardData.getData("text/plain");
+      e.preventDefault();
+      let text = (e.originalEvent || e).clipboardData.getData("text/plain");
       document.execCommand("insertHTML", false, text);
     });
 
