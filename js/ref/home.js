@@ -40,6 +40,7 @@ class Home {
   }
 
   studyRegimeHtml() {
+    let { numberSR, repeat, repeatInTime, mil, repeatInNumber } = this.cardsSR;
     // console.log(img);
     return {
       class: "home__module home__module--v2",
@@ -50,29 +51,39 @@ class Home {
             Study Regime
           </div>
           <ul class="home__study-regime-info">
-            <li><span>100 cards</span> in the regime.</li>
-            <li><span>9 more cards</span> to repeat in 10 minutes.</li>
+            <li><span>${numberSR} cards</span> in the regime.</li>
+            <li class="${
+              repeatInTime.length ? "" : "hidden"
+            }"><span>${repeatInNumber} ${
+        repeatInNumber === 1 ? "card" : "more cards"
+      }</span> to repeat ${this.findTimeInterval()}.</li>
           </ul>
         </div>
 
         <div class="home__repeat">
-          <p>Currently you have <span>15 cards</span> to repeat.</p>
-          <p>Repeat with:</p>
-          <div class="home__repeat-methods">
+          <p>Currently you have <span>${
+            repeat.length
+          } cards</span> to repeat.</p>
+          <p class="${repeat.length <= 0 ? "hidden" : ""}">Repeat with:</p>
+          <div class="home__repeat-methods ${
+            repeat.length <= 0 ? "hidden" : ""
+          }">
             <div class="home__counter-container">
               <div class="home__counter">
                 <div class="home__counter-subtract"><span>-</span></div>
-                <div class="home__counter-number" contenteditable="true">15</div>
+                <div class="home__counter-number" contenteditable="true">${
+                  repeat.length
+                }</div>
                 <div class="home__counter-add"><span>+</span></div>
               </div>
             </div>
-            <div class="home__repeat-item">
+            <div class="home__repeat-item" data-game="flashcards">
               <svg height="35" width="35">
                 <use href="img/sprite.svg#icon__cards"></use>
               </svg>
               <!-- <span>Flashcards</span> -->
             </div>
-            <div class="home__repeat-item">
+            <div class="home__repeat-item" data-game="write">
               <svg height="35" width="35">
                 <use href="img/sprite.svg#icon__write"></use>
               </svg>
@@ -137,7 +148,7 @@ class Home {
 
                     <div class="home__module-search">
 
-                        <div class="home__input-cont">
+                        <div class="home__input-cont" data-active ="true">
                             <input type="text" class="input pad5 fz17 height4r br-bottom2 bc-none brc-grey f-brc-yellow" placeholder="Type to filter ...">
                         </div>
                         
@@ -220,8 +231,7 @@ class Home {
   moduleListener(module, draft) {
     module.addEventListener("click", async (e) => {
       let id = e.currentTarget.dataset.id;
-      console.log(`${hashValues.module}?id=${id}`, "test");
-      // draft ? htmlGen.edit() : htmlGen.module(id);
+
       draft
         ? (location.href = hashValues.edit)
         : (location.href = `${hashValues.module}?id=${id}`);
@@ -260,19 +270,93 @@ class Home {
     htmlGen.toggleSpinner(false);
 
     this.moduleContainer = document.querySelector(".home__modules");
+    this.matchFilterContainer = document.querySelector(".home__input-cont");
     this.matchFilter = document.querySelector(".home__input-cont input");
     this.filterList = document.querySelector(".home__filter");
 
+    // this.counter = document.querySelector(".home__counter-number");
+    // this.counter_subtract = document.querySelector(".home__counter-subtract");
+    // this.counter_add = document.querySelector(".home__counter-add");
+
     this.filterTimeout = false;
     this.activeFilterMethod = "filterCreated";
+
+    this.moduleContainer.addEventListener("click", (e) => {
+      let repeatItemEl = e.target.closest(".home__repeat-item");
+      if (!repeatItemEl) return;
+
+      let game = repeatItemEl.dataset.game;
+
+      if (game == "flashcards") {
+        location.href = `${hashValues.flashcards}?number=${this.repeatNumber}`;
+        console.log("flashcards");
+      } else if (game == "write") {
+        location.href = `${hashValues.write}?number=${this.repeatNumber}`;
+        console.log("write");
+      }
+    });
+
+    this.moduleContainer.addEventListener("click", (e) => {
+      let target = e.target;
+      let el;
+
+      el = target.closest(".home__counter-subtract");
+      if (el) {
+        if (this.repeatNumber <= 1) return;
+        let counter = el
+          .closest(".home__counter")
+          .querySelector(".home__counter-number");
+        this.repeatNumber--;
+        counter.textContent = this.repeatNumber;
+      }
+
+      el = target.closest(".home__counter-add");
+      if (el) {
+        if (
+          this.repeatNumber >= 9999 ||
+          this.repeatNumber >= this.cardsSR.repeat.length
+        )
+          return;
+        let counter = el
+          .closest(".home__counter")
+          .querySelector(".home__counter-number");
+        this.repeatNumber++;
+        counter.textContent = this.repeatNumber;
+      }
+    });
+
+    this.moduleContainer.addEventListener("input", (e) => {
+      let target = e.target;
+      let el;
+      el = target.closest(".home__counter-number");
+      if (el) {
+        e.preventDefault();
+        let digStr = el.textContent.replace(/\D/g, "");
+        if (digStr.length > 4) digStr = `${this.repeatNumber}`;
+        if (parseInt(digStr, 10) >= this.cardsSR.repeat.length)
+          digStr = `${this.repeatNumber}`;
+        if (parseInt(digStr, 10) <= 1) digStr = "1";
+        el.textContent = digStr;
+        this.repeatNumber = parseInt(digStr, 10);
+      }
+    });
+
+    this.moduleContainer.addEventListener("paste", (e) => {
+      let target = e.target;
+      let el;
+      el = target.closest(".home__counter-number");
+      if (el) {
+        e.preventDefault();
+      }
+    });
 
     // Filter mehthiods and regimes --------------------------
 
     // this.filterCreated(this.modules);
     // this.appendModules(this.filteredModules);
-    this.callActiveFilter();
+    await this.callActiveFilter();
 
-    this.filterList.addEventListener("click", (e) => {
+    this.filterList.addEventListener("click", async (e) => {
       if (e.target.classList.contains("active")) return;
 
       for (let li of e.target.parentNode.children) {
@@ -282,7 +366,7 @@ class Home {
       e.target.classList.add("active");
       this.activeFilterMethod = "filter".concat(e.target.dataset.filterMethod);
 
-      this.callActiveFilter();
+      await this.callActiveFilter();
     });
 
     // Filter mehthiods and regimes --------------------------
@@ -292,12 +376,12 @@ class Home {
     this.matchFilter.addEventListener("input", (e) => {
       clearTimeout(this.filterTimeout);
 
-      this.filterTimeout = setTimeout(() => {
+      this.filterTimeout = setTimeout(async () => {
         this.moduleContainer.innerHTML = "";
 
         if (e.target.value != "") {
           if (this.findMatch(e.target.value)) {
-            this.callActiveFilter(this.filteredModules);
+            await this.callActiveFilter(this.filteredModules);
           } else {
             this.filteredModules = [
               {
@@ -306,11 +390,17 @@ class Home {
             ];
           }
         } else {
-          this.callActiveFilter(this.modules);
+          await this.callActiveFilter(this.modules);
         }
 
         this.appendModules(this.filteredModules);
       }, 800);
+    });
+
+    this.matchFilter.addEventListener("focus", (e) => {
+      if (this.activeFilterMethod === "filterStudied") {
+        this.matchFilter.blur();
+      }
     });
 
     // Filter for finding module by name --------------------------
@@ -322,8 +412,15 @@ class Home {
     return JSON.parse(await response.text());
   }
 
-  callActiveFilter() {
-    this[this.activeFilterMethod](this.modules);
+  async getCardsSR() {
+    let httpParam = new HttpParam("GET", false, true);
+    let response = await fetch(url + "/study_regime/get_cards", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async callActiveFilter() {
+    await this[this.activeFilterMethod](this.modules);
     this.appendModules(this.filteredModules);
   }
 
@@ -351,11 +448,14 @@ class Home {
   }
 
   filterRecent() {
+    this.matchFilterContainer.dataset.active = true;
     this.filteredModules = [];
     // console.log("filterRecent");
   }
 
   filterCreated(modules) {
+    this.matchFilterContainer.dataset.active = true;
+
     let sortedModules = modules
       .filter((module) => {
         if (!module.draft) return true;
@@ -388,13 +488,39 @@ class Home {
     // console.log(this.filteredModules);
   }
 
-  filterStudied() {
+  async filterStudied() {
+    this.matchFilterContainer.dataset.active = false;
+
+    this.cardsSR = await this.getCardsSR();
+
+    this.repeatNumber = this.cardsSR.repeat.length; // change
+
     this.filteredModules = [
       {
         studyRegime: true,
       },
     ];
-    // console.log("filterStudied");
+
+    let mil;
+    let counter = 0;
+
+    for (let card of this.cardsSR.repeatInTime) {
+      if (!mil) {
+        mil = new Date(card.nextRep).getTime();
+        counter++;
+        continue;
+      } else {
+        if (mil + 1800000 >= new Date(card.nextRep).getTime()) {
+          mil = new Date(card.nextRep).getTime();
+          counter++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    this.cardsSR.mil = mil;
+    this.cardsSR.repeatInNumber = counter;
   }
 
   nameSeparator(strDate, draft) {
@@ -422,6 +548,39 @@ class Home {
       return `${Math.floor(sec / 604800)} weeks ago`;
     } else {
       return `in ${this.months[date.getMonth()]} ${date.getFullYear()}`;
+    }
+  }
+
+  findTimeInterval() {
+    let mil = this.cardsSR.mil;
+
+    let sec = (mil - Date.now()) * 0.001;
+
+    if (sec < 60) {
+      return "in a minute";
+    } else if (sec < 3600) {
+      let int = Math.floor(sec / 60);
+      return `in ${int} minute${int === 1 ? "" : "s"}`;
+    } else if (sec < 7200) {
+      return `in an hour`;
+    } else if (sec < 86400) {
+      let int = Math.floor(sec / 3600);
+      return `in ${int} hour${int === 1 ? "" : "s"}`;
+    } else if (sec < 172800) {
+      return `tomorrow`;
+    } else if (sec < 604800) {
+      let int = Math.floor(sec / 86400);
+      return `in ${int} day${int === 1 ? "" : "s"}`;
+    } else if (sec < 1209600) {
+      return `in a week`;
+    } else if (sec < 2419200) {
+      let int = Math.floor(sec / 604800);
+      return `in ${int} week${int === 1 ? "" : "s"}`;
+    } else if (sec < 4838400) {
+      return `in a month`;
+    } else {
+      let int = Math.floor(sec / 2419200);
+      return `in ${int} month${int === 1 ? "" : "s"}`;
     }
   }
 }

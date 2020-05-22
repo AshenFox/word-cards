@@ -1,9 +1,17 @@
 class Write {
-  constructor(id) {
+  constructor(id, number) {
     if (active.newModule) htmlGen.hideCreateModule();
 
+    if (id) {
+      this.regime = "usual";
+    } else if (number && number > 0) {
+      this.regime = "study";
+    } else {
+      this.regime = false;
+    }
+
     this.class = "write";
-    this.render(id);
+    this.render(id, number);
   }
 
   gameHtml() {
@@ -314,7 +322,9 @@ class Write {
         (correctInRound / cardsInRound) * 100
       )}%</h3>
         </div>
-        <div class="game__finish-header-item">
+        <div class="game__finish-header-item ${
+          this.regime ? "hidden" : "sdfsd"
+        }">
           <button class="btn bcc-lightblue pad10-30 brr5 white fz15 fw-normal h-grey h-bcc-yellow" onclick="active.startOver()">Start over</button>
         </div>
       </div>
@@ -448,8 +458,19 @@ class Write {
       cardsInRound - incorrectInRound - correctInRound;
   }
 
-  continue(override) {
+  async continue(override) {
     let round = this.round;
+
+    if (this.round.number === 1) {
+      if (this.round.answer === "correct" || override) {
+        await this.sendAnswer(true);
+        console.log("correct", this.round.curCard._id);
+      } else if (this.round.answer === "incorrect") {
+        await this.sendAnswer(false);
+        console.log("incorrect", this.round.curCard._id);
+      }
+    }
+
     // if (override) round.answer = "correct";
 
     if (override) {
@@ -568,19 +589,43 @@ class Write {
     this.round = round;
   }
 
-  async render(id) {
+  async render(id, number) {
     htmlGen.deleteEl(active.class);
-    htmlGen.toggleGameButtons();
+    htmlGen.toggleGameButtons(true, this.regime === "study");
 
-    let response = await this.getModule(id);
-    if (!response) {
+    if (this.regime === "usual") {
+      let response = await this.getModule(id);
+      if (!response) {
+        location.href = hashValues.home;
+        return;
+      }
+
+      Object.assign(this, response);
+
+      this.cards = await this.getCards(this._id);
+    } else if (this.regime === "study") {
+      let response = await this.getCardsSR();
+
+      Object.assign(this, response);
+
+      if (this.repeat.length < number) number = this.repeat.length;
+      this.cards = this.repeat.slice(0, number);
+      this.number = number;
+    } else {
+      htmlGen.toggleGameButtons(false);
       location.href = hashValues.home;
       return;
     }
 
-    Object.assign(this, response);
+    // let response = await this.getModule(id);
+    // if (!response) {
+    //   location.href = hashValues.home;
+    //   return;
+    // }
 
-    this.cards = await this.getCards(this._id);
+    // Object.assign(this, response);
+
+    // this.cards = await this.getCards(this._id);
 
     this.gameHtml();
 
@@ -606,7 +651,7 @@ class Write {
     this.setProgress();
     this.question();
 
-    this.gameComponents.addEventListener("click", (e) => {
+    this.gameComponents.addEventListener("click", async (e) => {
       e.preventDefault();
       let target = e.target;
 
@@ -627,7 +672,7 @@ class Write {
 
       // Override answer
       if (target.closest(".game__override button")) {
-        this.continue(true);
+        await this.continue(true);
       }
 
       // Continue to the next question
@@ -636,7 +681,7 @@ class Write {
           target.closest(".game__answer-continue").dataset.correct === "false"
         )
           return;
-        this.continue(false);
+        await this.continue(false);
       }
 
       // Continue to the next round
@@ -697,7 +742,7 @@ class Write {
 
     this.gameComponents.addEventListener("keydown", (e) => {});
 
-    window.addEventListener("keydown", (e) => {
+    window.addEventListener("keydown", async (e) => {
       let { status, answer, answerValue, allAnswers, cards } = this.round;
 
       // Input the aswer
@@ -720,7 +765,7 @@ class Write {
         let gameAnsBtn = document.querySelector(".game__answer-continue");
         if (gameAnsBtn.dataset.correct !== "true") return;
 
-        this.continue(false);
+        await this.continue(false);
         return;
       }
 
@@ -732,7 +777,7 @@ class Write {
         e.keyCode === 13
       ) {
         e.preventDefault();
-        this.continue(false);
+        await this.continue(false);
         return;
       }
 
@@ -751,7 +796,7 @@ class Write {
         e.keyCode === 79
       ) {
         e.preventDefault();
-        this.continue(true);
+        await this.continue(true);
         return;
       }
     });
@@ -800,6 +845,24 @@ class Write {
     return false;
   }
 
+  async getCardsSR() {
+    let httpParam = new HttpParam("GET", false, true);
+    let response = await fetch(url + "/study_regime/get_cards", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async sendAnswer(answer) {
+    let reqData = {
+      _id: this.round.curCard._id,
+      answer,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/study_regime/answer", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
   return() {
     location.href = `${hashValues.module}?id=${this._id}`;
   }
@@ -809,7 +872,3 @@ class Write {
     location.href = `${hashValues.module}?id=${this._id}`;
   }
 }
-
-/*
-
-*/

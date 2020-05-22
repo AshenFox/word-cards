@@ -3,6 +3,10 @@
 <head>
 	<meta charset="UTF-8">	
 	<meta name="viewport" content="width=device-width initial-scale=1">
+	<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+	<link rel="manifest" href="img/site.webmanifest">
 	<link href="https://fonts.googleapis.com/css?family=Alata&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="css/styles.css">
 	<title>Flash Cards</title>
@@ -44,7 +48,7 @@
 				<div class="header__buttons-regular hidden">
 
 					<div class="header__btn-holder regular" id="new-module-regular">
-					<button class="btn white fz175 h-thinblue" onclick="location.href = hashValues.edit">
+					<button class="btn white fz175" onclick="location.href = hashValues.edit">
 							<svg fill="#ffffff" width="20" height="20">
 								<use href="img/sprite.svg#icon__new_module"></use>
 							</svg>
@@ -53,7 +57,7 @@
 					</div>
 
 					<div class="header__btn-holder regular">
-						<button class="btn white fz175 h-thinblue" onclick="log_out()">
+						<button class="btn white fz175" onclick="log_out()">
 							Log out 
 						</button>
 					</div>
@@ -133,9 +137,17 @@
 
 			<button onclick="clearCollectoins();">Clear collections</button>
 			<button onclick="studyRegimeTest();">Study regime test</button>
+			<button onclick="studyRegimeGetCards();">Study regime getCards</button>
+			<button onclick="studyRegimeTest1(1);">Study regime Test1 ( Option 1 )</button>
+			<button onclick="studyRegimeTest1(2);">Study regime Test1 ( Option 2 )</button>
+			<button onclick="studyRegimeTest1(3);">Study regime Test1 ( Option 3 )</button>
+			<button onclick="consoleCardsSR();">Console CardsSR()</button>
+			<button onclick="consoleCardsSRrepeat();">Console CardsSR repeat()</button>
+			<button onclick="createNotifTest();">Create notif test</button>
+			<button onclick="newNotif();">newNotif</button>
+			<button onclick="sendNotifications();">sendNotifications</button>
 		</div>
 	</div> -->
-
 	
 	
 	<script src="js/ref/start.js"></script>

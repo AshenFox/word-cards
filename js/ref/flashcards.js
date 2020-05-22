@@ -1,9 +1,17 @@
 class Flashcards {
-  constructor(id) {
+  constructor(id, number) {
     if (active.newModule) htmlGen.hideCreateModule();
 
+    if (id) {
+      this.regime = "usual";
+    } else if (number && number > 0) {
+      this.regime = "study";
+    } else {
+      this.regime = false;
+    }
+
     this.class = "flashcards";
-    this.render(id);
+    this.render(id, number);
   }
 
   gameHtml() {
@@ -53,9 +61,11 @@ class Flashcards {
                             </div>
                         </div>
 
-                        <div class="game__control-buttons">
+                        <div class="game__control-buttons ${
+                          this.regime === "study" ? "hidden" : ""
+                        }">
 
-                            <div class="game__method">
+                            <div class="game__method ">
                                 <div class="game__method-tilte">
                                     Answer with:
                                 </div>
@@ -106,7 +116,9 @@ class Flashcards {
 
                             <div class="game__nav">
 
-                                <div class="game__nav-question " data-active="true">
+                                <div class="game__nav-question ${
+                                  this.regime === "study" ? "" : "hidden"
+                                }" data-active="false">
                                   <p>Did you know the answer?</p>
                                   <div class="game__nav-answer" data-answer="true">
                                     <span>Yes</span>
@@ -116,7 +128,9 @@ class Flashcards {
                                   </div>
                                 </div>
 
-                                <div class="game__nav-item prev hidden">
+                                <div class="game__nav-item prev ${
+                                  this.regime === "study" ? "hidden" : ""
+                                }">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow mar-left-a p-r" onclick="active.switchCard(false)">
                                         <svg>
                                             <use href="img/sprite.svg#icon__triangle_left"></use>
@@ -124,7 +138,9 @@ class Flashcards {
                                     </button>
                                 </div>
 
-                                <div class="game__nav-item next hidden">
+                                <div class="game__nav-item next ${
+                                  this.regime === "study" ? "hidden" : ""
+                                }">
                                     <button class="btn pad15 bcc-white brr50p d-f h-bcc-yellow p-r" onclick="active.switchCard(true)">
                                         <svg>
                                             <use href="img/sprite.svg#icon__triangle_right"></use>
@@ -142,10 +158,11 @@ class Flashcards {
         `;
   }
 
-  cardHtml({ term, defenition, imgurl }, active, defAnswer) {
+  cardHtml({ _id, term, defenition, imgurl }, active, defAnswer) {
     return {
       class: "game__card", // next transparent
       id: "",
+      data_id: _id,
       html: /*html*/ `
         <div class="game__card-front ${defAnswer ? "rearside" : ""} ${
         active ? "" : "transparent next"
@@ -215,19 +232,46 @@ class Flashcards {
     };
   }
 
-  async render(id) {
+  async render(id, number) {
     htmlGen.deleteEl(active.class);
-    htmlGen.toggleGameButtons();
+    htmlGen.toggleGameButtons(true, this.regime === "study");
 
-    let response = await this.getModule(id);
-    if (!response) {
+    if (this.regime === "usual") {
+      let response = await this.getModule(id);
+      if (!response) {
+        location.href = hashValues.home;
+        return;
+      }
+
+      Object.assign(this, response);
+
+      this.cards = await this.getCards(this._id);
+    } else if (this.regime === "study") {
+      let response = await this.getCardsSR();
+
+      Object.assign(this, response);
+
+      if (this.repeat.length < number) number = this.repeat.length;
+      this.cards = this.repeat.slice(0, number);
+      this.number = number;
+    } else {
+      htmlGen.toggleGameButtons(false);
       location.href = hashValues.home;
       return;
     }
 
-    Object.assign(this, response);
+    // let response = await this.getModule(id);
+    // if (!response) {
+    //   location.href = hashValues.home;
+    //   return;
+    // }
+    // console.log(id, number);
 
-    this.cards = await this.getCards(this._id);
+    //getCardsSR()
+
+    // Object.assign(this, response);
+
+    // this.cards = await this.getCards(this._id);
 
     this.gameHtml();
 
@@ -248,13 +292,47 @@ class Flashcards {
     this.buttonMenu = document.querySelector(".game__method-menu-container");
     this.cardShuffle = document.querySelector(".game__shuffle");
     // -----------------------------
+    this.gameQestion = document.querySelector(".game__nav-question");
+    // -----------------------------
     this.progressCount = document.querySelectorAll(
       ".game__progress-count span"
     )[0];
     this.progressBar = document.querySelector(".game__bar-fill");
     this.methodTitle = document.querySelector(".game__method button span");
 
-    this.cardsContainer.addEventListener("click", this.flipCard);
+    this.cardsContainer.addEventListener("click", (e) => {
+      if (
+        e.target.closest(".game__card") &&
+        !e.target.closest(".game__speaker-flashcards")
+      ) {
+        if (
+          !this.cardFlipped &&
+          this.regime === "study" &&
+          this.progress != this.cardsEl.length - 1
+        ) {
+          this.cardFlipped = true;
+          this.gameQestion.dataset.active = true;
+        }
+        active.activeFront.classList.toggle("rearside");
+        active.activeBack.classList.toggle("rearside");
+      }
+    });
+
+    this.gameQestion.addEventListener("click", async (e) => {
+      let answer = e.target.closest(".game__nav-answer");
+
+      if (answer) {
+        let value = answer.dataset.answer;
+
+        value === "true" ? (value = true) : (value = false);
+        let result = await this.sendAnswer(value);
+        // send data to the server;
+
+        this.cardFlipped = false;
+        this.gameQestion.dataset.active = false;
+        this.switchCard(true);
+      }
+    });
 
     this.gameControls.addEventListener("click", (e) => {
       let el = e.target.closest(".game__method-menu-item");
@@ -290,7 +368,11 @@ class Flashcards {
       }
     });
 
-    this.appendCards(this.cards);
+    if (this.regime === "study") {
+      this.shuffle();
+    } else {
+      this.appendCards(this.cards);
+    }
 
     this.cardsEl = [...document.querySelectorAll(".game__card")];
     this.activeCard = this.cardsEl[0];
@@ -362,15 +444,21 @@ class Flashcards {
     this.activeBack.classList.remove(forward ? "next" : "prev");
   }
 
-  flipCard(event) {
-    if (
-      event.target.closest(".game__card") &&
-      !event.target.closest(".game__speaker-flashcards")
-    ) {
-      active.activeFront.classList.toggle("rearside");
-      active.activeBack.classList.toggle("rearside");
-    }
-  }
+  // flipCard(event) {
+  //   if (
+  //     event.target.closest(".game__card") &&
+  //     !event.target.closest(".game__speaker-flashcards")
+  //   ) {
+  //     console.log(!this.cardFlipped, this.regime === "study", this);
+  //     if (!this.cardFlipped && this.regime === "study") {
+  //       this.cardFlipped = true;
+  //       console.log(this.cardFlipped);
+  //       // this.gameQestion.dataset.active = true;
+  //     }
+  //     active.activeFront.classList.toggle("rearside");
+  //     active.activeBack.classList.toggle("rearside");
+  //   }
+  // }
 
   methodMenuToggle() {
     let target;
@@ -425,7 +513,8 @@ class Flashcards {
 
   shuffle() {
     this.shuffled = !this.shuffled;
-    this.cardsContainer.innerHTML = "";
+    if (this.cardsContainer) this.cardsContainer.innerHTML = "";
+
     this.setProgress(0);
     if (this.shuffled) {
       // Save original order
@@ -462,6 +551,24 @@ class Flashcards {
     };
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/get_cards", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async getCardsSR() {
+    let httpParam = new HttpParam("GET", false, true);
+    let response = await fetch(url + "/study_regime/get_cards", httpParam);
+    if (response.ok) return JSON.parse(await response.text());
+    return false;
+  }
+
+  async sendAnswer(answer) {
+    let reqData = {
+      _id: this.activeCard.dataset.id,
+      answer,
+    };
+    let httpParam = new HttpParam("POST", reqData, true);
+    let response = await fetch(url + "/study_regime/answer", httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }

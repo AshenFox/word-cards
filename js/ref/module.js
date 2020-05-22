@@ -4,7 +4,7 @@ class Module {
   constructor(id) {
     if (active.newModule) htmlGen.hideCreateModule();
     if (active.class == "flashcards" || active.class == "write")
-      htmlGen.toggleGameButtons();
+      htmlGen.toggleGameButtons(false);
 
     this.class = "module";
     // this.html = /*html*/ `
@@ -296,9 +296,13 @@ class Module {
       if (allCardsSR) {
         let checkbox = allCardsSR.querySelector(".module__checkbox");
 
-        let result = await this.studyRegime({ moduleID: this._id });
+        let result = await this.studyRegime({
+          moduleID: this._id,
+          value: !checkbox.checked,
+        });
 
         if (result) {
+          console.log("fire!");
           checkbox.checked = !checkbox.checked;
 
           let checkboxArr = document.querySelectorAll(".module__checkbox");

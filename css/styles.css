@@ -87,11 +87,20 @@ input {
 
 .header__btn-holder {
   padding-left: 2rem;
-  margin: auto; }
+  margin: auto;
+  transition: all 0.2s; }
 
 @media (max-width: 620px) {
   .header__btn-holder.regular {
     display: none; } }
+
+.header__btn-holder.regular button svg {
+  transition: all 0.2s; }
+
+.header__btn-holder.regular button:hover {
+  color: #89abeb; }
+  .header__btn-holder.regular button:hover svg {
+    fill: #89abeb; }
 
 .header__button-game-back,
 .header__button-game-options {
@@ -386,7 +395,12 @@ input {
 
 .home__input-cont {
   max-width: 40rem;
-  margin-left: auto; }
+  margin-left: auto;
+  transition: all 0.2s; }
+  .home__input-cont[data-active="false"] {
+    opacity: 0.5; }
+    .home__input-cont[data-active="false"] input {
+      cursor: default; }
 
 .home__module-search {
   margin-bottom: 4rem; }

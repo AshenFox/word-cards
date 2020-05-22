@@ -1,5 +1,7 @@
 class Options {
   constructor() {
+    if (active.regime === "study") return;
+
     this.class = "modal";
     this.id = "active-modal";
     this.el;
