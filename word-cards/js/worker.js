@@ -13,7 +13,7 @@ self.addEventListener("push", (e) => {
 });
 
 self.addEventListener("notificationclick", (event) => {
-  let url = "http://127.0.0.1:8080/#home";
+  let url = "https://hoarfox.github.io/word-cards/#home";
   event.notification.close();
 
   event.waitUntil(
