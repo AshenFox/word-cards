@@ -5,10 +5,9 @@ self.addEventListener("push", (e) => {
   console.log("Push recieved...");
   console.log(location);
   self.registration.showNotification(data.title, {
-    // body: data.body,
-    body: `${location.origin}`,
-    icon: `${location.origin}/img/android-chrome-192x192.png`,
-    badge: `${location.origin}/img/Fc - logo.png`,
+    body: data.body,
+    icon: `${location.origin}/word-cards/img/android-chrome-192x192.png`,
+    badge: `${location.origin}/word-cards/img/Fc - logo.png`,
     silent: false,
   });
 });
