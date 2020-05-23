@@ -124,22 +124,4 @@ class Options {
       el.parentNode.removeChild(el);
     }
   }
-
-  // methodMenuToggle() {
-  //     modal.methodMenu.classList.toggle('hidden');
-
-  //     if(active.methodMenu.classList.contains('hidden')) {
-  //         setTimeout(() => {
-  //             document.removeEventListener('click', active.methodMenuToggle);
-  //         }, 0);
-
-  //     } else {
-  //         setTimeout(() => {
-  //             document.addEventListener('click', active.methodMenuToggle);
-  //         }, 0);
-  //     }
-  // }
 }
-
-/*
- */

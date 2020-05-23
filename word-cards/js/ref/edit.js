@@ -553,8 +553,6 @@ class Edit {
           let result = true;
           if (this.draft) result = await this.deleteCard(_id);
 
-          // console.log(result);
-
           if (result) {
             el.parentNode.removeChild(el);
 
@@ -566,10 +564,6 @@ class Edit {
 
             this.deleting = false;
           }
-
-          // if (this.newModule) {
-          //   await this.editDraft();
-          // }
         }
       }
     );
@@ -595,10 +589,6 @@ class Edit {
         attributes: true,
       });
     }
-
-    // if (this.newModule) {
-    //   await this.editDraft();
-    // }
   }
 
   appendCards(arr) {
@@ -639,7 +629,6 @@ class Edit {
       if (_id === "undefined") _id = false;
 
       let dropSR = item.querySelector(".edit__checkbox").checked;
-      console.log(dropSR);
 
       let term = item
         .querySelector(".edit__cards-term")
@@ -666,47 +655,6 @@ class Edit {
       cards,
     };
   }
-
-  // async edit(_id) {
-  //   if (await this.isChanged(_id)) {
-  //     let reqData = {
-  //       _id,
-  //       module: this.collectData(this.titleCont, this.cardsCont),
-  //     };
-
-  //     let httpParam = new HttpParam("POST", reqData, true);
-  //     let response = await fetch(url + "/edit/edit", httpParam);
-
-  //     if (response.status == 200) {
-  //       console.log("Fire!");
-  //       location.href = `${hashValues.module}?id=${_id}`;
-  //       return;
-  //     } else if (response.status == 500) {
-  //       this.scrollToTop();
-  //       this.errorTitle();
-  //       return;
-  //     }
-  //   }
-
-  //   location.href = `${hashValues.module}?id=${_id}`;
-  //   return;
-  // }
-
-  // async isChanged(_id) {
-  //   let reqData = {
-  //     _id,
-  //     module: this.collectData(this.titleCont, this.cardsCont),
-  //   };
-
-  //   let httpParam = new HttpParam("POST", reqData, true);
-  //   let response = await fetch(url + "/edit/is_changed", httpParam);
-  //   if (response.status == 200) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  //   // return JSON.parse(await response.text());
-  // }
 
   async getModule(_id, draft) {
     let reqData = {
@@ -819,7 +767,6 @@ class Edit {
       draft,
       ...draftData,
     };
-    // console.log(reqData);
 
     let httpParam = new HttpParam("POST", reqData, true);
     let response = await fetch(url + "/edit/edit", httpParam);
@@ -840,9 +787,7 @@ class Edit {
     if (this.newModule) {
       location.href = hashValues.home;
     } else {
-      // console.log("Fire!");
       location.href = `${hashValues.module}?id=${this._id}`;
-      // console.log(location.href);
     }
   }
 }

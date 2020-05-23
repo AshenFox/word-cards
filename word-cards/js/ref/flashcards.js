@@ -260,24 +260,10 @@ class Flashcards {
       return;
     }
 
-    // let response = await this.getModule(id);
-    // if (!response) {
-    //   location.href = hashValues.home;
-    //   return;
-    // }
-    // console.log(id, number);
-
-    //getCardsSR()
-
-    // Object.assign(this, response);
-
-    // this.cards = await this.getCards(this._id);
-
     this.gameHtml();
 
     let el = htmlGen.createEl(this);
 
-    // document.body.append(el);
     main.appendChild(el);
     htmlGen.toggleSpinner(false);
 
@@ -326,7 +312,6 @@ class Flashcards {
 
         value === "true" ? (value = true) : (value = false);
         let result = await this.sendAnswer(value);
-        // send data to the server;
 
         this.cardFlipped = false;
         this.gameQestion.dataset.active = false;
@@ -444,22 +429,6 @@ class Flashcards {
     this.activeBack.classList.remove(forward ? "next" : "prev");
   }
 
-  // flipCard(event) {
-  //   if (
-  //     event.target.closest(".game__card") &&
-  //     !event.target.closest(".game__speaker-flashcards")
-  //   ) {
-  //     console.log(!this.cardFlipped, this.regime === "study", this);
-  //     if (!this.cardFlipped && this.regime === "study") {
-  //       this.cardFlipped = true;
-  //       console.log(this.cardFlipped);
-  //       // this.gameQestion.dataset.active = true;
-  //     }
-  //     active.activeFront.classList.toggle("rearside");
-  //     active.activeBack.classList.toggle("rearside");
-  //   }
-  // }
-
   methodMenuToggle() {
     let target;
     modal ? (target = modal.methodMenu) : (target = active.methodMenu);
@@ -517,9 +486,8 @@ class Flashcards {
 
     this.setProgress(0);
     if (this.shuffled) {
-      // Save original order
       if (!this.originalCards) this.originalCards = [...this.cards];
-      // Shuffle cards
+
       let arr = this.cards;
       for (let i = this.number - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
