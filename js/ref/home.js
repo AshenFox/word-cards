@@ -10,7 +10,6 @@ class Home {
   }
 
   moduleHtml({ author, number, title, draft, _id }, img) {
-    // console.log(img);
     return {
       class: "home__module",
       id: _id,
@@ -41,7 +40,6 @@ class Home {
 
   studyRegimeHtml() {
     let { numberSR, repeat, repeatInTime, mil, repeatInNumber } = this.cardsSR;
-    // console.log(img);
     return {
       class: "home__module home__module--v2",
       id: "",
@@ -274,10 +272,6 @@ class Home {
     this.matchFilter = document.querySelector(".home__input-cont input");
     this.filterList = document.querySelector(".home__filter");
 
-    // this.counter = document.querySelector(".home__counter-number");
-    // this.counter_subtract = document.querySelector(".home__counter-subtract");
-    // this.counter_add = document.querySelector(".home__counter-add");
-
     this.filterTimeout = false;
     this.activeFilterMethod = "filterCreated";
 
@@ -289,10 +283,8 @@ class Home {
 
       if (game == "flashcards") {
         location.href = `${hashValues.flashcards}?number=${this.repeatNumber}`;
-        console.log("flashcards");
       } else if (game == "write") {
         location.href = `${hashValues.write}?number=${this.repeatNumber}`;
-        console.log("write");
       }
     });
 
@@ -352,9 +344,7 @@ class Home {
 
     // Filter mehthiods and regimes --------------------------
 
-    // this.filterCreated(this.modules);
-    // this.appendModules(this.filteredModules);
-    await this.callActiveFilter();
+    await this.callActiveFilter(this.modules);
 
     this.filterList.addEventListener("click", async (e) => {
       if (e.target.classList.contains("active")) return;
@@ -366,7 +356,7 @@ class Home {
       e.target.classList.add("active");
       this.activeFilterMethod = "filter".concat(e.target.dataset.filterMethod);
 
-      await this.callActiveFilter();
+      await this.callActiveFilter(this.modules);
     });
 
     // Filter mehthiods and regimes --------------------------
@@ -403,6 +393,8 @@ class Home {
       }
     });
 
+    await preparePush();
+
     // Filter for finding module by name --------------------------
   }
 
@@ -419,8 +411,8 @@ class Home {
     return false;
   }
 
-  async callActiveFilter() {
-    await this[this.activeFilterMethod](this.modules);
+  async callActiveFilter(arr) {
+    await this[this.activeFilterMethod](arr);
     this.appendModules(this.filteredModules);
   }
 
@@ -450,7 +442,6 @@ class Home {
   filterRecent() {
     this.matchFilterContainer.dataset.active = true;
     this.filteredModules = [];
-    // console.log("filterRecent");
   }
 
   filterCreated(modules) {
@@ -467,12 +458,8 @@ class Home {
         return date_B - date_A;
       });
 
-    // console.log(sortedModules);
-
     let uniqueSeparators = [];
     this.filteredModules = [];
-
-    // console.log(uniqueSeparators);
 
     sortedModules.forEach((module) => {
       let name = this.nameSeparator(module.creation_date);
@@ -484,8 +471,6 @@ class Home {
 
       this.filteredModules.push(module);
     });
-
-    // console.log(this.filteredModules);
   }
 
   async filterStudied() {

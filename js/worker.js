@@ -11,3 +11,22 @@ self.addEventListener("push", (e) => {
     silent: false,
   });
 });
+
+self.addEventListener("notificationclick", (event) => {
+  let url = "http://127.0.0.1:8080/#home";
+  event.notification.close();
+
+  event.waitUntil(
+    clients
+      .matchAll({
+        type: "window",
+      })
+      .then((clientList) => {
+        for (let i = 0; i < clientList.length; i++) {
+          let client = clientList[i];
+          if (client.url == url && "focus" in client) return client.focus();
+        }
+        if (clients.openWindow) return clients.openWindow(url);
+      })
+  );
+});

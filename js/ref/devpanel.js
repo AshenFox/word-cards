@@ -71,19 +71,6 @@ async function studyRegimeTest1(option) {
   return false;
 }
 
-// async function createNotifTest() {
-//   let httpParam = new HttpParam("GET", false, true);
-//   let response = await fetch(url + "/notifications/test", httpParam);
-
-//   if (response.ok) {
-//     let result = JSON.parse(await response.text());
-//     console.log(result);
-//     return result;
-//   }
-
-//   return false;
-// }
-
 async function newNotif() {
   let httpParam = new HttpParam("GET", false, true);
   let response = await fetch(url + "/notifications/test2", httpParam);

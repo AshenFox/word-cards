@@ -256,13 +256,6 @@ class Sign_up {
     }
   }
 
-  // ===== User checks
-
-  // minLength(str, length) {
-  //     if (str.length <= length) return true;
-  //     return false;
-  // }
-
   httpParam(method, data, cred) {
     let obj = {
       method: method,
@@ -314,8 +307,6 @@ class Sign_up {
         if (response.status == 200) {
           let data = JSON.parse(await response.text());
 
-          console.log(data);
-
           localStorage.setItem("value", data.token);
 
           this.checkForModal();
@@ -347,5 +338,3 @@ class Sign_up {
     }
   }
 }
-
-// When u have username email and password active you still can send requsest although it doesn't fit the format

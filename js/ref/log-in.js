@@ -209,8 +209,6 @@ class Log_in {
       this.checkForModal();
       location.href = hashValues.home;
       htmlGen.startDashboard();
-      // htmlGen.regularDashboard();
-      // htmlGen.home();
     }
     return;
   }

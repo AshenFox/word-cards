@@ -14,7 +14,6 @@ class Voice {
             this.engBackup = voice;
           if (/ru.+RU/.test(voice.lang) && !this.rusBackup)
             this.rusBackup = voice;
-          console.log();
         });
 
         if (!this.engBackup && !this.rusBackup) {
@@ -22,7 +21,6 @@ class Voice {
         } else {
           this.working = true;
         }
-        // console.log(this.english, this.russian, this.engBackup, this.rusBackup);
       });
     }
   }
@@ -94,7 +92,7 @@ class Voice {
       };
 
       speakText.onerror = (e) => {
-        console.log("Something vent wrong...");
+        console.log("Something vent wrong...", e);
       };
 
       if (language === "english") {

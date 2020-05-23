@@ -3,7 +3,7 @@
 let active = { empty: true };
 let modal = false;
 
-const url = "https://word-cards-15-12-2019.herokuapp.com"; // "http://localhost:5000"
+const url = "https://word-cards-15-12-2019.herokuapp.com"; //  "http://localhost:5000"
 const hashValues = {
   start: "#start",
   home: "#home",
@@ -19,6 +19,8 @@ const publicVapidKey =
 const voice = new Voice();
 
 let device;
+let register;
+let subscriptionSent = false;
 const screenWidth = screen.width;
 
 if (screenWidth < 620) {
@@ -63,21 +65,6 @@ const htmlGen = {
     regularBTN.classList.toggle("hidden");
     menuBTN.classList.toggle("hidden");
   },
-
-  // toggleGameButtons() {
-  //   document
-  //     .querySelector(".header__title")
-  //     .classList.toggle("hidden__media-tablet");
-  //   document
-  //     .querySelector(".header__buttons-regular")
-  //     .classList.toggle("hidden__media-tablet");
-  //   document
-  //     .querySelector(".header__button-game-back")
-  //     .classList.toggle("hidden");
-  //   document
-  //     .querySelector(".header__button-game-options")
-  //     .classList.toggle("hidden");
-  // },
 
   toggleGameButtons(add, study) {
     let title = document.querySelector(".header__title").classList;
@@ -218,8 +205,6 @@ class HttpParam {
 
 async function loggedInCheck() {
   try {
-    // let token = localStorage.getItem('token');
-    // console.log(token);
     let httpParam = new HttpParam("GET", false, true);
     let response = await fetch(url + "/home/auth", httpParam);
 
@@ -227,7 +212,6 @@ async function loggedInCheck() {
       return true;
     }
   } catch (err) {
-    // add connection with the server is absent message
     console.log(err);
   }
 
@@ -295,7 +279,6 @@ window.addEventListener("hashchange", async (e) => {
 });
 
 async function hashHandler(hash, id, number) {
-  // console.log(hash, id);
   switch (hash) {
     case "start":
       if (!active.empty) {
@@ -379,29 +362,23 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-let register;
-
-preparePush();
-
 async function preparePush() {
   if ("serviceWorker" in navigator) {
-    try {
-      // console.log("Regestering SW...");
-      register = await navigator.serviceWorker.register("js/worker.js");
-      // console.log("Service worker registered...");
+    if (subscriptionSent) return;
 
-      // console.log("Regestering Push...");
+    console.log("preparing push...");
+
+    try {
+      register = await navigator.serviceWorker.register("js/worker.js");
+
       const subscription = await register.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
       });
-      // console.log("Push registered...");
 
-      console.log(subscription);
-
-      // console.log("Sending Push...");
       await sendSubscription(subscription);
-      // console.log("Push sent...");
+
+      subscriptionSent = true;
     } catch (err) {
       console.log(err);
     }
@@ -418,7 +395,6 @@ async function sendSubscription(subscription) {
 
   if (response.ok) {
     let result = JSON.parse(await response.text());
-    console.log(result);
     return result;
   }
 

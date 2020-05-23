@@ -302,7 +302,6 @@ class Module {
         });
 
         if (result) {
-          console.log("fire!");
           checkbox.checked = !checkbox.checked;
 
           let checkboxArr = document.querySelectorAll(".module__checkbox");
@@ -314,14 +313,11 @@ class Module {
             item.studyRegime = checkbox.checked;
           });
         }
-        // console.log(allCardsSR, checkbox);
       }
 
       if (cardSR) {
         let checkbox = cardSR.querySelector(".module__checkbox");
         let cardID = cardSR.closest(".module__card").id;
-
-        // let result = true;
 
         let result = await this.studyRegime({ cardID });
 
@@ -351,7 +347,6 @@ class Module {
       if (speaker && !voice.synth.speaking) {
         let text = speaker.closest("[data-textfield=true]").querySelector("p")
           .textContent;
-        console.log(text);
         if (text !== "" && speaker.dataset.active !== "false") {
           speaker.dataset.speaking = true;
           let speakText = voice.speak(text);
@@ -391,25 +386,6 @@ class Module {
 
     return result;
   }
-
-  // findMatch(value) {
-  //     if (value == '') return false;
-
-  //     value = value.toLowerCase();
-
-  //     this.filteredCards = this.cards.filter(card => {
-  //         if (card.term.toLowerCase().indexOf(value) != -1) return true;
-  //         return false;
-  //     }).map(card => {
-  //         let newCard = Object.assign({}, card);
-  //         let regExp = new RegExp(`${value}`, 'g');
-  //         let replacement = `<span class='bcc-yellow'>${value}</span>`;
-  //         newCard.term = newCard.term.replace(regExp, replacement);
-  //         return newCard;
-  //     });
-
-  //     return true;
-  // }
 
   async deleteModule(_id) {
     let reqData = {

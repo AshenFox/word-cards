@@ -384,9 +384,6 @@ class Write {
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
     document.querySelector(".game__form-input input").focus();
-    // setTimeout(() => {
-    //   document.querySelector(".game__form-input input").focus();
-    // }, 0);
   }
 
   answer(correct, answer) {
@@ -464,10 +461,8 @@ class Write {
     if (this.round.number === 1) {
       if (this.round.answer === "correct" || override) {
         await this.sendAnswer(true);
-        console.log("correct", this.round.curCard._id);
       } else if (this.round.answer === "incorrect") {
         await this.sendAnswer(false);
-        console.log("incorrect", this.round.curCard._id);
       }
     }
 
@@ -616,16 +611,6 @@ class Write {
       location.href = hashValues.home;
       return;
     }
-
-    // let response = await this.getModule(id);
-    // if (!response) {
-    //   location.href = hashValues.home;
-    //   return;
-    // }
-
-    // Object.assign(this, response);
-
-    // this.cards = await this.getCards(this._id);
 
     this.gameHtml();
 
@@ -800,13 +785,6 @@ class Write {
         return;
       }
     });
-
-    // this.progressCount = document.querySelectorAll(
-    //   ".game__progress-count span"
-    // )[0];
-    // this.progressBar = document.querySelector(".game__bar-fill");
-
-    // this.gameControls.addEventListener("click", (e) => {});
   }
 
   checkAnswer(answer) {
