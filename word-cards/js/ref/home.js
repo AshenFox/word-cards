@@ -487,15 +487,20 @@ class Home {
     ];
 
     let mil;
+    let initDelay;
+    let stageDelay;
     let counter = 0;
 
     for (let card of this.cardsSR.repeatInTime) {
       if (!mil) {
         mil = new Date(card.nextRep).getTime();
+        initDelay = new Date(card.nextRep).getTime();
         counter++;
+        stageDelay = stages[card.stage - 2].prevStage;
+        if (card.stage === 2) stageDelay = stageDelay * 2;
         continue;
       } else {
-        if (mil + 1800000 >= new Date(card.nextRep).getTime()) {
+        if (initDelay + stageDelay >= new Date(card.nextRep).getTime()) {
           mil = new Date(card.nextRep).getTime();
           counter++;
         } else {
