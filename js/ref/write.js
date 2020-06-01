@@ -144,10 +144,10 @@ class Write {
             </svg>
           </div>
         </div>
-        <form action="" class="game__form">
+        <form action="" class="game__form" autocomplete="off">
           <fieldset class="game__form-fieldset">
             <div class="game__form-input">
-              <input type="text" id="write-input"/>
+              <input type="text" id="write-input" autocomplete="off"/>
             </div>
             
             <label for="write-input">type the answer</label>
@@ -239,10 +239,12 @@ class Write {
           </div>
 
           <!-- Input -->
-          <form action="" class="game__form ${type.id === 3 ? "" : "hidden"}">
+          <form action="" class="game__form ${
+            type.id === 3 ? "" : "hidden"
+          }" autocomplete="off">
             <fieldset class="game__form-fieldset">
               <div class="game__form-input" data-correct="false">
-                <input type="text" id="write-input"/>
+                <input type="text" id="write-input" autocomplete="off"/>
               </div>
               <label for="write-input">copy answer</label>
             </fieldset>
