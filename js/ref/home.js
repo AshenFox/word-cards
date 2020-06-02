@@ -496,8 +496,14 @@ class Home {
         mil = new Date(card.nextRep).getTime();
         initDelay = new Date(card.nextRep).getTime();
         counter++;
-        stageDelay = stages[card.stage - 2].prevStage;
-        if (card.stage === 2) stageDelay = stageDelay * 2;
+
+        if (card.stage === 2) {
+          stageDelay = 3600000;
+        } else if (card.stage >= 5) {
+          stageDelay = 86400000;
+        } else {
+          stageDelay = stages[card.stage - 2].prevStage;
+        }
         continue;
       } else {
         if (initDelay + stageDelay >= new Date(card.nextRep).getTime()) {
