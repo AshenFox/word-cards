@@ -13,18 +13,23 @@ self.addEventListener("push", (e) => {
 });
 
 self.addEventListener("notificationclick", (event) => {
-  let url = "https://hoarfox.github.io/word-cards/#home";
+  const url =
+    location.host === "127.0.0.1:8080"
+      ? "http://127.0.0.1:8080/#home"
+      : "https://hoarfox.github.io/word-cards/#home";
+
   event.notification.close();
 
   event.waitUntil(
     clients
       .matchAll({
+        includeUncontrolled: true,
         type: "window",
       })
       .then((clientList) => {
         for (let i = 0; i < clientList.length; i++) {
           let client = clientList[i];
-          if (client.url == url && "focus" in client) return client.focus();
+          if (client.url === url) return client.focus();
         }
         if (clients.openWindow) return clients.openWindow(url);
       })
