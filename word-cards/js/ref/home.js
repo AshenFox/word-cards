@@ -489,12 +489,16 @@ class Home {
     let mil;
     let initDelay;
     let stageDelay;
+    let prevStageDelay;
+    let stage;
     let counter = 0;
 
     for (let card of this.cardsSR.repeatInTime) {
       if (!mil) {
         mil = new Date(card.nextRep).getTime();
         initDelay = new Date(card.nextRep).getTime();
+        prevStageDelay = new Date(card.prevStage).getTime();
+        stage = card.stage;
         counter++;
 
         if (card.stage >= 5) {
@@ -504,6 +508,21 @@ class Home {
         }
         continue;
       } else {
+        // New logic
+        if (
+          card.stage < stage &&
+          new Date(card.prevStage).getTime() < prevStageDelay
+        ) {
+          if (card.stage >= 5) {
+            stageDelay = 43200000;
+          } else {
+            stageDelay = stages[card.stage - 2].prevStage;
+          }
+          initDelay = new Date(card.nextRep).getTime();
+          prevStageDelay = new Date(card.prevStage).getTime();
+          stage = card.stage;
+        }
+
         if (initDelay + stageDelay >= new Date(card.nextRep).getTime()) {
           mil = new Date(card.nextRep).getTime();
           counter++;
