@@ -1714,10 +1714,9 @@ input {
       width: 100%; } }
 
 .game__question-defenition {
-  display: flex;
-  font-size: 2rem; }
-  .game__question-defenition p {
-    flex: 1; }
+  font-size: 2rem;
+  position: relative;
+  padding-right: 2.75rem; }
   @media (max-width: 620px) {
     .game__question-defenition {
       font-size: 1.5rem; } }
@@ -1816,10 +1815,8 @@ input {
       width: 100%; } }
 
 .game__section-body {
-  display: flex; }
-  @media (max-width: 620px) {
-    .game__section-body {
-      flex-direction: column; } }
+  position: relative;
+  padding-right: 2.75rem; }
 
 .game__override {
   margin-left: 1rem;
@@ -1832,12 +1829,9 @@ input {
   flex: 1; }
 
 .game__speaker-write {
-  align-self: flex-end;
-  margin-left: 1rem; }
-  @media (max-width: 620px) {
-    .game__speaker-write {
-      margin-top: 1rem;
-      flex-direction: column; } }
+  position: absolute;
+  bottom: 0;
+  right: 0; }
 
 .game__answer-continue {
   margin-top: 3rem;

@@ -2401,12 +2401,14 @@ input {
 }
 
 .game__question-defenition {
-  display: flex;
+  // display: flex;
   font-size: 2rem;
+  position: relative;
+  padding-right: 2.75rem;
 
-  & p {
-    flex: 1;
-  }
+  // & p {
+  //   flex: 1;
+  // }
 
   @media (max-width: $mobile) {
     font-size: 1.5rem;
@@ -2547,10 +2549,12 @@ input {
 }
 
 .game__section-body {
-  display: flex;
+  position: relative;
+  padding-right: 2.75rem;
+  // display: flex;
 
   @media (max-width: $mobile) {
-    flex-direction: column;
+    // flex-direction: column;
   }
 }
 
@@ -2568,12 +2572,15 @@ input {
 }
 
 .game__speaker-write {
-  align-self: flex-end;
-  margin-left: 1rem;
+  // align-self: flex-end;
+  // margin-left: 1rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 
   @media (max-width: $mobile) {
-    margin-top: 1rem;
-    flex-direction: column;
+    // margin-top: 1rem;
+    // flex-direction: column;
   }
 }
 

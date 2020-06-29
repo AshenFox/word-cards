@@ -132,7 +132,7 @@ class Write {
         }" style="background-image: url(${imgurl !== "" ? imgurl : ""});"></div>
         <div class="game__question-defenition">
           <p>${defenition}</p>
-          <div class="game__speaker-write relative" data-active="${
+          <div class="game__speaker-write" data-active="${
             voice.working &&
             defenition !== "" &&
             voice.detectLanguage(defenition)
@@ -201,7 +201,7 @@ class Write {
             }" style="background-image: url(${!imgurl ? "" : imgurl});"></div>
             <div class="game__section-body ${defenition ? "" : "hidden"}">
               <p class="game__section-text">${defenition}</p>
-              <div class="game__speaker-write relative" data-active="${
+              <div class="game__speaker-write" data-active="${
                 voice.working && defLang ? "true" : "false"
               }">
                 <svg height="22" width="22">
@@ -228,7 +228,7 @@ class Write {
             <span class="game__section-title">Correct</span>
             <div class="game__section-body ${term ? "" : "hidden"}">
               <p class="game__section-text">${term}</p>
-              <div class="game__speaker-write relative" data-active="${
+              <div class="game__speaker-write" data-active="${
                 voice.working && termLang ? "true" : "false"
               }">
                 <svg height="22" width="22">
@@ -684,7 +684,7 @@ class Write {
         if (!parent) parent = speaker.closest(".game__section-body");
 
         let text;
-        if (parent) text = parent.querySelector("p").textContent;
+        if (parent) text = parent.textContent;
 
         if (text !== "" && speaker.dataset.active !== "false") {
           speaker.dataset.speaking = true;
