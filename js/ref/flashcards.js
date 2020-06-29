@@ -336,9 +336,9 @@ class Flashcards {
         let defenition = speaker.closest(".game__defenition-container");
 
         let text;
-        if (term) text = term.querySelector(".game__term p").textContent;
+        if (term) text = term.querySelector(".game__term").textContent;
         if (defenition)
-          text = defenition.querySelector(".game__defenition p").textContent;
+          text = defenition.querySelector(".game__defenition").textContent;
 
         if (text !== "" && speaker.dataset.active !== "false") {
           speaker.dataset.speaking = true;

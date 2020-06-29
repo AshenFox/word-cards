@@ -271,6 +271,11 @@ class Edit {
         await this.editDraft();
       });
 
+    /* FILTER /&nbsp/ */
+    /* this.cardsCont.addEventListener("input", (e) => {
+      e.target.innerHTML = e.target.innerHTML.replace(/&nbsp;/g, " ");
+    }); */
+
     this.cardsCont.addEventListener("click", (e) => {
       let searchBtn = e.target.closest(".edit__searchbar-icon");
       this.imagesSearch(searchBtn);

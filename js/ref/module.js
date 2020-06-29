@@ -132,7 +132,7 @@ class Module {
       id: _id,
       html: /*html*/ `
                 <div class="module__card-term" data-textfield="true">
-                <p>${term}</p>
+                <p >${term}</p>
                 <div class="module__card-study-regime">
                   <input class="module__checkbox" type="checkbox" id="toggleswitch${
                     this.switchCounter
@@ -345,8 +345,16 @@ class Module {
     this.cardsContainer.addEventListener("click", (e) => {
       let speaker = e.target.closest(".module__speaker[data-active=true]");
       if (speaker && !voice.synth.speaking) {
-        let text = speaker.closest("[data-textfield=true]").querySelector("p")
-          .textContent;
+        let textContainerEl = speaker.closest("[data-textfield=true]");
+
+        let text;
+
+        if (textContainerEl.classList.contains("module__card-definition")) {
+          text = textContainerEl.textContent;
+        } else {
+          text = textContainerEl.querySelector("p").textContent;
+        }
+
         if (text !== "" && speaker.dataset.active !== "false") {
           speaker.dataset.speaking = true;
           let speakText = voice.speak(text);
