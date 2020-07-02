@@ -7,7 +7,7 @@ const stages = [
   {
     stage: 2,
     nextRep: 900000,
-    prevStage: 1800000,
+    prevStage: 2700000,
   },
   {
     stage: 3,
