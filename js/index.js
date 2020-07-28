@@ -12,7 +12,7 @@ const stages = [
   {
     stage: 3,
     nextRep: 3600000,
-    prevStage: 7200000,
+    prevStage: 10800000,
   },
   {
     stage: 4,
@@ -37,6 +37,7 @@ const stages = [
   {
     stage: 8,
     nextRep: 604800000,
+    prevStage: 1814400000,
   },
   {
     stage: 9,
@@ -53,7 +54,7 @@ const stages = [
     nextRep: 4838400000,
     prevStage: 14515200000,
   },
-];
+],
 
 const url =
   location.host === "127.0.0.1:8080"

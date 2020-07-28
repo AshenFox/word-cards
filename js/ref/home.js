@@ -501,8 +501,8 @@ class Home {
         stage = card.stage;
         counter++;
 
-        if (card.stage >= 5) {
-          stageDelay = 21600000;
+        if (card.stage >= 3) {
+          stageDelay = 10800000;
         } else {
           stageDelay = stages[card.stage - 2].prevStage;
         }
