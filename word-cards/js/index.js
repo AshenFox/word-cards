@@ -54,7 +54,7 @@ const stages = [
     nextRep: 4838400000,
     prevStage: 14515200000,
   },
-],
+];
 
 const url =
   location.host === "127.0.0.1:8080"
