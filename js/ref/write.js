@@ -3,14 +3,14 @@ class Write {
     if (active.newModule) htmlGen.hideCreateModule();
 
     if (id) {
-      this.regime = "usual";
+      this.regime = 'usual';
     } else if (number && number > 0) {
-      this.regime = "study";
+      this.regime = 'study';
     } else {
       this.regime = false;
     }
 
-    this.class = "write";
+    this.class = 'write';
     this.render(id, number);
   }
 
@@ -121,23 +121,23 @@ class Write {
 
   questionHtml({ defenition, imgurl }) {
     return {
-      class: "game__question", // next transparent
-      id: "",
+      class: 'game__question', // next transparent
+      id: '',
       html: /*html*/ `
         <div class="game__question-dontknow">
           <span>Don't know</span>
         </div>
         <div class="game__question-img ${
-          imgurl === "" ? "hidden" : ""
-        }" style="background-image: url(${imgurl !== "" ? imgurl : ""});"></div>
+          imgurl === '' ? 'hidden' : ''
+        }" style="background-image: url(${imgurl !== '' ? imgurl : ''});"></div>
         <div class="game__question-defenition">
           <p>${defenition}</p>
           <div class="game__speaker-write" data-active="${
             voice.working &&
-            defenition !== "" &&
+            defenition !== '' &&
             voice.detectLanguage(defenition)
-              ? "true"
-              : "false"
+              ? 'true'
+              : 'false'
           }">
             <svg height="22" width="22">
               <use href="img/sprite.svg#icon__speaker"></use>
@@ -163,14 +163,14 @@ class Write {
   answerHtml({ term, defenition, imgurl }, correct, answer) {
     let type = {};
     if (correct) {
-      type.name = "Correct";
+      type.name = 'Correct';
       type.id = 1;
     } else {
-      if (answer !== "") {
-        type.name = "Incorrect";
+      if (answer !== '') {
+        type.name = 'Incorrect';
         type.id = 2;
       } else {
-        type.name = "Copy answer";
+        type.name = 'Copy answer';
         type.id = 3;
       }
     }
@@ -178,31 +178,31 @@ class Write {
     let termLang = voice.detectLanguage(term);
     let defLang = voice.detectLanguage(defenition);
 
-    if (term === "") term = false;
-    if (defenition === "") defenition = false;
-    if (imgurl === "") imgurl = false;
+    if (term === '') term = false;
+    if (defenition === '') defenition = false;
+    if (imgurl === '') imgurl = false;
 
     return {
-      class: "game__answer", // next transparent
-      id: "",
+      class: 'game__answer', // next transparent
+      id: '',
       html: /*html*/ `
-        <h1 class="game__answer-type ${correct ? "correct" : "incorrect"}">${
+        <h1 class="game__answer-type ${correct ? 'correct' : 'incorrect'}">${
         type.name
       }</h1>
 
         <div class="game__answer-main">
           <!-- Defenition -->
           <div class="game__answer-section ${
-            !imgurl && !defenition ? "hidden" : ""
+            !imgurl && !defenition ? 'hidden' : ''
           }">
             <span class="game__section-title">Defenition</span>
             <div class="game__section-img ${
-              !imgurl ? "hidden" : ""
-            }" style="background-image: url(${!imgurl ? "" : imgurl});"></div>
-            <div class="game__section-body ${defenition ? "" : "hidden"}">
+              !imgurl ? 'hidden' : ''
+            }" style="background-image: url(${!imgurl ? '' : imgurl});"></div>
+            <div class="game__section-body ${defenition ? '' : 'hidden'}">
               <p class="game__section-text">${defenition}</p>
               <div class="game__speaker-write" data-active="${
-                voice.working && defLang ? "true" : "false"
+                voice.working && defLang ? 'true' : 'false'
               }">
                 <svg height="22" width="22">
                   <use href="img/sprite.svg#icon__speaker"></use>
@@ -212,7 +212,7 @@ class Write {
           </div>
 
           <!-- You said -->
-          <div class="game__answer-section ${type.id === 2 ? "" : "hidden"}">
+          <div class="game__answer-section ${type.id === 2 ? '' : 'hidden'}">
             <span class="game__section-title">You said</span>
             <div class="game__section-body">
               <p class="game__section-text">${answer}</p>
@@ -226,10 +226,10 @@ class Write {
           <!-- Correct -->
           <div class="game__answer-section">
             <span class="game__section-title">Correct</span>
-            <div class="game__section-body ${term ? "" : "hidden"}">
+            <div class="game__section-body ${term ? '' : 'hidden'}">
               <p class="game__section-text">${term}</p>
               <div class="game__speaker-write" data-active="${
-                voice.working && termLang ? "true" : "false"
+                voice.working && termLang ? 'true' : 'false'
               }">
                 <svg height="22" width="22">
                   <use href="img/sprite.svg#icon__speaker"></use>
@@ -240,7 +240,7 @@ class Write {
 
           <!-- Input -->
           <form action="" class="game__form ${
-            type.id === 3 ? "" : "hidden"
+            type.id === 3 ? '' : 'hidden'
           }" autocomplete="off">
             <fieldset class="game__form-fieldset">
               <div class="game__form-input" data-correct="false">
@@ -253,7 +253,7 @@ class Write {
         </div>
 
         <div class="game__answer-continue" data-correct="${
-          correct || type.id === 2 ? "true" : "false"
+          correct || type.id === 2 ? 'true' : 'false'
         }">
           <button class="btn bcc-lightblue pad10-30 brr5 white fz15 fw-normal h-grey h-bcc-yellow">Click to continue</button>
         </div>
@@ -271,8 +271,8 @@ class Write {
     } = data;
 
     return {
-      class: "game__round", // next transparent
-      id: "",
+      class: 'game__round', // next transparent
+      id: '',
       html: /*html*/ `
         <h1 class="game__round-title">
           <span>Round </span><span>${this.round.number}</span>
@@ -314,8 +314,8 @@ class Write {
 
   finishHtml({ correctInRound, cardsInRound, roundNumber }) {
     return {
-      class: "game__finish", // next transparent
-      id: "",
+      class: 'game__finish', // next transparent
+      id: '',
       html: /*html*/ `
       <div class="game__finish-header">
         <div class="game__finish-header-item">
@@ -325,7 +325,7 @@ class Write {
       )}%</h3>
         </div>
         <div class="game__finish-header-item ${
-          this.regime ? "hidden" : "sdfsd"
+          this.regime ? 'hidden' : 'sdfsd'
         }">
           <button class="btn bcc-lightblue pad10-30 brr5 white fz15 fw-normal h-grey h-bcc-yellow" onclick="active.startOver()">Start over</button>
         </div>
@@ -337,41 +337,41 @@ class Write {
   }
 
   finishItemHtml({ correct, card: { term, defenition, imgurl }, number }) {
-    if (term === "") term = false;
-    if (defenition === "") term = false;
-    if (imgurl === "") term = false;
+    if (term === '') term = false;
+    if (defenition === '') term = false;
+    if (imgurl === '') term = false;
 
     return {
-      class: "game__finish-body-item", // next transparent
-      id: "",
+      class: 'game__finish-body-item', // next transparent
+      id: '',
       html: /*html*/ `
       <div class="game__finish-body-left">
         <div class="game__finish-icon ${
           correct
-            ? "game__finish-icon--correct"
-            : "game__finish-icon--incorrect"
+            ? 'game__finish-icon--correct'
+            : 'game__finish-icon--incorrect'
         }">
           <svg height="22" width="22">
             <use href="img/sprite.svg#icon__${
-              correct ? "tick" : "close"
+              correct ? 'tick' : 'close'
             }"></use>
           </svg>
         </div>
         <div class="game__finish-term ${
           correct
-            ? "game__finish-term--correct"
-            : "game__finish-term--incorrect"
+            ? 'game__finish-term--correct'
+            : 'game__finish-term--incorrect'
         }">
-          <span>${number}.</span><span>${term ? term : ""}</span>
+          <span>${number}.</span><span>${term ? term : ''}</span>
         </div>
       </div>
 
       <div class="game__finish-body-right">
         <div class="game__finish-defenition">
-          <p>${defenition ? defenition : ""}</p>
+          <p>${defenition ? defenition : ''}</p>
           <div class="game__finish-img ${
-            imgurl ? "" : "hidden"
-          }" style="background-image: url(${imgurl ? imgurl : ""});"></div>
+            imgurl ? '' : 'hidden'
+          }" style="background-image: url(${imgurl ? imgurl : ''});"></div>
         </div>
       </div>
       `,
@@ -379,22 +379,22 @@ class Write {
   }
 
   question() {
-    this.gameComponents.innerHTML = "";
-    this.round.status = "question";
+    this.gameComponents.innerHTML = '';
+    this.round.status = 'question';
     let { curCard } = this.round;
     let html = this.questionHtml(curCard);
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
-    document.querySelector(".game__form-input input").focus();
+    document.querySelector('.game__form-input input').focus();
   }
 
   answer(correct, answer) {
-    this.gameComponents.innerHTML = "";
-    this.round.status = "answer";
+    this.gameComponents.innerHTML = '';
+    this.round.status = 'answer';
     this.round.answerValue = answer;
     correct
-      ? (this.round.answer = "correct")
-      : (this.round.answer = "incorrect");
+      ? (this.round.answer = 'correct')
+      : (this.round.answer = 'incorrect');
 
     this.saveAnswer();
     this.setProgress();
@@ -403,7 +403,7 @@ class Write {
     let html = this.answerHtml(curCard, correct, answer);
     let el = htmlGen.createEl(html);
     this.gameComponents.prepend(el);
-    let input = document.querySelector(".game__form-input input");
+    let input = document.querySelector('.game__form-input input');
     if (input) input.focus();
   }
 
@@ -413,18 +413,18 @@ class Write {
     round.incorrect.number--;
     round.incorrect.cards.pop();
     round.allAnswers.pop();
-    round.answer = "correct";
+    round.answer = 'correct';
   }
 
   saveAnswer() {
     let round = this.round;
 
-    if (round.answer === "correct") {
+    if (round.answer === 'correct') {
       round.correct.number++;
       round.correct.cards.push(round.curCard);
       let number = round.allAnswers.length + 1;
       round.allAnswers.push({ correct: true, card: round.curCard, number });
-    } else if (round.answer === "incorrect") {
+    } else if (round.answer === 'incorrect') {
       round.incorrect.number++;
       round.incorrect.cards.push(round.curCard);
       let number = round.allAnswers.length + 1;
@@ -461,9 +461,9 @@ class Write {
     let round = this.round;
 
     if (this.round.number === 1) {
-      if (this.round.answer === "correct" || override) {
+      if (this.round.answer === 'correct' || override) {
         await this.sendAnswer(true);
-      } else if (this.round.answer === "incorrect") {
+      } else if (this.round.answer === 'incorrect') {
         await this.sendAnswer(false);
       }
     }
@@ -494,7 +494,7 @@ class Write {
   }
 
   finishRound() {
-    this.gameComponents.innerHTML = "";
+    this.gameComponents.innerHTML = '';
 
     let html = this.roundHtml(this.collectRoundData());
     let el = htmlGen.createEl(html);
@@ -509,13 +509,13 @@ class Write {
   }
 
   finishGame() {
-    this.gameComponents.innerHTML = "";
+    this.gameComponents.innerHTML = '';
 
     this.rounds.forEach((round) => {
       let data = this.collectRoundData(round);
       let html = this.finishHtml(data);
       let el = htmlGen.createEl(html);
-      let finishBody = el.querySelector(".game__finish-body");
+      let finishBody = el.querySelector('.game__finish-body');
 
       data.allAnswers.forEach((answer) => {
         let html = this.finishItemHtml(answer);
@@ -529,11 +529,11 @@ class Write {
 
   startOver() {
     if (modal) {
-      htmlGen.deleteEl("modal");
+      htmlGen.deleteEl('modal');
       modal = false;
     }
 
-    this.gameComponents.innerHTML = "";
+    this.gameComponents.innerHTML = '';
     this.round = false;
     this.rounds = false;
     this.createRound(this.cards);
@@ -588,9 +588,9 @@ class Write {
 
   async render(id, number) {
     htmlGen.deleteEl(active.class);
-    htmlGen.toggleGameButtons(true, this.regime === "study");
+    htmlGen.toggleGameButtons(true, this.regime === 'study');
 
-    if (this.regime === "usual") {
+    if (this.regime === 'usual') {
       let response = await this.getModule(id);
       if (!response) {
         location.href = hashValues.home;
@@ -600,7 +600,7 @@ class Write {
       Object.assign(this, response);
 
       this.cards = await this.getCards(this._id);
-    } else if (this.regime === "study") {
+    } else if (this.regime === 'study') {
       let response = await this.getCardsSR();
 
       Object.assign(this, response);
@@ -624,69 +624,69 @@ class Write {
 
     this.createRound(this.cards);
 
-    this.gameComponents = document.querySelector(".game__components");
-    this.gameControls = document.querySelector(".game__controls");
+    this.gameComponents = document.querySelector('.game__components');
+    this.gameControls = document.querySelector('.game__controls');
     // -------------------------------
-    this.fillRemaining = document.querySelector("#fill-remaining");
-    this.countRemaining = document.querySelector("#count-remaining");
-    this.fillIncorrect = document.querySelector("#fill-incorrect");
-    this.countIncorrect = document.querySelector("#count-incorrect");
-    this.fillCorrect = document.querySelector("#fill-correct");
-    this.countCorrect = document.querySelector("#count-correct");
+    this.fillRemaining = document.querySelector('#fill-remaining');
+    this.countRemaining = document.querySelector('#count-remaining');
+    this.fillIncorrect = document.querySelector('#fill-incorrect');
+    this.countIncorrect = document.querySelector('#count-incorrect');
+    this.fillCorrect = document.querySelector('#fill-correct');
+    this.countCorrect = document.querySelector('#count-correct');
     // -------------------------------
 
     this.setProgress();
     this.question();
 
-    this.gameComponents.addEventListener("click", async (e) => {
+    this.gameComponents.addEventListener('click', async (e) => {
       e.preventDefault();
       let target = e.target;
 
       // Don't know btn pressed
-      if (target.closest(".game__question-dontknow span")) {
-        this.answer(false, "");
+      if (target.closest('.game__question-dontknow span')) {
+        this.answer(false, '');
       }
 
       // Input the aswer
-      if (target.closest(".game__form-btn-container button")) {
+      if (target.closest('.game__form-btn-container button')) {
         let value = target
-          .closest(".game__form")
-          .querySelector(".game__form-input input").value;
+          .closest('.game__form')
+          .querySelector('.game__form-input input').value;
 
         let result = this.checkAnswer(value);
         this.answer(result, value);
       }
 
       // Override answer
-      if (target.closest(".game__override button")) {
+      if (target.closest('.game__override button')) {
         await this.continue(true);
       }
 
       // Continue to the next question
-      if (target.closest(".game__answer-continue button")) {
+      if (target.closest('.game__answer-continue button')) {
         if (
-          target.closest(".game__answer-continue").dataset.correct === "false"
+          target.closest('.game__answer-continue').dataset.correct === 'false'
         )
           return;
         await this.continue(false);
       }
 
       // Continue to the next round
-      if (target.closest(".game__round-continue button")) {
+      if (target.closest('.game__round-continue button')) {
         this.nextRound();
       }
 
       // -------------------------------------------
       // Voice
-      let speaker = e.target.closest(".game__speaker-write[data-active=true]");
+      let speaker = e.target.closest('.game__speaker-write[data-active=true]');
       if (speaker && !voice.synth.speaking) {
-        let parent = speaker.closest(".game__question-defenition");
-        if (!parent) parent = speaker.closest(".game__section-body");
+        let parent = speaker.closest('.game__question-defenition');
+        if (!parent) parent = speaker.closest('.game__section-body');
 
         let text;
         if (parent) text = parent.textContent;
 
-        if (text !== "" && speaker.dataset.active !== "false") {
+        if (text !== '' && speaker.dataset.active !== 'false') {
           speaker.dataset.speaking = true;
           let speakText = voice.speak(text);
 
@@ -699,23 +699,23 @@ class Write {
       }
     });
 
-    this.gameControls.addEventListener("click", (e) => {
+    this.gameControls.addEventListener('click', (e) => {
       let target = e.target;
 
       // Open options
-      if (target.closest(".game__startover button")) {
+      if (target.closest('.game__startover button')) {
         htmlGen.options();
       }
     });
 
-    this.gameComponents.addEventListener("input", (e) => {
+    this.gameComponents.addEventListener('input', (e) => {
       e.preventDefault();
       let target = e.target;
-      let gameAnswer = target.closest(".game__answer");
+      let gameAnswer = target.closest('.game__answer');
       if (gameAnswer) {
         let value = target.value;
-        let inputCont = gameAnswer.querySelector(".game__form-input");
-        let btnCont = gameAnswer.querySelector(".game__answer-continue");
+        let inputCont = gameAnswer.querySelector('.game__form-input');
+        let btnCont = gameAnswer.querySelector('.game__answer-continue');
 
         if (value === this.round.curCard.term) {
           inputCont.dataset.correct = true;
@@ -727,17 +727,17 @@ class Write {
       }
     });
 
-    this.gameComponents.addEventListener("keydown", (e) => {});
+    this.gameComponents.addEventListener('keydown', (e) => {});
 
-    window.addEventListener("keydown", async (e) => {
+    window.addEventListener('keydown', async (e) => {
       let { status, answer, answerValue, allAnswers, cards } = this.round;
 
       // Input the aswer
-      if (e.keyCode === 13 && status === "question") {
+      if (e.keyCode === 13 && status === 'question') {
         e.preventDefault();
 
         let input = document.activeElement;
-        if (input.id !== "write-input") return;
+        if (input.id !== 'write-input') return;
 
         let value = input.value;
         let result = this.checkAnswer(value);
@@ -746,11 +746,11 @@ class Write {
       }
 
       // Input copied answer
-      if (e.keyCode === 13 && status === "answer") {
+      if (e.keyCode === 13 && status === 'answer') {
         e.preventDefault();
 
-        let gameAnsBtn = document.querySelector(".game__answer-continue");
-        if (gameAnsBtn.dataset.correct !== "true") return;
+        let gameAnsBtn = document.querySelector('.game__answer-continue');
+        if (gameAnsBtn.dataset.correct !== 'true') return;
 
         await this.continue(false);
         return;
@@ -758,9 +758,9 @@ class Write {
 
       // Continue
       if (
-        status === "answer" &&
-        (answer === "correct" ||
-          (answer === "incorrect" && answerValue !== "")) &&
+        status === 'answer' &&
+        (answer === 'correct' ||
+          (answer === 'incorrect' && answerValue !== '')) &&
         e.keyCode === 13
       ) {
         e.preventDefault();
@@ -777,9 +777,9 @@ class Write {
 
       // Override
       if (
-        status === "answer" &&
-        answer === "incorrect" &&
-        answerValue !== "" &&
+        status === 'answer' &&
+        answer === 'incorrect' &&
+        answerValue !== '' &&
         e.keyCode === 79
       ) {
         e.preventDefault();
@@ -790,7 +790,8 @@ class Write {
   }
 
   checkAnswer(answer) {
-    if (answer === this.round.curCard.term) return true;
+    let formatedTerm = this.round.curCard.term.replace(/&nbsp;/g, ' ').trim();
+    if (answer === formatedTerm) return true;
     return false;
   }
 
@@ -809,8 +810,8 @@ class Write {
     let reqData = {
       _id,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/get_module", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/get_module', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -819,15 +820,15 @@ class Write {
     let reqData = {
       moduleID: id,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/get_cards", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/get_cards', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
 
   async getCardsSR() {
-    let httpParam = new HttpParam("GET", false, true);
-    let response = await fetch(url + "/study_regime/get_cards", httpParam);
+    let httpParam = new HttpParam('GET', false, true);
+    let response = await fetch(url + '/study_regime/get_cards', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -837,8 +838,8 @@ class Write {
       _id: this.round.curCard._id,
       answer,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/study_regime/answer", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/study_regime/answer', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -848,7 +849,7 @@ class Write {
   }
 
   end() {
-    console.log("Saving and sending statistcs...");
+    console.log('Saving and sending statistcs...');
     location.href = `${hashValues.module}?id=${this._id}`;
   }
 }

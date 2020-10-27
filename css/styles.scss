@@ -1,4 +1,4 @@
-@import "vars";
+@import 'vars';
 
 // $notebook
 // max-height: $h-mobile-sm: 350px; //565px
@@ -16,7 +16,7 @@
 
 html {
   font-size: 10px;
-  font-family: "Alata", sans-serif;
+  font-family: 'Alata', sans-serif;
 }
 
 body {
@@ -398,7 +398,7 @@ input {
   text-align: center;
   position: relative;
 
-  &[data-checking="true"] {
+  &[data-checking='true'] {
     & button {
       background-color: $yellow;
       cursor: auto;
@@ -564,7 +564,7 @@ input {
   margin-left: auto;
   transition: all 0.2s;
 
-  &[data-active="false"] {
+  &[data-active='false'] {
     opacity: 0.5;
     input {
       cursor: default;
@@ -1111,7 +1111,7 @@ input {
   }
 
   &:after {
-    content: "";
+    content: '';
     display: inline-block;
     position: absolute;
     top: 2px;
@@ -1232,7 +1232,7 @@ input {
     }
   }
 
-  &[data-active="false"] {
+  &[data-active='false'] {
     cursor: initial;
 
     svg {
@@ -1246,7 +1246,7 @@ input {
     }
   }
 
-  &[data-speaking="true"] {
+  &[data-speaking='true'] {
     svg {
       fill: $yellow;
     }
@@ -1536,7 +1536,7 @@ input {
     visibility: hidden;
   }
 
-  &[data-imgurl~="false"] {
+  &[data-imgurl~='false'] {
     border: $grey-medium dashed 2px;
     padding: 1rem 0;
 
@@ -1596,6 +1596,106 @@ input {
   }
 }
 
+.edit__scrape-panel {
+  display: flex;
+  border-top: 2px solid $grey-light;
+  padding: 1rem 2rem;
+
+  &[data-loading='true'] {
+    .edit__scrape-button {
+      cursor: auto;
+      .edit__scrape-background {
+        filter: grayscale(100%);
+      }
+      &:hover span {
+        display: none;
+      }
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.edit__scrape-background {
+  width: 100%;
+  height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.edit__scrape-button {
+  width: 4rem;
+  height: 4rem;
+
+  position: relative;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  margin-right: 1rem;
+
+  &[data-dictionary='cod'] {
+    .edit__scrape-background {
+      background-image: url(../img/cod-logo.png);
+    }
+  }
+
+  &[data-dictionary='urban'] {
+    .edit__scrape-background {
+      border-radius: 50%;
+      background-image: url(../img/urban-logo.jpg);
+    }
+  }
+
+  span {
+    width: max-content;
+    z-index: 30;
+    position: absolute;
+    transition: all 0.2s;
+    color: $blue;
+    margin: 0;
+    background-color: $white;
+    padding: 0.5rem 1rem;
+    border: 2px solid $blue;
+    border-radius: 2rem;
+    display: none;
+
+    top: -40px;
+  }
+
+  &:hover span {
+    display: inline-block;
+  }
+
+  &::after {
+    content: '';
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: calc(50% - 1rem);
+    left: calc(50% - 1rem);
+    border-radius: 50%;
+    border: 3px solid $yellow;
+    border-right: 3px solid transparent;
+    box-shadow: 0px 0px 13px 2px rgba(0, 0, 0, 0.82);
+
+    animation: spin 1.75s linear infinite;
+    transition: all 0.3s ease;
+
+    opacity: 0;
+  }
+
+  @media (max-width: $mobile) {
+    span {
+      display: none !important;
+    }
+  }
+}
+//  data-loading="true"
 .edit__img-search-container {
   border-top: 2px solid $grey-light;
   overflow: hidden;
@@ -1650,7 +1750,7 @@ input {
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
@@ -1770,7 +1870,7 @@ input {
       }
     }
 
-    &[data-active="false"] {
+    &[data-active='false'] {
       button {
         cursor: auto;
         background-color: $grey-medium;
@@ -1910,7 +2010,7 @@ input {
 
 .spinner::before,
 .spinner::after {
-  content: "";
+  content: '';
   position: absolute;
   border-radius: 50%;
   border: 4px solid transparent;
@@ -2460,7 +2560,7 @@ input {
   }
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
@@ -2471,7 +2571,7 @@ input {
     transition: all 0.2s;
   }
 
-  &[data-correct="true"] {
+  &[data-correct='true'] {
     border-color: $green;
 
     & + label {
@@ -2588,7 +2688,7 @@ input {
   margin-top: 3rem;
   text-align: center;
 
-  &[data-correct="false"] {
+  &[data-correct='false'] {
     & button {
       background-color: $grey-lighter;
 
@@ -3164,7 +3264,7 @@ input {
   transform: translateY(20rem);
   opacity: 0;
 
-  &[data-active="true"] {
+  &[data-active='true'] {
     transform: translateY(0);
     opacity: 1;
   }
@@ -3197,7 +3297,7 @@ input {
     animation: pulse 1.25s linear infinite;
   }
 
-  &[data-answer="true"] {
+  &[data-answer='true'] {
     background-color: $palegreen;
 
     &:hover {
@@ -3205,7 +3305,7 @@ input {
     }
   }
 
-  &[data-answer="false"] {
+  &[data-answer='false'] {
     background-color: $palered;
 
     &:hover {
@@ -3228,4 +3328,4 @@ input {
   }
 }
 
-@import "helpers";
+@import 'helpers';

@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 class Edit {
   constructor(id) {
-    if (active.class == "game") htmlGen.toggleGameButtons();
+    if (active.class == 'game') htmlGen.toggleGameButtons();
 
     !id ? (this.newModule = true) : (this.newModule = false);
 
-    this.class = "edit";
+    this.class = 'edit';
 
     if (this.newModule) {
       this.timer = false;
@@ -28,13 +28,13 @@ class Edit {
                     <div class="edit__intro-info">
                         <h2>${
                           this.newModule
-                            ? "Create a new study set!"
-                            : "Edit the study set! :)"
+                            ? 'Create a new study set!'
+                            : 'Edit the study set! :)'
                         }</h2>
                     </div>
                     <div class="edit__intro-return">
                         <button class="btn bcc-lightblue pad12-30 brr10 white fz15 fw-normal h-grey h-bcc-yellow" type="button" onclick="active.return();">
-                            ${this.newModule ? "Cancel" : "Return"}
+                            ${this.newModule ? 'Cancel' : 'Return'}
                         </button>
                     </div>
                 </div>
@@ -49,7 +49,7 @@ class Edit {
                 <div class="edit__module-content">
                     <div class="edit__module-title">
                         <div contenteditable="true" class="textarea textarea--module">${
-                          this.title ? this.title : ""
+                          this.title ? this.title : ''
                         }</div>
                         <div class="label" id="title-error">TITLE</div>
                     </div>
@@ -87,13 +87,13 @@ class Edit {
   }
 
   cardHtml(card) {
-    let { term = "", defenition = "", imgurl = "", moduleID, _id } = card;
+    let { term = '', defenition = '', imgurl = '', moduleID, _id } = card;
 
     this.switchCounter++;
     // Add img field
     return {
-      class: "edit__cards-card",
-      id: "",
+      class: 'edit__cards-card',
+      id: '',
       data_module_id: moduleID,
       data_card_id: _id,
       html: /*html*/ `
@@ -101,7 +101,7 @@ class Edit {
                 <div class="edit__cards-header">
                     <div class="edit__cards-number"></div>
                     <div class="edit__study-progress ${
-                      this.draft ? "hidden" : ""
+                      this.draft ? 'hidden' : ''
                     }">
                       <input class="edit__checkbox" type="checkbox" id="toggleswitch${
                         this.switchCounter
@@ -136,8 +136,8 @@ class Edit {
                         </div>
 
                         <div class="edit__addimg" style="background-image: url(${
-                          imgurl !== "" ? imgurl : ""
-                        })" data-imgurl="${imgurl !== "" ? imgurl : "false"}">
+                          imgurl !== '' ? imgurl : ''
+                        })" data-imgurl="${imgurl !== '' ? imgurl : 'false'}">
                             <div class="edit__img-logo" >
                                 <svg>
                                   <use href="img/sprite.svg#icon__img"></use>
@@ -151,8 +151,16 @@ class Edit {
                             <span>IMAGE</span>
                         </div>
                     </div>
-
-                    
+                </div>
+                <div class="edit__scrape-panel">
+                  <div class="edit__scrape-button" data-dictionary="cod">
+                    <div class="edit__scrape-background"></div>
+                    <span>Search in Cambridge Online Dictionary</span>
+                  </div>
+                  <div class="edit__scrape-button" data-dictionary="urban">
+                    <div class="edit__scrape-background"></div>
+                    <span>Search in Urban Dictionary</span>
+                  </div>
                 </div>
                 <div class="edit__img-search-container">
                   <div class="edit__img-search">
@@ -213,9 +221,9 @@ class Edit {
 
   galleryItemHtml(url) {
     return {
-      type: "figcaption",
-      class: "edit__gallery-item",
-      id: "",
+      type: 'figcaption',
+      class: 'edit__gallery-item',
+      id: '',
       data_url: `${url}`,
       html: /*html*/ `
         <img src="${url}" alt="Gallery img"/>
@@ -247,83 +255,96 @@ class Edit {
 
     let el = htmlGen.createEl(this);
 
-    el.addEventListener("paste", (e) => {
+    el.addEventListener('paste', (e) => {
       // Influences paste on the page
       e.preventDefault();
-      let text = (e.originalEvent || e).clipboardData.getData("text/plain");
-      document.execCommand("insertHTML", false, text);
+      let text = (e.originalEvent || e).clipboardData.getData('text/plain');
+      document.execCommand('insertHTML', false, text);
     });
 
     // document.body.appendChild(el);
     main.appendChild(el);
     htmlGen.toggleSpinner(false);
 
-    this.titleCont = document.querySelector(".edit__module-title");
-    this.cardsCont = document.querySelector(".edit__cards-container");
-    this.title_err = document.getElementById("title-error");
+    this.titleCont = document.querySelector('.edit__module-title');
+    this.cardsCont = document.querySelector('.edit__cards-container');
+    this.title_err = document.getElementById('title-error');
 
     this.switchCounter = 0;
 
     this.titleCont
-      .querySelector(".textarea")
-      .addEventListener("input", async (e) => {
+      .querySelector('.textarea')
+      .addEventListener('input', async (e) => {
         if (!this.draft) return;
         await this.editDraft();
       });
 
-    /* FILTER /&nbsp/ */
-    /* this.cardsCont.addEventListener("input", (e) => {
-      e.target.innerHTML = e.target.innerHTML.replace(/&nbsp;/g, " ");
-    }); */
+    this.cardsCont.addEventListener('click', async (e) => {
+      let searchBtn = e.target.closest('.edit__searchbar-icon');
+      if (searchBtn) {
+        this.imagesSearch(searchBtn);
+      }
 
-    this.cardsCont.addEventListener("click", (e) => {
-      let searchBtn = e.target.closest(".edit__searchbar-icon");
-      this.imagesSearch(searchBtn);
+      let scrapeBtn = e.target.closest('.edit__scrape-button');
+
+      if (scrapeBtn) {
+        let type = scrapeBtn.dataset.dictionary;
+        let query = this.getQuery(scrapeBtn, type);
+        let panel = scrapeBtn.closest('.edit__scrape-panel');
+        panel.dataset.loading = true;
+        let result = await this.scrapeDictionary(query, type);
+
+        if (result) {
+          this.displayDictionaryResult(result, type, scrapeBtn);
+        }
+
+        panel.dataset.loading = false;
+      }
     });
 
     // Gallery listners -----------------------------
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener('keydown', (e) => {
       let input = document.activeElement;
       if (
         e.keyCode === 13 &&
-        input.classList.contains("edit__searchbar-input")
+        input.classList.contains('edit__searchbar-input')
       ) {
         e.preventDefault();
-        let searchBtn = input.parentNode.querySelector(".edit__searchbar-icon");
+        let searchBtn = input.parentNode.querySelector('.edit__searchbar-icon');
         this.imagesSearch(searchBtn);
       }
     });
 
-    this.cardsCont.addEventListener("click", (e) => {
-      let control = e.target.closest("[data-control_el=true]");
+    this.cardsCont.addEventListener('click', (e) => {
+      let control = e.target.closest('[data-control_el=true]');
       if (control) {
-        let window = control.parentNode.querySelector(".edit__gallery-window");
-        let gallery = control.parentNode.querySelector(".edit__gallery");
+        let window = control.parentNode.querySelector('.edit__gallery-window');
+        let gallery = control.parentNode.querySelector('.edit__gallery');
         let dir = control.dataset.dir;
         this.moveGallery(gallery, window, dir, control);
       }
     });
 
-    this.cardsCont.addEventListener("click", (e) => {
-      let addimg = e.target.closest(".edit__addimg");
-      let imgdel = e.target.closest(".edit__img-delete");
-      let chooseImg = e.target.closest(".edit__gallery-item");
+    this.cardsCont.addEventListener('click', (e) => {
+      let addimg = e.target.closest('.edit__addimg');
+      let imgdel = e.target.closest('.edit__img-delete');
+      let chooseImg = e.target.closest('.edit__gallery-item');
       if (addimg && !imgdel) {
         let imgSearchCont = addimg
-          .closest(".edit__cards-card")
-          .querySelector(".edit__img-search-container");
-        imgSearchCont.classList.toggle("edit__img-search-container--active");
+          .closest('.edit__cards-card')
+          .querySelector('.edit__img-search-container');
+        imgSearchCont.classList.toggle('edit__img-search-container--active');
       } else if (imgdel) {
         let addImg = imgdel
-          .closest(".edit__cards-card")
-          .querySelector(".edit__addimg");
+          .closest('.edit__cards-card')
+          .querySelector('.edit__addimg');
 
-        addImg.dataset.imgurl = "false";
+        addImg.dataset.imgurl = 'false';
         addImg.style = `background-image: url()`;
       } else if (chooseImg) {
         let addImg = chooseImg
-          .closest(".edit__cards-card")
-          .querySelector(".edit__addimg");
+          .closest('.edit__cards-card')
+          .querySelector('.edit__addimg');
 
         let imgurl = chooseImg.dataset.url;
         addImg.dataset.imgurl = imgurl;
@@ -331,21 +352,21 @@ class Edit {
       }
     });
 
-    this.cardsCont.addEventListener("transitionstart", (e) => {
+    this.cardsCont.addEventListener('transitionstart', (e) => {
       let element = e.target;
-      if (element.classList.contains("edit__gallery")) {
+      if (element.classList.contains('edit__gallery')) {
         this.toggleAnimated(element);
       }
     });
 
-    this.cardsCont.addEventListener("transitionend", (e) => {
+    this.cardsCont.addEventListener('transitionend', (e) => {
       let element = e.target;
-      if (element.classList.contains("edit__gallery")) {
+      if (element.classList.contains('edit__gallery')) {
         this.toggleAnimated(element);
       }
     });
 
-    window.addEventListener("resize", (e) => {
+    window.addEventListener('resize', (e) => {
       let prev = this.screenWidth;
       let curr = window.screen.width;
 
@@ -357,14 +378,14 @@ class Edit {
         (prev > 600 && curr < 600) ||
         (prev < 600 && curr > 600)
       ) {
-        let window = document.querySelector(".edit__gallery-window");
+        let window = document.querySelector('.edit__gallery-window');
         let leftCont = document.querySelectorAll(
-          ".edit__gallery-control--right"
+          '.edit__gallery-control--right'
         );
         let rightCont = document.querySelectorAll(
-          ".edit__gallery-control--left"
+          '.edit__gallery-control--left'
         );
-        let galleryArr = document.querySelectorAll(".edit__gallery");
+        let galleryArr = document.querySelectorAll('.edit__gallery');
 
         let controlsArr = [];
 
@@ -374,7 +395,7 @@ class Edit {
 
         for (let i = 0; i < controlsArr.length; i++) {
           this.toggleControls(controlsArr[i], galleryArr[i], window);
-          galleryArr[i].style.transform = "translateX(0px)";
+          galleryArr[i].style.transform = 'translateX(0px)';
         }
       }
       this.screenWidth = window.screen.width;
@@ -397,34 +418,34 @@ class Edit {
   }
 
   async imagesSearch(searchBtn) {
-    if (searchBtn && searchBtn.dataset.searching != "true") {
-      let input = searchBtn.parentNode.querySelector(".edit__searchbar-input");
+    if (searchBtn && searchBtn.dataset.searching !== 'true') {
+      let input = searchBtn.parentNode.querySelector('.edit__searchbar-input');
       let inquiry = input.value;
-      if (inquiry === "") return;
+      if (inquiry === '') return;
 
-      searchBtn.dataset.searching = "true";
+      searchBtn.dataset.searching = 'true';
 
-      let imgSearch = searchBtn.closest(".edit__img-search");
-      let gallery = imgSearch.querySelector(".edit__gallery");
-      let window = imgSearch.querySelector(".edit__gallery-window");
-      let galeryControls = imgSearch.querySelectorAll("[data-control_el=true]");
+      let imgSearch = searchBtn.closest('.edit__img-search');
+      let gallery = imgSearch.querySelector('.edit__gallery');
+      let window = imgSearch.querySelector('.edit__gallery-window');
+      let galeryControls = imgSearch.querySelectorAll('[data-control_el=true]');
       let galleryContainer = imgSearch.querySelector(
-        ".edit__gallery-container"
+        '.edit__gallery-container'
       );
       let spinnerContainer = imgSearch.querySelector(
-        ".edit__spinner-container"
+        '.edit__spinner-container'
       );
-      let errorContainer = imgSearch.querySelector(".edit__error-container");
+      let errorContainer = imgSearch.querySelector('.edit__error-container');
 
-      if (errorContainer.dataset.error === "true") {
-        this.toggleHide(errorContainer, "edit__error-container");
+      if (errorContainer.dataset.error === 'true') {
+        this.toggleHide(errorContainer, 'edit__error-container');
       }
-      this.toggleHide(spinnerContainer, "edit__spinner-container");
+      this.toggleHide(spinnerContainer, 'edit__spinner-container');
 
       if (gallery.children.length != 0) {
-        this.toggleHide(galleryContainer, "edit__gallery-container");
-        gallery.innerHTML = "";
-        gallery.style.width = "0";
+        this.toggleHide(galleryContainer, 'edit__gallery-container');
+        gallery.innerHTML = '';
+        gallery.style.width = '0';
         gallery.style.transform = `translateX(0px)`;
       }
 
@@ -432,42 +453,42 @@ class Edit {
       console.log(imagesArr);
 
       if (!imagesArr) {
-        this.toggleHide(errorContainer, "edit__error-container");
-        this.toggleHide(spinnerContainer, "edit__spinner-container");
-        errorContainer.dataset.error = "true";
-        searchBtn.dataset.searching = "false";
+        this.toggleHide(errorContainer, 'edit__error-container');
+        this.toggleHide(spinnerContainer, 'edit__spinner-container');
+        errorContainer.dataset.error = 'true';
+        searchBtn.dataset.searching = 'false';
 
         return;
       }
-      errorContainer.dataset.error = "false";
+      errorContainer.dataset.error = 'false';
 
       let success = 0,
         err = 0;
 
       imagesArr.forEach((item) => {
         let figcap = htmlGen.createEl(this.galleryItemHtml(item.url));
-        let img = figcap.querySelector("img");
+        let img = figcap.querySelector('img');
 
-        img.addEventListener("error", (e) => {
+        img.addEventListener('error', (e) => {
           err++;
           if (success + err == imagesArr.length) {
-            searchBtn.dataset.searching = "false";
+            searchBtn.dataset.searching = 'false';
             this.formatGallery(gallery, success);
-            this.toggleHide(galleryContainer, "edit__gallery-container");
-            this.toggleHide(spinnerContainer, "edit__spinner-container");
+            this.toggleHide(galleryContainer, 'edit__gallery-container');
+            this.toggleHide(spinnerContainer, 'edit__spinner-container');
             this.toggleControls(galeryControls, gallery, window);
           }
         });
 
-        img.addEventListener("load", (e) => {
+        img.addEventListener('load', (e) => {
           success++;
           gallery.append(figcap);
 
           if (success + err == imagesArr.length) {
-            searchBtn.dataset.searching = "false";
+            searchBtn.dataset.searching = 'false';
             this.formatGallery(gallery, success);
-            this.toggleHide(galleryContainer, "edit__gallery-container");
-            this.toggleHide(spinnerContainer, "edit__spinner-container");
+            this.toggleHide(galleryContainer, 'edit__gallery-container');
+            this.toggleHide(spinnerContainer, 'edit__spinner-container');
             this.toggleControls(galeryControls, gallery, window);
           }
         });
@@ -481,21 +502,21 @@ class Edit {
   }
 
   moveGallery(gallery, window, dir, control) {
-    if (gallery.dataset.animated === "true") return;
-    if (control.dataset.active === "false") return;
+    if (gallery.dataset.animated === 'true') return;
+    if (control.dataset.active === 'false') return;
 
-    let galWidth = +getComputedStyle(gallery).width.replace(/px/, "");
+    let galWidth = +getComputedStyle(gallery).width.replace(/px/, '');
     if (galWidth === 20) return;
 
-    let winWidth = +getComputedStyle(window).width.replace(/px/, "");
+    let winWidth = +getComputedStyle(window).width.replace(/px/, '');
     let position = +getComputedStyle(gallery)
-      .transform.replace(/matrix|\s|\(|\)/g, "")
-      .split(",")[4];
+      .transform.replace(/matrix|\s|\(|\)/g, '')
+      .split(',')[4];
 
     let offset;
-    if (dir === "right") {
+    if (dir === 'right') {
       offset = -170;
-    } else if (dir === "left") {
+    } else if (dir === 'left') {
       offset = 170;
     }
 
@@ -506,27 +527,27 @@ class Edit {
   }
 
   toggleControls(controls, gallery, window) {
-    let width = +getComputedStyle(window).width.replace(/px/g, "");
+    let width = +getComputedStyle(window).width.replace(/px/g, '');
     let itemsNum = gallery.children.length;
     if (width / 170 >= itemsNum) {
       controls.forEach((item) => {
-        item.dataset.active = "false";
+        item.dataset.active = 'false';
       });
     } else {
       controls.forEach((item) => {
-        item.dataset.active = "true";
+        item.dataset.active = 'true';
       });
     }
   }
 
   toggleAnimated(element) {
-    element.dataset.animated === "false"
-      ? (element.dataset.animated = "true")
-      : (element.dataset.animated = "false");
+    element.dataset.animated === 'false'
+      ? (element.dataset.animated = 'true')
+      : (element.dataset.animated = 'false');
   }
 
   toggleHide(element, className) {
-    element.classList.toggle(className + "--hide");
+    element.classList.toggle(className + '--hide');
   }
 
   async addCard(card = {}, createCard) {
@@ -546,12 +567,12 @@ class Edit {
 
     this.changeNumber();
 
-    el.querySelector(".edit__cards-delete").addEventListener(
-      "click",
+    el.querySelector('.edit__cards-delete').addEventListener(
+      'click',
       async (e) => {
         if (this.cardsCont.children.length > 2 && !this.deleting) {
           this.deleting = true;
-          let cardEl = e.target.closest(".edit__cards-card");
+          let cardEl = e.target.closest('.edit__cards-card');
 
           let _id = cardEl.dataset.card_id;
 
@@ -574,15 +595,15 @@ class Edit {
     );
 
     if (this.newModule) {
-      el.querySelector(".edit__cards-term")
-        .querySelector(".textarea")
-        .addEventListener("input", async (e) => {
+      el.querySelector('.edit__cards-term')
+        .querySelector('.textarea')
+        .addEventListener('input', async (e) => {
           await this.editDraft();
         });
 
-      el.querySelector(".edit__cards-definition-input")
-        .querySelector(".textarea")
-        .addEventListener("input", async (e) => {
+      el.querySelector('.edit__cards-definition-input')
+        .querySelector('.textarea')
+        .addEventListener('input', async (e) => {
           await this.editDraft();
         });
 
@@ -590,7 +611,7 @@ class Edit {
         await this.editDraft();
       });
 
-      observer.observe(el.querySelector(".edit__addimg"), {
+      observer.observe(el.querySelector('.edit__addimg'), {
         attributes: true,
       });
     }
@@ -604,20 +625,20 @@ class Edit {
 
   changeNumber() {
     let i = 1;
-    this.cardsCont.querySelectorAll(".edit__cards-card").forEach((card) => {
-      card.querySelector(".edit__cards-number").innerHTML = i;
+    this.cardsCont.querySelectorAll('.edit__cards-card').forEach((card) => {
+      card.querySelector('.edit__cards-number').innerHTML = i;
       i++;
     });
   }
 
   toggleDelete(opt) {
     this.cardsCont
-      .querySelectorAll(".edit__cards-delete")
+      .querySelectorAll('.edit__cards-delete')
       .forEach((deleteBTN) => {
         if (opt) {
-          deleteBTN.classList.remove("edit__cards-delete-inactive");
+          deleteBTN.classList.remove('edit__cards-delete-inactive');
         } else {
-          deleteBTN.classList.add("edit__cards-delete-inactive");
+          deleteBTN.classList.add('edit__cards-delete-inactive');
         }
       });
   }
@@ -625,23 +646,23 @@ class Edit {
   //
 
   collectData(titleCont, cardsCont) {
-    let title = titleCont.querySelector(".textarea").innerHTML;
+    let title = titleCont.querySelector('.textarea').innerHTML;
     let cards = [...cardsCont.children].map((item) => {
       let moduleID = item.dataset.module_id;
       let _id = item.dataset.card_id;
 
-      if (moduleID === "undefined") moduleID = false;
-      if (_id === "undefined") _id = false;
+      if (moduleID === 'undefined') moduleID = false;
+      if (_id === 'undefined') _id = false;
 
-      let dropSR = item.querySelector(".edit__checkbox").checked;
+      let dropSR = item.querySelector('.edit__checkbox').checked;
 
       let term = item
-        .querySelector(".edit__cards-term")
-        .querySelector(".textarea").innerHTML;
+        .querySelector('.edit__cards-term')
+        .querySelector('.textarea').innerHTML;
       let defenition = item
-        .querySelector(".edit__cards-definition-input")
-        .querySelector(".textarea").innerHTML;
-      let imgurl = item.querySelector(".edit__addimg").dataset.imgurl;
+        .querySelector('.edit__cards-definition-input')
+        .querySelector('.textarea').innerHTML;
+      let imgurl = item.querySelector('.edit__addimg').dataset.imgurl;
       let result = {
         moduleID,
         _id,
@@ -650,7 +671,7 @@ class Edit {
         dropSR,
       };
 
-      result.imgurl = imgurl !== "false" ? imgurl : "";
+      result.imgurl = imgurl !== 'false' ? imgurl : '';
 
       return result;
     });
@@ -661,13 +682,120 @@ class Edit {
     };
   }
 
+  getQuery(button, type) {
+    let cardEl = button.closest('.edit__cards-card');
+    let termFieldEl = cardEl.querySelector('.edit__cards-term .textarea');
+    let unformatedQuery = termFieldEl.textContent.trim();
+    if (type === 'cod') return unformatedQuery.replace(/\s+/g, '-');
+    if (type === 'urban') return unformatedQuery.replace(/\s+/g, '+');
+  }
+
+  displayDictionaryResult(result, type, scrapeBtn) {
+    let definitionArea = scrapeBtn
+      .closest('.edit__cards-card')
+      .querySelector('.edit__cards-definition-input .textarea');
+    let definitiondeHTML = definitionArea.innerHTML;
+
+    let wrapIn = this.wrapIn;
+
+    let devider = '<br><div>-------</div><br>';
+    let br = '<br>';
+
+    let dictionaryResultHtml = devider;
+    // cod
+    if (type === 'cod') {
+      result.map((sect) => {
+        let { part_of_speech, transcr_uk, transcr_us, sub_sections } = sect;
+
+        sub_sections.map((sub_sect) => {
+          let { guideword, blocks } = sub_sect;
+
+          blocks.map((block) => {
+            let { definition, examples } = block;
+
+            let examplesHtml = '';
+            examples.map((example) => {
+              examplesHtml = examplesHtml + wrapIn(example, 'div');
+            });
+
+            let defenitionHtml = wrapIn(
+              guideword.concat(wrapIn(definition)),
+              'div'
+            );
+
+            let additionalInfoHtml = wrapIn(
+              wrapIn(transcr_us).concat(wrapIn(part_of_speech), wrapIn()),
+              'div'
+            );
+
+            dictionaryResultHtml = dictionaryResultHtml.concat(
+              examplesHtml,
+              br,
+              defenitionHtml,
+              additionalInfoHtml,
+              devider
+            );
+          });
+        });
+      });
+
+      // urban
+    } else if (type === 'urban') {
+      let term;
+      result.map((panel) => {
+        let { definition, example } = panel;
+        console.log(definition, example);
+        if (!term) {
+          term = panel.term;
+          dictionaryResultHtml = dictionaryResultHtml.concat(
+            br,
+            wrapIn(term, 'div'),
+            br
+          );
+        }
+
+        dictionaryResultHtml = dictionaryResultHtml.concat(
+          wrapIn(example, 'div'),
+          br,
+          wrapIn(wrapIn(definition), 'div'),
+          devider
+        );
+      });
+    }
+
+    definitionArea.innerHTML = definitiondeHTML + dictionaryResultHtml;
+  }
+
+  wrapIn(str, el) {
+    if (!str) return '';
+
+    switch (el) {
+      case 'div':
+        return `<${el}>` + str + `</${el}>`;
+      default:
+        return `( ` + str + ` )`;
+    }
+  }
+
+  async scrapeDictionary(query, type) {
+    let reqData = { query };
+    console.log(query, type);
+
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + `/dictionary_scaping/${type}`, httpParam);
+    if (response.ok) {
+      return JSON.parse(await response.text()).result;
+    }
+    return false;
+  }
+
   async getModule(_id, draft) {
     let reqData = {
       _id,
       draft,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/get_module", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/get_module', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -676,8 +804,8 @@ class Edit {
     let reqData = {
       moduleID: id,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/get_cards", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/get_cards', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -686,8 +814,8 @@ class Edit {
     let reqData = {
       _id,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/create_card", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/create_card', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -697,8 +825,8 @@ class Edit {
       moduleID: this._id,
       _id,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/delete_card", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/delete_card', httpParam);
     if (response.ok) return JSON.parse(await response.text());
     return false;
   }
@@ -707,10 +835,10 @@ class Edit {
     let reqData = {
       inquiry,
     };
-    let httpParam = new HttpParam("POST", reqData, true);
+    let httpParam = new HttpParam('POST', reqData, true);
     let response;
     try {
-      response = await fetch(url + "/edit/imgsearch", httpParam);
+      response = await fetch(url + '/edit/imgsearch', httpParam);
       if (response.ok) return JSON.parse(await response.text());
     } catch (err) {
       console.log(err);
@@ -726,8 +854,8 @@ class Edit {
 
     let reqData = { title };
 
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/save_draft", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/save_draft', httpParam);
 
     if (response.status == 200) {
       location.href = hashValues.home;
@@ -741,15 +869,15 @@ class Edit {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }
 
   errorTitle() {
-    console.log("You must enter the title");
-    this.title_err.innerHTML = "please enter a title to save your set.";
-    this.title_err.classList.add("error");
-    this.title_err.previousElementSibling.classList.add("error");
+    console.log('You must enter the title');
+    this.title_err.innerHTML = 'please enter a title to save your set.';
+    this.title_err.classList.add('error');
+    this.title_err.previousElementSibling.classList.add('error');
   }
 
   async editDraft() {
@@ -773,8 +901,8 @@ class Edit {
       ...draftData,
     };
 
-    let httpParam = new HttpParam("POST", reqData, true);
-    let response = await fetch(url + "/edit/edit", httpParam);
+    let httpParam = new HttpParam('POST', reqData, true);
+    let response = await fetch(url + '/edit/edit', httpParam);
 
     if (this.draft) return;
 
