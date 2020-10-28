@@ -103,7 +103,7 @@ class Edit {
                     <div class="edit__study-progress ${
                       this.draft ? 'hidden' : ''
                     }">
-                      <input class="edit__checkbox" type="checkbox" id="toggleswitch${
+                      <input class="edit__checkbox edit__checkbox--drop" type="checkbox" id="toggleswitch${
                         this.switchCounter
                       }"/>
                       <svg height="17" width="17">
@@ -111,6 +111,20 @@ class Edit {
                       </svg>
                       <span>Drop card study progress:</span>
                       <label class="edit__toggle-switch sm" for="toggleswitch${
+                        this.switchCounter
+                      }"></label>
+                    </div>
+                    <div class="edit__save-include ${
+                      this.draft ? '' : 'hidden'
+                    }">
+                      <input class="edit__checkbox edit__checkbox--save" type="checkbox" id="togglesave${
+                        this.switchCounter
+                      }"/>
+                      <svg height="17" width="17">
+                        <use href="img/sprite.svg#icon__save"></use>
+                      </svg>
+                      <span>The card is ready for saving:</span>
+                      <label class="edit__toggle-switch sm" for="togglesave${
                         this.switchCounter
                       }"></label>
                     </div>
@@ -302,16 +316,27 @@ class Edit {
       }
     });
 
+    // Include save -----------------------------
+    document.addEventListener('keyup', (e) => {
+      let keyCode = e.keyCode;
+      if (keyCode === 67) {
+        this.control = false;
+      }
+    });
+
     // Gallery listners -----------------------------
     document.addEventListener('keydown', (e) => {
       let input = document.activeElement;
-      if (
-        e.keyCode === 13 &&
-        input.classList.contains('edit__searchbar-input')
-      ) {
+      let keyCode = e.keyCode;
+
+      if (keyCode === 13 && input.classList.contains('edit__searchbar-input')) {
         e.preventDefault();
         let searchBtn = input.parentNode.querySelector('.edit__searchbar-icon');
         this.imagesSearch(searchBtn);
+      }
+
+      if (keyCode === 67) {
+        this.control = true;
       }
     });
 
@@ -407,7 +432,7 @@ class Edit {
       this.appendCards(this.cards);
       this.changeNumber();
 
-      if (this.cardsCont.children.length < 3) {
+      if (this.cardsCont.children.length < 2) {
         this.toggleDelete(false);
       }
     } else {
@@ -559,9 +584,20 @@ class Edit {
 
     let el = htmlGen.createEl(newCard);
 
+    el.addEventListener('mouseenter', (e) => {
+      if (!this.control) return;
+      if (this.draft) {
+        let currentValue = el.querySelector('.edit__checkbox--save').checked;
+        el.querySelector('.edit__checkbox--save').checked = !currentValue;
+      } else {
+        let currentValue = el.querySelector('.edit__checkbox--drop').checked;
+        el.querySelector('.edit__checkbox--drop').checked = !currentValue;
+      }
+    });
+
     this.cardsCont.appendChild(el);
 
-    if (this.cardsCont.children.length > 2) {
+    if (this.cardsCont.children.length > 1) {
       this.toggleDelete(true);
     }
 
@@ -570,7 +606,7 @@ class Edit {
     el.querySelector('.edit__cards-delete').addEventListener(
       'click',
       async (e) => {
-        if (this.cardsCont.children.length > 2 && !this.deleting) {
+        if (this.cardsCont.children.length > 1 && !this.deleting) {
           this.deleting = true;
           let cardEl = e.target.closest('.edit__cards-card');
 
@@ -584,7 +620,7 @@ class Edit {
 
             this.changeNumber();
 
-            if (this.cardsCont.children.length <= 2) {
+            if (this.cardsCont.children.length <= 1) {
               this.toggleDelete(false);
             }
 
@@ -645,8 +681,12 @@ class Edit {
 
   //
 
-  collectData(titleCont, cardsCont) {
+  collectData(titleCont, cardsCont, filterIncluded) {
     let title = titleCont.querySelector('.textarea').innerHTML;
+
+    let saveAll = false;
+    let numOfIncluded = 0;
+
     let cards = [...cardsCont.children].map((item) => {
       let moduleID = item.dataset.module_id;
       let _id = item.dataset.card_id;
@@ -654,7 +694,10 @@ class Edit {
       if (moduleID === 'undefined') moduleID = false;
       if (_id === 'undefined') _id = false;
 
-      let dropSR = item.querySelector('.edit__checkbox').checked;
+      let dropSR = item.querySelector('.edit__checkbox--drop').checked;
+      let saveInclude = item.querySelector('.edit__checkbox--save').checked;
+      // if (saveInclude) saveAll = false;
+      if (saveInclude) numOfIncluded++;
 
       let term = item
         .querySelector('.edit__cards-term')
@@ -669,16 +712,26 @@ class Edit {
         term,
         defenition, // EDIT ... add ing url field
         dropSR,
+        saveInclude,
       };
 
       result.imgurl = imgurl !== 'false' ? imgurl : '';
-
       return result;
     });
 
+    if (numOfIncluded === 0 || numOfIncluded === cards.length) saveAll = true;
+    if (!saveAll && filterIncluded)
+      cards = cards.filter((item) => item.saveInclude);
+
+    /* console.log({
+      title,
+      cards,
+      saveAll,
+    }); */
     return {
       title,
       cards,
+      saveAll,
     };
   }
 
@@ -850,9 +903,7 @@ class Edit {
   async saveDraft() {
     if (this.timer) return;
 
-    let { title } = this.collectData(this.titleCont, this.cardsCont);
-
-    let reqData = { title };
+    let reqData = this.collectData(this.titleCont, this.cardsCont, true);
 
     let httpParam = new HttpParam('POST', reqData, true);
     let response = await fetch(url + '/edit/save_draft', httpParam);
@@ -861,7 +912,7 @@ class Edit {
       location.href = hashValues.home;
     } else if (response.status == 400) {
       this.scrollToTop();
-      this.errorTitle();
+      this.saveError();
     }
   }
 
@@ -873,9 +924,10 @@ class Edit {
     });
   }
 
-  errorTitle() {
-    console.log('You must enter the title');
-    this.title_err.innerHTML = 'please enter a title to save your set.';
+  saveError() {
+    console.log('You must enter the title and save at least 2 cards');
+    this.title_err.innerHTML =
+      'please enter a title and ensure saving of at least 2 cards';
     this.title_err.classList.add('error');
     this.title_err.previousElementSibling.classList.add('error');
   }
@@ -911,7 +963,7 @@ class Edit {
       return;
     } else if (response.status == 500) {
       this.scrollToTop();
-      this.errorTitle();
+      this.saveError();
       return;
     }
   }

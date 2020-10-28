@@ -952,7 +952,8 @@ input {
 
 .module__study-regime,
 .module__card-study-regime,
-.edit__study-progress {
+.edit__study-progress,
+.edit__save-include {
   display: flex;
   align-items: center;
   line-height: 1;
@@ -1011,7 +1012,8 @@ input {
   }
 }
 
-.edit__study-progress {
+.edit__study-progress,
+.edit__save-include {
   position: relative;
   padding-right: 1.5rem;
   border-right: 2px solid $grey-light;
@@ -1019,7 +1021,7 @@ input {
   & span {
     top: -4.5rem;
     right: 0rem;
-    width: 20rem;
+    width: max-content;
   }
 }
 
@@ -1057,16 +1059,9 @@ input {
 
 .edit__checkbox {
   &:checked {
-    & ~ span {
-      color: $red;
-      border-color: $red;
-    }
-
     & ~ .edit__toggle-switch {
-      border-color: $red;
       &:after {
         left: 23.5px;
-        background-color: $red;
       }
     }
 
@@ -1075,9 +1070,45 @@ input {
         left: 16.5px;
       }
     }
+  }
 
-    & ~ svg {
-      fill: $red;
+  &--drop {
+    &:checked {
+      & ~ span {
+        color: $red;
+        border-color: $red;
+      }
+
+      & ~ .edit__toggle-switch {
+        border-color: $red;
+        &:after {
+          background-color: $red;
+        }
+      }
+
+      & ~ svg {
+        fill: $red;
+      }
+    }
+  }
+
+  &--save {
+    &:checked {
+      & ~ span {
+        color: $green;
+        border-color: $green;
+      }
+
+      & ~ .edit__toggle-switch {
+        border-color: $green;
+        &:after {
+          background-color: $green;
+        }
+      }
+
+      & ~ svg {
+        fill: $green;
+      }
     }
   }
 }
