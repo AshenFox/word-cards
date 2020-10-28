@@ -685,7 +685,8 @@ input {
 
 .module__study-regime,
 .module__card-study-regime,
-.edit__study-progress {
+.edit__study-progress,
+.edit__save-include {
   display: flex;
   align-items: center;
   line-height: 1;
@@ -693,14 +694,16 @@ input {
   font-size: 1.5rem; }
   .module__study-regime svg,
   .module__card-study-regime svg,
-  .edit__study-progress svg {
+  .edit__study-progress svg,
+  .edit__save-include svg {
     margin-left: auto;
     margin-right: 1rem;
     fill: #4e4e4e;
     transition: all 0.2s; }
   .module__study-regime span,
   .module__card-study-regime span,
-  .edit__study-progress span {
+  .edit__study-progress span,
+  .edit__save-include span {
     z-index: 30;
     position: absolute;
     transition: all 0.2s;
@@ -713,7 +716,8 @@ input {
     display: none; }
   .module__study-regime:hover span,
   .module__card-study-regime:hover span,
-  .edit__study-progress:hover span {
+  .edit__study-progress:hover span,
+  .edit__save-include:hover span {
     display: inline-block; }
 
 .module__study-regime {
@@ -737,14 +741,16 @@ input {
     left: 0rem;
     width: 17rem; }
 
-.edit__study-progress {
+.edit__study-progress,
+.edit__save-include {
   position: relative;
   padding-right: 1.5rem;
   border-right: 2px solid #f0f0f0; }
-  .edit__study-progress span {
+  .edit__study-progress span,
+  .edit__save-include span {
     top: -4.5rem;
     right: 0rem;
-    width: 20rem; }
+    width: max-content; }
 
 .module__checkbox,
 .edit__checkbox {
@@ -766,21 +772,35 @@ input {
 .module__checkbox:checked ~ svg {
   fill: #23b26d; }
 
-.edit__checkbox:checked ~ span {
-  color: #ff725b;
-  border-color: #ff725b; }
-
-.edit__checkbox:checked ~ .edit__toggle-switch {
-  border-color: #ff725b; }
-  .edit__checkbox:checked ~ .edit__toggle-switch:after {
-    left: 23.5px;
-    background-color: #ff725b; }
+.edit__checkbox:checked ~ .edit__toggle-switch:after {
+  left: 23.5px; }
 
 .edit__checkbox:checked ~ .edit__toggle-switch.sm:after {
   left: 16.5px; }
 
-.edit__checkbox:checked ~ svg {
+.edit__checkbox--drop:checked ~ span {
+  color: #ff725b;
+  border-color: #ff725b; }
+
+.edit__checkbox--drop:checked ~ .edit__toggle-switch {
+  border-color: #ff725b; }
+  .edit__checkbox--drop:checked ~ .edit__toggle-switch:after {
+    background-color: #ff725b; }
+
+.edit__checkbox--drop:checked ~ svg {
   fill: #ff725b; }
+
+.edit__checkbox--save:checked ~ span {
+  color: #23b26d;
+  border-color: #23b26d; }
+
+.edit__checkbox--save:checked ~ .edit__toggle-switch {
+  border-color: #23b26d; }
+  .edit__checkbox--save:checked ~ .edit__toggle-switch:after {
+    background-color: #23b26d; }
+
+.edit__checkbox--save:checked ~ svg {
+  fill: #23b26d; }
 
 .module__toggle-switch,
 .edit__toggle-switch {
